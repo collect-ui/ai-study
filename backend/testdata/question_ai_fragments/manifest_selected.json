@@ -1,0 +1,45 @@
+{
+  "cases": [
+    {
+      "id": "02_multiple_choice",
+      "name": "多选题",
+      "file": "02_multiple_choice.txt",
+      "expected_count": 2,
+      "params": {
+        "question_type": "multiple_choice",
+        "question_category": "normal"
+      }
+    },
+    {
+      "id": "05_dialogue_completion",
+      "name": "补全对话/选句填空",
+      "file": "05_dialogue_completion.txt",
+      "expected_count": 3,
+      "params": {
+        "question_type": "single_choice",
+        "question_category": "dialogue_completion"
+      }
+    },
+    {
+      "id": "06_reading_choice",
+      "name": "阅读理解选择",
+      "file": "06_reading_choice.txt",
+      "expected_count": 1,
+      "expected_choice_items": 2,
+      "params": {
+        "question_type": "single_choice",
+        "question_category": "reading_choice"
+      }
+    },
+    {
+      "id": "08_short_answer",
+      "name": "简答题",
+      "file": "08_short_answer.txt",
+      "expected_count": 2,
+      "params": {
+        "question_type": "short_answer",
+        "question_category": "reading_short_answer"
+      }
+    }
+  ]
+}

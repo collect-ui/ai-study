@@ -1,0 +1,244 @@
+.profile-page {
+  position: relative;
+  padding-bottom: 170rpx;
+}
+
+.profile-page::before {
+  content: "A B C";
+  position: absolute;
+  top: 140rpx;
+  right: 20rpx;
+  z-index: 0;
+  color: rgba(0, 93, 167, 0.035);
+  font-size: 120rpx;
+  font-weight: 900;
+}
+
+.profile-head,
+.assessment-card,
+.task-card,
+.knowledge-card,
+.mistake-entry {
+  position: relative;
+  z-index: 1;
+}
+
+.profile-head {
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+}
+
+.avatar-wrap {
+  position: relative;
+  flex: none;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 142rpx;
+  height: 142rpx;
+  border: 6rpx solid #ffffff;
+  border-radius: 999rpx;
+  background: linear-gradient(145deg, #005da7, #67f7d5);
+  color: #ffffff;
+  font-size: 54rpx;
+  font-weight: 900;
+  box-shadow: 0 10rpx 26rpx rgba(0, 93, 167, 0.18);
+}
+
+.avatar-badge {
+  position: absolute;
+  right: -24rpx;
+  bottom: -8rpx;
+  padding: 5rpx 14rpx;
+  border: 4rpx solid #f7f9fc;
+  border-radius: 999rpx;
+  background: #006b58;
+  color: #ffffff;
+  font-size: 18rpx;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.profile-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12rpx;
+}
+
+.profile-title > text:first-child {
+  color: #191c1e;
+  font-size: 38rpx;
+  font-weight: 900;
+}
+
+.profile-level {
+  color: rgba(0, 93, 167, 0.7);
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.profile-grade {
+  margin-top: 6rpx;
+  color: #717783;
+  font-size: 24rpx;
+}
+
+.tag-row {
+  display: flex;
+  gap: 10rpx;
+  margin-top: 14rpx;
+}
+
+.profile-tag {
+  padding: 5rpx 12rpx;
+  border-radius: 12rpx;
+  background: rgba(0, 93, 167, 0.1);
+  color: #005da7;
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.assessment-card,
+.task-card,
+.knowledge-card,
+.mistake-entry {
+  padding: 30rpx;
+}
+
+.assessment-card {
+  background: linear-gradient(135deg, rgba(212, 227, 255, 0.7), #ffffff 52%, rgba(103, 247, 213, 0.18));
+}
+
+.assessment-head,
+.score-row,
+.task-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title {
+  color: #191c1e;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.card-subtitle {
+  margin-top: 4rpx;
+  color: rgba(113, 119, 131, 0.78);
+  font-size: 21rpx;
+  font-weight: 800;
+}
+
+.improve {
+  color: #006b58;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.score-row {
+  margin-top: 34rpx;
+}
+
+.score-label {
+  color: #717783;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.mock-score {
+  margin-top: 4rpx;
+  color: #005da7;
+  font-size: 54rpx;
+  font-weight: 900;
+}
+
+.mock-score text {
+  margin-left: 6rpx;
+  color: #717783;
+  font-size: 26rpx;
+  font-weight: 600;
+}
+
+.mini-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 10rpx;
+  width: 172rpx;
+  height: 96rpx;
+}
+
+.mini-chart view {
+  width: 20rpx;
+  border-radius: 8rpx 8rpx 0 0;
+  background: #005da7;
+  opacity: 0.35;
+}
+
+.mini-chart view:nth-child(4),
+.mini-chart view:nth-child(5) {
+  opacity: 0.9;
+}
+
+.task-count {
+  color: #717783;
+  font-size: 23rpx;
+  font-weight: 800;
+}
+
+.task-card progress-bar {
+  display: block;
+  margin-top: 22rpx;
+}
+
+.knowledge-row {
+  margin-top: 24rpx;
+}
+
+.mistake-entry {
+  display: flex;
+  align-items: center;
+}
+
+.mistake-icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90rpx;
+  height: 90rpx;
+  margin-right: 22rpx;
+  border-radius: 24rpx;
+  background: #ffdad6;
+  color: #ba1a1a;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.mistake-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.mistake-copy text {
+  display: block;
+  margin-top: 6rpx;
+  color: #717783;
+  font-size: 23rpx;
+}
+
+.entry-arrow {
+  color: #717783;
+  font-size: 48rpx;
+  font-weight: 900;
+}

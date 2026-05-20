@@ -1,0 +1,57 @@
+{
+  "started_at": "2026-05-20T02:44:56.264Z",
+  "base_url": "http://127.0.0.1:8026",
+  "console_errors": [],
+  "page_errors": [],
+  "request_failed": [],
+  "http_errors": [],
+  "steps": [
+    {
+      "name": "opened_question_bank",
+      "at": "2026-05-20T02:44:59.647Z"
+    },
+    {
+      "name": "opened_ai_import_dialog",
+      "at": "2026-05-20T02:45:00.150Z"
+    },
+    {
+      "name": "read_sample_pdf",
+      "at": "2026-05-20T02:45:00.771Z",
+      "pdf_text_length": 81674
+    },
+    {
+      "name": "mock_ai_parse_service",
+      "at": "2026-05-20T02:45:00.787Z",
+      "row_count": 2,
+      "fixed_text_length": 2307
+    },
+    {
+      "name": "parsed_fixed_string",
+      "at": "2026-05-20T02:45:01.036Z"
+    },
+    {
+      "name": "confirmed_import",
+      "at": "2026-05-20T02:45:01.320Z"
+    },
+    {
+      "name": "verified_imported_question",
+      "at": "2026-05-20T02:45:01.338Z",
+      "question_id": "da0e8713-b725-4f06-9192-0b7073bec8f7",
+      "reading_id": "c83bf70f-59b7-4a08-ae70-bd101ba114ad",
+      "reading_choice_items": 1
+    },
+    {
+      "name": "cleaned_imported_question",
+      "at": "2026-05-20T02:45:01.358Z",
+      "question_id": "da0e8713-b725-4f06-9192-0b7073bec8f7",
+      "reading_id": "c83bf70f-59b7-4a08-ae70-bd101ba114ad"
+    }
+  ],
+  "screenshots": {
+    "dialog_open": "/data/project/ai-study/feature/ai-question-import-verify/dialog-open.png",
+    "parsed_table": "/data/project/ai-study/feature/ai-question-import-verify/parsed-table.png",
+    "imported_result": "/data/project/ai-study/feature/ai-question-import-verify/imported-result.png"
+  },
+  "ok": true,
+  "finished_at": "2026-05-20T02:45:01.358Z"
+}

@@ -1,0 +1,1340 @@
+service:
+  - key: question_query
+    http: true
+    module: sql
+    params:
+      keyword:
+        template: "{{ if .keyword }}%{{.keyword}}%{{end}}"
+      page:
+        type: int
+        default: 1
+      size:
+        type: int
+        default: 20
+      start:
+        template: "({{.page}}-1) * {{.size}}"
+        exec: true
+        type: int
+      pagination:
+        default: true
+      count:
+        default: true
+    data_file: question_query.sql
+    count_file: question_query_count.sql
+    pagination: pagination
+    count: "[count]"
+
+  - key: question_stats
+    http: true
+    module: sql
+    data_file: question_stats.sql
+    result_handler:
+      - key: arr2obj
+
+  - key: question_detail
+    http: true
+    module: sql
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+    data_file: question_detail.sql
+    result_handler:
+      - key: arr2obj
+
+  - key: question_choice_detail
+    http: true
+    module: sql
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+    data_file: question_choice_detail.sql
+    result_handler:
+      - key: arr2obj
+
+  - key: question_save
+    http: true
+    module: model_save
+    table: question_item
+    params:
+      question_id:
+        template: "{{ if .question_id }}{{.question_id}}{{else}}{{uuid}}{{end}}"
+      question_code:
+        template: "{{ if .question_code }}{{.question_code}}{{else}}Q{{uuid}}{{end}}"
+      subject:
+        check:
+          template: "{{must .subject}}"
+          err_msg: 科目不能为空
+      stage:
+        check:
+          template: "{{must .stage}}"
+          err_msg: 学段不能为空
+      grade:
+        check:
+          template: "{{must .grade}}"
+          err_msg: 年级不能为空
+      textbook_version:
+        check:
+          template: "{{must .textbook_version}}"
+          err_msg: 教材版本不能为空
+      unit_id:
+        default: ""
+      question_type:
+        default: single_choice
+      question_category:
+        default: normal
+      difficulty:
+        default: basic
+      score:
+        type: int
+        default: 5
+      duration_seconds:
+        type: int
+        default: 0
+      sequence_no:
+        type: int
+        default: 0
+      option_count:
+        type: int
+        default: 0
+      blank_count:
+        type: int
+        default: 0
+      asset_count:
+        type: int
+        default: 0
+      analysis_media_url:
+        default: ""
+      analysis_media_name:
+        default: ""
+      analysis_media_type:
+        default: ""
+      source:
+        default: manual
+      status:
+        default: draft
+      version:
+        type: int
+        default: 1
+      is_delete:
+        default: "0"
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+
+  - key: question_choice_save
+    http: true
+    module: empty
+    params:
+      question_id:
+        template: "{{uuid}}"
+      question_code:
+        default: ""
+      question_type:
+        default: single_choice
+      question_category:
+        default: normal
+      subject:
+        default: english
+      stage:
+        default: junior
+      knowledge_id:
+        default: ""
+      knowledge_name:
+        default: ""
+      knowledge_rels:
+        default: []
+      textbook_version:
+        default: pep
+      difficulty:
+        default: basic
+      score:
+        type: int
+        default: 5
+      option_count:
+        template: '{{if or (eq .question_category "cloze_choice") (eq .question_category "reading_choice")}}0{{else if .option_count}}{{.option_count}}{{else if or (eq .question_type "single_choice") (eq .question_type "multiple_choice")}}4{{else if eq .question_type "judge"}}2{{else}}0{{end}}'
+        type: int
+      blank_count:
+        template: '{{if .blank_count}}{{.blank_count}}{{else if eq .question_type "blank"}}1{{else}}0{{end}}'
+        type: int
+      answer_key:
+        default: A
+      content_mode:
+        default: plain
+      answer_value:
+        default: "[]"
+      answer_type:
+        default: single_choice
+      answer_text:
+        default: ""
+      blank_answers:
+        default: []
+      choice_items:
+        default: []
+      reference_text:
+        default: ""
+      source:
+        default: manual
+      remark:
+        default: ""
+      option_a_correct:
+        default: "0"
+      option_b_correct:
+        default: "0"
+      option_c_correct:
+        default: "0"
+      option_d_correct:
+        default: "0"
+      stem_html:
+        template: "{{if .stem_html}}{{.stem_html}}{{else}}{{.stem_text}}{{end}}"
+        check:
+          template: "{{if .stem_html}}{{must .stem_html}}{{else}}{{must .stem_text}}{{end}}"
+          err_msg: 题干不能为空
+      option_a_html:
+        template: "{{if .option_a_html}}{{.option_a_html}}{{else}}{{.option_a_text}}{{end}}"
+        check:
+          template: '{{if and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}{{if .option_a_html}}{{must .option_a_html}}{{else}}{{must .option_a_text}}{{end}}{{else}}1{{end}}'
+          err_msg: 选项A不能为空
+      option_b_html:
+        template: "{{if .option_b_html}}{{.option_b_html}}{{else}}{{.option_b_text}}{{end}}"
+        check:
+          template: '{{if and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}{{if .option_b_html}}{{must .option_b_html}}{{else}}{{must .option_b_text}}{{end}}{{else}}1{{end}}'
+          err_msg: 选项B不能为空
+      option_c_html:
+        template: "{{if .option_c_html}}{{.option_c_html}}{{else}}{{.option_c_text}}{{end}}"
+        check:
+          template: '{{if and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}{{if .option_c_html}}{{must .option_c_html}}{{else}}{{must .option_c_text}}{{end}}{{else}}1{{end}}'
+          err_msg: 选项C不能为空
+      option_d_html:
+        template: "{{if .option_d_html}}{{.option_d_html}}{{else}}{{.option_d_text}}{{end}}"
+        check:
+          template: '{{if and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}{{if .option_d_html}}{{must .option_d_html}}{{else}}{{must .option_d_text}}{{end}}{{else}}1{{end}}'
+          err_msg: 选项D不能为空
+    handler_params:
+      - key: service2field
+        service:
+          service: question.question_save
+          question_id: "[question_id]"
+          question_code: "[question_code]"
+          title: "[title]"
+          subject: "[subject]"
+          stage: "[stage]"
+          grade: "[grade]"
+          textbook_version: "[textbook_version]"
+          unit_id: "[unit_id]"
+          unit_code: "[unit_code]"
+          unit_name: "[unit_name]"
+          question_type: "[question_type]"
+          question_category: "[question_category]"
+          difficulty: "[difficulty]"
+          score: "[score]"
+          sequence_no: "[sequence_no]"
+          duration_seconds: "[duration_seconds]"
+          stem_html: "[stem_html]"
+          stem_text: "[stem_text]"
+          analysis_html: "[analysis_html]"
+          analysis_text: "[analysis_text]"
+          analysis_media_url: "[analysis_media_url]"
+          analysis_media_name: "[analysis_media_name]"
+          analysis_media_type: "[analysis_media_type]"
+          option_count: "[option_count]"
+          blank_count: "[blank_count]"
+          source: "[source]"
+          remark: "[remark]"
+          status: draft
+      - key: service2field
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        service:
+          service: question.option_save
+          question_id: "[question_id]"
+          option_key: A
+          option_order: 1
+          content_mode: "[content_mode]"
+          option_html: "[option_a_html]"
+          option_text: "[option_a_text]"
+          is_correct: "[option_a_correct]"
+      - key: service2field
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        service:
+          service: question.option_save
+          question_id: "[question_id]"
+          option_key: B
+          option_order: 2
+          content_mode: "[content_mode]"
+          option_html: "[option_b_html]"
+          option_text: "[option_b_text]"
+          is_correct: "[option_b_correct]"
+      - key: service2field
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        service:
+          service: question.option_save
+          question_id: "[question_id]"
+          option_key: C
+          option_order: 3
+          content_mode: "[content_mode]"
+          option_html: "[option_c_html]"
+          option_text: "[option_c_text]"
+          is_correct: "[option_c_correct]"
+      - key: service2field
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        service:
+          service: question.option_save
+          question_id: "[question_id]"
+          option_key: D
+          option_order: 4
+          content_mode: "[content_mode]"
+          option_html: "[option_d_html]"
+          option_text: "[option_d_text]"
+          is_correct: "[option_d_correct]"
+      - key: service2field
+        service:
+          service: question.answer_save
+          question_id: "[question_id]"
+          answer_type: "[answer_type]"
+          answer_value: "[answer_value]"
+          answer_text: "[answer_text]"
+          reference_text: "[reference_text]"
+      - key: update_array
+        enable: "{{must .knowledge_rels}}"
+        foreach: "[knowledge_rels]"
+        item: item
+        fields:
+          - field: rel_id
+            template: "{{uuid}}"
+          - field: question_id
+            template: "[question_id]"
+          - field: knowledge_id
+            template: "[item.knowledge_id]"
+          - field: knowledge_name
+            template: "[item.knowledge_name]"
+          - field: order_index
+            template: "{{if .item.order_index}}{{.item.order_index}}{{else}}1{{end}}"
+            type: int32
+          - field: create_time
+            template: "{{current_date_time}}"
+          - field: create_user
+            template: "{{.session_user_id}}"
+      - key: service2field
+        enable: "{{must .knowledge_rels}}"
+        service:
+          service: question.knowledge_rel_bulk_save
+          knowledge_rels: "[knowledge_rels]"
+      - key: service2field
+        enable: "{{and (must .knowledge_id) (not (must .knowledge_rels))}}"
+        service:
+          service: question.knowledge_rel_save
+          question_id: "[question_id]"
+          knowledge_id: "[knowledge_id]"
+          knowledge_name: "[knowledge_name]"
+          order_index: 1
+      - key: update_array
+        enable: '{{and (eq .question_type "blank") (must .blank_answers)}}'
+        foreach: "[blank_answers]"
+        item: item
+        fields:
+          - field: blank_answer_id
+            template: "{{uuid}}"
+          - field: question_id
+            template: "[question_id]"
+          - field: blank_index
+            template: "[item.blank_index]"
+            type: int32
+          - field: standard_answer
+            template: "[item.standard_answer]"
+          - field: alternative_answers
+            template: "{{if .item.alternative_answers}}{{.item.alternative_answers}}{{else}}[]{{end}}"
+          - field: score
+            template: "{{if .item.score}}{{.item.score}}{{else}}0{{end}}"
+            type: int32
+          - field: match_mode
+            template: "{{if .item.match_mode}}{{.item.match_mode}}{{else}}exact{{end}}"
+          - field: case_sensitive
+            template: "{{if .item.case_sensitive}}{{.item.case_sensitive}}{{else}}0{{end}}"
+          - field: is_delete
+            template: "0"
+          - field: create_time
+            template: "{{current_date_time}}"
+          - field: create_user
+            template: "{{.session_user_id}}"
+          - field: modify_time
+            template: "{{current_date_time}}"
+          - field: modify_user
+            template: "{{.session_user_id}}"
+      - key: service2field
+        enable: '{{and (eq .question_type "blank") (must .blank_answers)}}'
+        service:
+          service: question.blank_answer_bulk_save
+          blank_answers: "[blank_answers]"
+      - key: param2result
+        field: "[question_id]"
+
+  - key: question_update
+    http: true
+    module: model_update
+    table: question_item
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - title
+      - subject
+      - stage
+      - grade
+      - textbook_version
+      - unit_id
+      - unit_code
+      - unit_name
+      - question_type
+      - question_category
+      - difficulty
+      - score
+      - duration_seconds
+      - sequence_no
+      - stem_html
+      - stem_text
+      - analysis_html
+      - analysis_text
+      - analysis_media_url
+      - analysis_media_name
+      - analysis_media_type
+      - option_count
+      - blank_count
+      - asset_count
+      - content_hash
+      - source
+      - status
+      - version
+      - remark
+      - modify_time
+      - modify_user
+    filter:
+      question_id: "[question_id]"
+
+  - key: question_choice_update
+    http: true
+    module: empty
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      question_code:
+        default: ""
+      question_type:
+        default: single_choice
+      question_category:
+        default: normal
+      subject:
+        default: english
+      stage:
+        default: junior
+      knowledge_id:
+        default: ""
+      knowledge_name:
+        default: ""
+      knowledge_rels:
+        default: []
+      textbook_version:
+        default: pep
+      difficulty:
+        default: basic
+      score:
+        type: int
+        default: 5
+      option_count:
+        template: '{{if or (eq .question_category "cloze_choice") (eq .question_category "reading_choice")}}0{{else if .option_count}}{{.option_count}}{{else if or (eq .question_type "single_choice") (eq .question_type "multiple_choice")}}4{{else if eq .question_type "judge"}}2{{else}}0{{end}}'
+        type: int
+      blank_count:
+        template: '{{if .blank_count}}{{.blank_count}}{{else if eq .question_type "blank"}}1{{else}}0{{end}}'
+        type: int
+      answer_key:
+        default: A
+      content_mode:
+        default: plain
+      answer_value:
+        default: "[]"
+      answer_type:
+        default: single_choice
+      answer_text:
+        default: ""
+      blank_answers:
+        default: []
+      choice_items:
+        default: []
+      reference_text:
+        default: ""
+      source:
+        default: manual
+      remark:
+        default: ""
+      option_a_correct:
+        default: "0"
+      option_b_correct:
+        default: "0"
+      option_c_correct:
+        default: "0"
+      option_d_correct:
+        default: "0"
+      stem_html:
+        template: "{{if .stem_html}}{{.stem_html}}{{else}}{{.stem_text}}{{end}}"
+        check:
+          template: "{{if .stem_html}}{{must .stem_html}}{{else}}{{must .stem_text}}{{end}}"
+          err_msg: 题干不能为空
+      option_a_html:
+        template: "{{if .option_a_html}}{{.option_a_html}}{{else}}{{.option_a_text}}{{end}}"
+      option_b_html:
+        template: "{{if .option_b_html}}{{.option_b_html}}{{else}}{{.option_b_text}}{{end}}"
+      option_c_html:
+        template: "{{if .option_c_html}}{{.option_c_html}}{{else}}{{.option_c_text}}{{end}}"
+      option_d_html:
+        template: "{{if .option_d_html}}{{.option_d_html}}{{else}}{{.option_d_text}}{{end}}"
+    handler_params:
+      - key: service2field
+        service:
+          service: question.question_update
+          question_id: "[question_id]"
+          question_code: "[question_code]"
+          title: "[title]"
+          subject: "[subject]"
+          stage: "[stage]"
+          grade: "[grade]"
+          textbook_version: "[textbook_version]"
+          unit_id: "[unit_id]"
+          unit_code: "[unit_code]"
+          unit_name: "[unit_name]"
+          question_type: "[question_type]"
+          question_category: "[question_category]"
+          difficulty: "[difficulty]"
+          score: "[score]"
+          sequence_no: "[sequence_no]"
+          duration_seconds: "[duration_seconds]"
+          stem_html: "[stem_html]"
+          stem_text: "[stem_text]"
+          analysis_html: "[analysis_html]"
+          analysis_text: "[analysis_text]"
+          analysis_media_url: "[analysis_media_url]"
+          analysis_media_name: "[analysis_media_name]"
+          analysis_media_type: "[analysis_media_type]"
+          option_count: "[option_count]"
+          blank_count: "[blank_count]"
+          source: "[source]"
+          remark: "[remark]"
+          status: draft
+      - key: service2field
+        service:
+          service: question.option_delete_by_question
+          question_id: "[question_id]"
+      - key: service2field
+        service:
+          service: question.answer_delete_by_question
+          question_id: "[question_id]"
+      - key: service2field
+        service:
+          service: question.blank_answer_delete_by_question
+          question_id: "[question_id]"
+      - key: service2field
+        service:
+          service: question.knowledge_rel_delete_by_question
+          question_id: "[question_id]"
+      - key: service2field
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        service:
+          service: question.option_save
+          question_id: "[question_id]"
+          option_key: A
+          option_order: 1
+          content_mode: "[content_mode]"
+          option_html: "[option_a_html]"
+          option_text: "[option_a_text]"
+          is_correct: "[option_a_correct]"
+      - key: service2field
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        service:
+          service: question.option_save
+          question_id: "[question_id]"
+          option_key: B
+          option_order: 2
+          content_mode: "[content_mode]"
+          option_html: "[option_b_html]"
+          option_text: "[option_b_text]"
+          is_correct: "[option_b_correct]"
+      - key: service2field
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        service:
+          service: question.option_save
+          question_id: "[question_id]"
+          option_key: C
+          option_order: 3
+          content_mode: "[content_mode]"
+          option_html: "[option_c_html]"
+          option_text: "[option_c_text]"
+          is_correct: "[option_c_correct]"
+      - key: service2field
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        service:
+          service: question.option_save
+          question_id: "[question_id]"
+          option_key: D
+          option_order: 4
+          content_mode: "[content_mode]"
+          option_html: "[option_d_html]"
+          option_text: "[option_d_text]"
+          is_correct: "[option_d_correct]"
+      - key: service2field
+        service:
+          service: question.answer_save
+          question_id: "[question_id]"
+          answer_type: "[answer_type]"
+          answer_value: "[answer_value]"
+          answer_text: "[answer_text]"
+          reference_text: "[reference_text]"
+      - key: update_array
+        enable: "{{must .knowledge_rels}}"
+        foreach: "[knowledge_rels]"
+        item: item
+        fields:
+          - field: rel_id
+            template: "{{uuid}}"
+          - field: question_id
+            template: "[question_id]"
+          - field: knowledge_id
+            template: "[item.knowledge_id]"
+          - field: knowledge_name
+            template: "[item.knowledge_name]"
+          - field: order_index
+            template: "{{if .item.order_index}}{{.item.order_index}}{{else}}1{{end}}"
+            type: int32
+          - field: create_time
+            template: "{{current_date_time}}"
+          - field: create_user
+            template: "{{.session_user_id}}"
+      - key: service2field
+        enable: "{{must .knowledge_rels}}"
+        service:
+          service: question.knowledge_rel_bulk_save
+          knowledge_rels: "[knowledge_rels]"
+      - key: service2field
+        enable: "{{and (must .knowledge_id) (not (must .knowledge_rels))}}"
+        service:
+          service: question.knowledge_rel_save
+          question_id: "[question_id]"
+          knowledge_id: "[knowledge_id]"
+          knowledge_name: "[knowledge_name]"
+          order_index: 1
+      - key: update_array
+        enable: '{{and (eq .question_type "blank") (must .blank_answers)}}'
+        foreach: "[blank_answers]"
+        item: item
+        fields:
+          - field: blank_answer_id
+            template: "{{uuid}}"
+          - field: question_id
+            template: "[question_id]"
+          - field: blank_index
+            template: "[item.blank_index]"
+            type: int32
+          - field: standard_answer
+            template: "[item.standard_answer]"
+          - field: alternative_answers
+            template: "{{if .item.alternative_answers}}{{.item.alternative_answers}}{{else}}[]{{end}}"
+          - field: score
+            template: "{{if .item.score}}{{.item.score}}{{else}}0{{end}}"
+            type: int32
+          - field: match_mode
+            template: "{{if .item.match_mode}}{{.item.match_mode}}{{else}}exact{{end}}"
+          - field: case_sensitive
+            template: "{{if .item.case_sensitive}}{{.item.case_sensitive}}{{else}}0{{end}}"
+          - field: is_delete
+            template: "0"
+          - field: create_time
+            template: "{{current_date_time}}"
+          - field: create_user
+            template: "{{.session_user_id}}"
+          - field: modify_time
+            template: "{{current_date_time}}"
+          - field: modify_user
+            template: "{{.session_user_id}}"
+      - key: service2field
+        enable: '{{and (eq .question_type "blank") (must .blank_answers)}}'
+        service:
+          service: question.blank_answer_bulk_save
+          blank_answers: "[blank_answers]"
+      - key: param2result
+        field: "[question_id]"
+
+  - key: analysis_media_upload
+    name: 上传题目解析音视频
+    http: true
+    module: empty
+    params:
+      type:
+        default: question-analysis
+      only_path:
+        default: false
+        type: bool
+    handler_params:
+      - key: to_local_file
+        field: "{{get_key \"local_file_dir\"}}/{{.type}}/{{sub_str current_date_time 0 10}}/"
+        save_field: fileData
+      - key: param2result
+        enable: "[only_path]"
+        field: "[fileData.path]"
+      - key: param2result
+        enable: "{{ not .only_path }}"
+        field: "[fileData]"
+
+  - key: question_delete
+    http: true
+    module: model_update
+    table: question_item
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      is_delete:
+        default: "1"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - is_delete
+      - modify_time
+      - modify_user
+    filter:
+      question_id: "[question_id]"
+
+  - key: question_choice_delete
+    http: true
+    module: empty
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+    handler_params:
+      - key: service2field
+        service:
+          service: question.question_delete
+          question_id: "[question_id]"
+      - key: service2field
+        service:
+          service: question.option_delete_by_question
+          question_id: "[question_id]"
+      - key: service2field
+        service:
+          service: question.answer_delete_by_question
+          question_id: "[question_id]"
+      - key: service2field
+        service:
+          service: question.blank_answer_delete_by_question
+          question_id: "[question_id]"
+      - key: service2field
+        service:
+          service: question.knowledge_rel_delete_by_question
+          question_id: "[question_id]"
+      - key: param2result
+        field: "[question_id]"
+
+  - key: question_choice_batch_delete
+    http: true
+    module: bulk_service
+    params:
+      rows:
+        default: []
+    batch:
+      foreach: "[rows]"
+      item: item
+      loop_max: 1
+      service:
+        service: question.question_choice_delete
+      append_item_param: true
+      save_field: delete_result
+
+  - key: question_submit_review
+    http: true
+    module: model_update
+    table: question_item
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      status:
+        default: reviewing
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - status
+      - modify_time
+      - modify_user
+    filter:
+      question_id: "[question_id]"
+
+  - key: question_publish
+    http: true
+    module: model_update
+    table: question_item
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      status:
+        default: published
+      publish_time:
+        template: "{{current_date_time}}"
+      publish_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - status
+      - publish_time
+      - publish_user
+      - modify_time
+      - modify_user
+    filter:
+      question_id: "[question_id]"
+
+  - key: question_reject
+    http: true
+    module: model_update
+    table: question_item
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      status:
+        default: rejected
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - status
+      - modify_time
+      - modify_user
+    filter:
+      question_id: "[question_id]"
+
+  - key: question_offline
+    http: true
+    module: model_update
+    table: question_item
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      status:
+        default: offline
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - status
+      - modify_time
+      - modify_user
+    filter:
+      question_id: "[question_id]"
+
+  - key: option_query
+    http: true
+    module: sql
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+    data_file: option_query.sql
+
+  - key: option_save
+    http: true
+    module: model_save
+    table: question_option
+    params:
+      option_id:
+        template: "{{uuid}}"
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      option_order:
+        type: int
+        default: 1
+      content_mode:
+        default: plain
+      is_correct:
+        default: "0"
+      asset_count:
+        type: int
+        default: 0
+      is_delete:
+        default: "0"
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+
+  - key: option_update
+    http: true
+    module: model_update
+    table: question_option
+    params:
+      option_id:
+        check:
+          template: "{{must .option_id}}"
+          err_msg: option_id不能为空
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - option_key
+      - option_order
+      - content_mode
+      - option_html
+      - option_text
+      - is_correct
+      - asset_count
+      - modify_time
+      - modify_user
+    filter:
+      option_id: "[option_id]"
+
+  - key: option_delete
+    http: true
+    module: model_update
+    table: question_option
+    params:
+      option_id:
+        check:
+          template: "{{must .option_id}}"
+          err_msg: option_id不能为空
+      is_delete:
+        default: "1"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - is_delete
+      - modify_time
+      - modify_user
+    filter:
+      option_id: "[option_id]"
+
+  - key: option_delete_by_question
+    http: true
+    module: model_update
+    table: question_option
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      is_delete:
+        default: "1"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - is_delete
+      - modify_time
+      - modify_user
+    filter:
+      question_id: "[question_id]"
+
+  - key: answer_query
+    http: true
+    module: sql
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+    data_file: answer_query.sql
+    result_handler:
+      - key: arr2obj
+
+  - key: answer_save
+    http: true
+    module: model_save
+    table: question_answer
+    params:
+      answer_id:
+        template: "{{uuid}}"
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      answer_type:
+        default: single_choice
+      answer_value:
+        default: "[]"
+      answer_text:
+        default: ""
+      reference_text:
+        default: ""
+      case_sensitive:
+        default: "0"
+      allow_order_change:
+        default: "0"
+      is_delete:
+        default: "0"
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+
+  - key: answer_update
+    http: true
+    module: model_update
+    table: question_answer
+    params:
+      answer_id:
+        check:
+          template: "{{must .answer_id}}"
+          err_msg: answer_id不能为空
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - answer_type
+      - answer_value
+      - answer_text
+      - reference_text
+      - case_sensitive
+      - allow_order_change
+      - auto_grading_rule
+      - modify_time
+      - modify_user
+    filter:
+      answer_id: "[answer_id]"
+
+  - key: answer_delete
+    http: true
+    module: model_update
+    table: question_answer
+    params:
+      answer_id:
+        check:
+          template: "{{must .answer_id}}"
+          err_msg: answer_id不能为空
+      is_delete:
+        default: "1"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - is_delete
+      - modify_time
+      - modify_user
+    filter:
+      answer_id: "[answer_id]"
+
+  - key: answer_delete_by_question
+    http: true
+    module: model_update
+    table: question_answer
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      is_delete:
+        default: "1"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - is_delete
+      - modify_time
+      - modify_user
+    filter:
+      question_id: "[question_id]"
+
+  - key: blank_answer_query
+    http: true
+    module: sql
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+    data_file: blank_answer_query.sql
+
+  - key: blank_answer_save
+    http: true
+    module: model_save
+    table: question_blank_answer
+    params:
+      blank_answer_id:
+        template: "{{uuid}}"
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      blank_index:
+        type: int
+        default: 1
+      standard_answer:
+        default: ""
+      alternative_answers:
+        default: "[]"
+      score:
+        type: int
+        default: 0
+      match_mode:
+        default: exact
+      case_sensitive:
+        default: "0"
+      is_delete:
+        default: "0"
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+
+  - key: blank_answer_bulk_save
+    http: true
+    module: bulk_create
+    table: question_blank_answer
+    params:
+      blank_answers:
+        default: []
+    model_field: "[blank_answers]"
+
+  - key: blank_answer_delete_by_question
+    http: true
+    module: model_update
+    table: question_blank_answer
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      is_delete:
+        default: "1"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - is_delete
+      - modify_time
+      - modify_user
+    filter:
+      question_id: "[question_id]"
+
+  - key: blank_answer_update
+    http: true
+    module: model_update
+    table: question_blank_answer
+    params:
+      blank_answer_id:
+        check:
+          template: "{{must .blank_answer_id}}"
+          err_msg: blank_answer_id不能为空
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - blank_index
+      - standard_answer
+      - alternative_answers
+      - score
+      - match_mode
+      - case_sensitive
+      - modify_time
+      - modify_user
+    filter:
+      blank_answer_id: "[blank_answer_id]"
+
+  - key: scoring_point_query
+    http: true
+    module: sql
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+    data_file: scoring_point_query.sql
+
+  - key: scoring_point_save
+    http: true
+    module: model_save
+    table: question_scoring_point
+    params:
+      scoring_point_id:
+        template: "{{uuid}}"
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      point_index:
+        type: int
+        default: 1
+      score:
+        type: int
+        default: 0
+      keywords:
+        default: "[]"
+      is_required:
+        default: "0"
+      is_delete:
+        default: "0"
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+
+  - key: scoring_point_update
+    http: true
+    module: model_update
+    table: question_scoring_point
+    params:
+      scoring_point_id:
+        check:
+          template: "{{must .scoring_point_id}}"
+          err_msg: scoring_point_id不能为空
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - point_index
+      - point_text
+      - score
+      - keywords
+      - is_required
+      - modify_time
+      - modify_user
+    filter:
+      scoring_point_id: "[scoring_point_id]"
+
+  - key: asset_query
+    http: true
+    module: sql
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+    data_file: asset_query.sql
+
+  - key: asset_save
+    http: true
+    module: model_save
+    table: question_asset
+    params:
+      asset_id:
+        template: "{{uuid}}"
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      usage_type:
+        default: stem
+      file_size:
+        type: int
+        default: 0
+      status:
+        default: enabled
+      is_delete:
+        default: "0"
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+
+  - key: review_record_save
+    http: true
+    module: model_save
+    table: question_review_record
+    params:
+      review_id:
+        template: "{{uuid}}"
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      review_time:
+        template: "{{current_date_time}}"
+      review_user:
+        template: "{{.session_user_id}}"
+      is_delete:
+        default: "0"
+
+  - key: question_review_history
+    http: true
+    module: sql
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+    data_file: review_history.sql
+
+  - key: change_log_save
+    http: true
+    module: model_save
+    table: question_change_log
+    params:
+      log_id:
+        template: "{{uuid}}"
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      before_json:
+        default: "{}"
+      after_json:
+        default: "{}"
+      op_time:
+        template: "{{current_date_time}}"
+      op_user:
+        template: "{{.session_user_id}}"

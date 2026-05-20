@@ -1,0 +1,81 @@
+.learn-page {
+  padding-bottom: 48rpx;
+}
+
+.study-card {
+  padding: 36rpx;
+}
+
+.word-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.word {
+  font-size: 56rpx;
+  font-weight: 800;
+  color: #172033;
+}
+
+.phonetic {
+  margin-top: 8rpx;
+  color: #6b7280;
+  font-size: 28rpx;
+}
+
+.sound-button {
+  width: 92rpx;
+  height: 72rpx;
+  margin: 0;
+  border-radius: 12rpx;
+  background: #172033;
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 72rpx;
+}
+
+.meaning {
+  margin-top: 34rpx;
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.example {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  border-left: 8rpx solid #167a5a;
+  border-radius: 8rpx;
+  background: #f4faf7;
+  color: #344052;
+  font-size: 28rpx;
+  line-height: 1.7;
+}
+
+.tag {
+  display: inline-block;
+  margin-top: 28rpx;
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: #fff4dc;
+  color: #8a5a00;
+  font-size: 24rpx;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+  margin-top: 24rpx;
+}
+
+.tips {
+  padding: 26rpx;
+}
+
+.tip-line {
+  margin: 10rpx 0;
+  color: #5b6472;
+  font-size: 28rpx;
+  line-height: 1.6;
+}

@@ -1,0 +1,50 @@
+<view class="stitch-page knowledge-page">
+  <app-top-bar showBack="{{true}}" title="知识点掌握情况" showShare="{{true}}" showSettings="{{true}}" compact="{{true}}" />
+
+  <view class="knowledge-hero stitch-section stitch-card">
+    <view class="hero-label">英语能力综合评估</view>
+    <view class="hero-score">{{stats.score}}<text>分</text></view>
+    <view class="beat-pill">超越 {{stats.beatRate}}% 的学生</view>
+  </view>
+
+  <view class="ability-grid stitch-section">
+    <view
+      wx:for="{{stats.abilities}}"
+      wx:key="id"
+      class="ability-card stitch-card {{item.tone}} {{item.id == 'oral' ? 'wide' : ''}}"
+      bindtap="openMistakes"
+    >
+      <view class="ability-ring" style="background: conic-gradient({{item.color}} 0 {{item.percent}}%, #eceef1 {{item.percent}}% 100%);">
+        <view>{{item.percent}}%</view>
+      </view>
+      <view class="ability-copy">
+        <view class="ability-name">{{item.name}}</view>
+        <view class="ability-desc">{{item.desc}}</view>
+        <progress-bar wx:if="{{item.id == 'oral'}}" percent="{{item.percent}}" tone="{{item.tone}}" />
+      </view>
+    </view>
+  </view>
+
+  <view class="skills-card stitch-section stitch-card stitch-card-pad">
+    <view class="skills-title">分项技能追踪</view>
+    <view wx:for="{{stats.skills}}" wx:key="name" class="skill-row">
+      <progress-bar label="{{item.name}}" value="{{item.percent}}%" percent="{{item.percent}}" />
+    </view>
+  </view>
+
+  <view class="insight-card stitch-section">
+    <view class="insight-title">AI 学习洞察</view>
+    <view wx:for="{{stats.insights}}" wx:key="*this" class="insight-line">
+      <view class="insight-dot"></view>
+      <text>{{item}}</text>
+    </view>
+    <view class="stitch-primary-button target-button" bindtap="startPractice">开始针对性练习</view>
+  </view>
+
+  <view class="map-card stitch-section">
+    <view class="map-icon">图</view>
+    <view>知识图谱正在持续更新中</view>
+  </view>
+
+  <bottom-nav selected="knowledge" variant="full" />
+</view>

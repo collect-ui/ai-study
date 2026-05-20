@@ -1,0 +1,41 @@
+service:
+  - key: create_user_flow
+    http: true
+    module: empty
+    params:
+      user_id:
+        template: "{{uuid}}"
+    handler_params:
+      - key: service2field
+        service:
+          service: hrm.create_user
+        append_param: true
+      - key: service2field
+        enable: "{{must .role_id_list}}"
+        service:
+          service: hrm.user_role_add
+          role_id_list: "[role_id_list]"
+          user_id: "[user_id]"
+      - key: param2result
+        field: "[user_id]"
+
+  - key: edit_user_flow
+    http: true
+    module: empty
+    params:
+      user_id:
+        check:
+          template: "{{must .user_id}}"
+          err_msg: 用户ID不能为空
+    handler_params:
+      - key: service2field
+        service:
+          service: hrm.update_user_by_user_id
+        append_param: true
+      - key: service2field
+        service:
+          service: hrm.user_role_replace
+          user_id: "[user_id]"
+          role_id_list: "[role_id_list]"
+      - key: param2result
+        field: "[user_id]"

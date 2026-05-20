@@ -1,0 +1,24 @@
+<view class="page checkin-page">
+  <view class="summary card">
+    <view class="summary-label">当前连续学习</view>
+    <view class="summary-value">{{profile.streak}} 天</view>
+    <view class="summary-text">保持每天一次短学习，比偶尔突击更稳定。</view>
+  </view>
+
+  <view class="metric-grid">
+    <view class="metric card">
+      <view class="metric-value">{{profile.learnedWords}}</view>
+      <view class="metric-label">累计单词</view>
+    </view>
+    <view class="metric card">
+      <view class="metric-value">{{profile.targetMinutes}}</view>
+      <view class="metric-label">分钟目标</view>
+    </view>
+  </view>
+
+  <button class="primary-button checkin-button" bindtap="checkin">
+    {{checkedToday ? "今日已打卡" : "完成今日打卡"}}
+  </button>
+
+  <button class="reset-button" bindtap="resetProgress">重置示例进度</button>
+</view>

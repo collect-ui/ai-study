@@ -1,0 +1,70 @@
+<view class="stitch-page profile-page">
+  <app-top-bar brand="{{true}}" title="智学AI" showBell="{{true}}" showSettings="{{true}}" />
+
+  <view class="profile-head stitch-section">
+    <view class="avatar-wrap">
+      <view class="avatar">陈</view>
+      <view class="avatar-badge">{{profile.badge}}</view>
+    </view>
+    <view class="profile-copy">
+      <view class="profile-title">
+        <text>{{profile.name}}</text>
+        <text class="profile-level">{{profile.level}}</text>
+      </view>
+      <view class="profile-grade">{{profile.grade}}</view>
+      <view class="tag-row">
+        <view wx:for="{{profile.tags}}" wx:key="*this" class="profile-tag">{{item}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="assessment-card stitch-section stitch-card" bindtap="openKnowledge">
+    <view class="assessment-head">
+      <view>
+        <view class="card-title">英语学力评估</view>
+        <view class="card-subtitle">Proficiency Assessment</view>
+      </view>
+      <view class="improve">{{profile.improvement}}</view>
+    </view>
+    <view class="score-row">
+      <view>
+        <view class="score-label">最近模考分数</view>
+        <view class="mock-score">{{profile.mockScore}}<text>/ {{profile.mockTotal}}</text></view>
+      </view>
+      <view class="mini-chart">
+        <view style="height: 38%;"></view>
+        <view style="height: 52%;"></view>
+        <view style="height: 45%;"></view>
+        <view style="height: 74%;"></view>
+        <view style="height: 90%;"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="task-card stitch-section stitch-card" bindtap="openStudy">
+    <view class="task-head">
+      <view class="card-title">学习任务</view>
+      <view class="task-count">已完成 {{profile.tasks.done}}/{{profile.tasks.total}}</view>
+    </view>
+    <progress-bar percent="{{profile.tasks.percent}}" tone="green" />
+  </view>
+
+  <view class="knowledge-card stitch-section stitch-card">
+    <view class="card-title" bindtap="openKnowledge">知识点掌握情况</view>
+    <view class="card-subtitle">Knowledge Distribution</view>
+    <view wx:for="{{profile.knowledge}}" wx:key="name" class="knowledge-row" bindtap="openKnowledge">
+      <progress-bar label="{{item.name}}" value="{{item.percent}}%" percent="{{item.percent}}" tone="{{item.tone}}" />
+    </view>
+  </view>
+
+  <view class="mistake-entry stitch-section stitch-card" bindtap="openMistakes">
+    <view class="mistake-icon">错</view>
+    <view class="mistake-copy">
+      <view class="card-title">错题集</view>
+      <text>Question Bank · {{profile.mistakes}} 道待回顾</text>
+    </view>
+    <view class="entry-arrow">›</view>
+  </view>
+
+  <bottom-nav selected="profile" />
+</view>

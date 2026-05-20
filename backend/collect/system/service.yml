@@ -1,0 +1,18 @@
+# 系统基础服务，保留登录、菜单权限、码表和用户页面依赖的数据对象能力。
+service:
+  - name: 登录
+    path: login/index.yml
+  - name: 码表
+    path: sys_code/index.yml
+  - name: 菜单
+    path: menu/index.yml
+  - name: 角色菜单
+    path: role_menu/index.yml
+  - name: 系统按钮
+    path: sys_btn/index.yml
+  - name: 数据对象
+    path: schema_page_data/index.yml
+  - name: 字段配置
+    path: schema_page_field/index.yml
+  - name: 页面配置
+    path: schema_page/index.yml

@@ -1,0 +1,79 @@
+service:
+  - key: grade_query
+    http: true
+    module: sql
+    params:
+      keyword:
+        template: "{{ if .keyword }}%{{.keyword}}%{{end}}"
+    data_file: grade_query.sql
+
+  - key: grade_save
+    http: true
+    module: model_save
+    table: question_grade
+    params:
+      grade_id:
+        template: "{{uuid}}"
+      stage:
+        check:
+          template: "{{must .stage}}"
+          err_msg: 学段不能为空
+      grade_code:
+        check:
+          template: "{{must .grade_code}}"
+          err_msg: 年级编码不能为空
+      grade_name:
+        check:
+          template: "{{must .grade_name}}"
+          err_msg: 年级名称不能为空
+      order_index:
+        type: int
+        default: 1
+      status:
+        default: enabled
+      is_delete:
+        default: "0"
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+
+  - key: grade_update
+    http: true
+    module: model_update
+    table: question_grade
+    params:
+      grade_id:
+        check:
+          template: "{{must .grade_id}}"
+          err_msg: grade_id不能为空
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - stage
+      - grade_code
+      - grade_name
+      - order_index
+      - status
+      - modify_time
+      - modify_user
+    filter:
+      grade_id: "[grade_id]"
+
+  - key: grade_delete
+    http: true
+    module: model_delete
+    table: question_grade
+    params:
+      grade_id_list:
+        check:
+          template: "{{must .grade_id_list}}"
+          err_msg: 年级不能为空
+    filter:
+      grade_id__in: "[grade_id_list]"

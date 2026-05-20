@@ -1,0 +1,10 @@
+service:
+  - key: name_to_pinyin
+    http: true
+    module: empty
+    handler_params:
+      - key: pinyin
+        field: "[text]"
+        save_field: pinyin_result
+      - key: param2result
+        field: "[pinyin_result]"

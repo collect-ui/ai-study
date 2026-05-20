@@ -1,0 +1,34 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/dashboard/dashboard",
+    "pages/assessment/exam/exam",
+    "pages/assessment/report/report",
+    "pages/study/setup/setup",
+    "pages/study/recognition/recognition",
+    "pages/study/speaking/speaking",
+    "pages/study/report/report",
+    "pages/knowledge/overview/overview",
+    "pages/mistakes/list/list",
+    "pages/profile/english/english",
+    "pages/learn/learn",
+    "pages/checkin/checkin"
+  ],
+  "window": {
+    "navigationBarTitleText": "AI Study",
+    "navigationBarBackgroundColor": "#f7fafc",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f7fafc",
+    "backgroundTextStyle": "dark",
+    "navigationStyle": "custom"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "usingComponents": {
+    "app-top-bar": "/components/app-top-bar/app-top-bar",
+    "bottom-nav": "/components/bottom-nav/bottom-nav",
+    "progress-bar": "/components/progress-bar/progress-bar",
+    "metric-card": "/components/metric-card/metric-card",
+    "action-card": "/components/action-card/action-card"
+  }
+}

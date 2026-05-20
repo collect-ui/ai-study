@@ -1,0 +1,300 @@
+<!DOCTYPE html><html lang="zh-CN" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&amp;family=Be+Vietnam+Pro:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .bento-card-shadow {
+            box-shadow: 0 8px 30px rgba(0, 93, 167, 0.04);
+        }
+        .mesh-gradient {
+            background: radial-gradient(at 0% 0%, #005da7 0%, transparent 50%),
+                        radial-gradient(at 100% 0%, #2976c7 0%, transparent 50%),
+                        radial-gradient(at 100% 100%, #0060ac 0%, transparent 50%);
+            background-color: #005da7;
+        }
+        .active-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#7f5300",
+                        "on-primary-fixed-variant": "#004883",
+                        "inverse-primary": "#a4c9ff",
+                        "surface-container-low": "#f2f4f7",
+                        "on-secondary-container": "#00705c",
+                        "tertiary-fixed-dim": "#ffb953",
+                        "surface": "#f7f9fc",
+                        "on-tertiary-fixed-variant": "#633f00",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#002019",
+                        "tertiary-fixed": "#ffddb4",
+                        "on-background": "#191c1e",
+                        "secondary-container": "#67f7d5",
+                        "primary": "#005da7",
+                        "surface-container-highest": "#e0e3e6",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#0060ac",
+                        "primary-fixed-dim": "#a4c9ff",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-dim": "#d8dadd",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#eff1f4",
+                        "surface-variant": "#e0e3e6",
+                        "secondary-fixed": "#6bfad8",
+                        "on-surface": "#191c1e",
+                        "on-primary-container": "#fdfcff",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c1c7d3",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-fixed": "#001c39",
+                        "surface-bright": "#f7f9fc",
+                        "outline": "#717783",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005142",
+                        "secondary-fixed-dim": "#48ddbc",
+                        "secondary": "#006b58",
+                        "background": "#f7f9fc",
+                        "on-tertiary-fixed": "#291800",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#2976c7",
+                        "tertiary-container": "#a06900",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#d4e3ff",
+                        "surface-container-high": "#e6e8eb",
+                        "on-surface-variant": "#414751",
+                        "surface-container": "#eceef1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-margin": "32px",
+                        "stack-gap": "16px",
+                        "container-padding": "20px",
+                        "inline-gap": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-surface/80 backdrop-blur-md top-0 flex justify-between items-center w-full px-container-padding h-16 sticky z-50">
+<div class="flex items-center gap-inline-gap">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[20px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">AI 学习助手</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-on-surface-variant p-2 rounded-full hover:bg-surface-container-high transition-all" data-icon="search">search</button>
+<div class="relative">
+<button class="material-symbols-outlined text-on-surface-variant p-2 rounded-full hover:bg-surface-container-high transition-all" data-icon="notifications">notifications</button>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</div>
+</div>
+</header>
+<main class="px-container-padding pt-4 space-y-8">
+<!-- Enhanced Header Area -->
+<section class="flex items-center justify-between">
+<div class="space-y-1">
+<h2 class="font-display-lg text-[28px] text-on-surface leading-tight">早安，小明同学 <span class="inline-block animate-bounce">👋</span></h2>
+<p class="font-body-md text-on-surface-variant">准备好开始今天的 AI 提分之旅了吗？</p>
+</div>
+<div class="relative">
+<div class="w-14 h-14 rounded-2xl overflow-hidden ring-4 ring-primary/10">
+<img alt="AI Mentor" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXrvKtBSknfNdjgOhdW5-hL6giky0JEovcabigT6XovN5iyDAWVFrvd55u6ItQvhP9jokRZTRezTMzm6h8V4O3Bf3vjvavSSxGLE2NUPRVSBMc4j0dnlAkYuDhX-146D3hApzucD_P6NVeJ7g84C2sOpkV--6X544VFy6fuUm7Odj_XYaVSeSgxH5W0Vox88eBRlVLRs4ve-nxnciaZ6AOkPxmdZcJ3JNBdm9-DbM5c4LwsWDQjeh1Q7jbvdm97NOw6SrrMcdF7w">
+</div>
+<div class="absolute -bottom-1 -right-1 bg-secondary-fixed text-on-secondary-fixed text-[10px] px-1.5 py-0.5 rounded-full font-bold">在线</div>
+</div>
+</section>
+<!-- Redesigned Learning Progress Card -->
+<section class="mesh-gradient p-6 rounded-3xl shadow-xl shadow-primary/20 relative overflow-hidden text-on-primary-container">
+<div class="relative z-10 space-y-4">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-white/80 font-label-md uppercase tracking-widest">今日学习成就</p>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="text-4xl font-bold text-white tracking-tighter">75</span>
+<span class="text-xl font-medium text-white/90">%</span>
+</div>
+</div>
+<div class="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/30 text-white font-medium text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="task_alt">task_alt</span>
+                        还剩 3 个任务
+                    </div>
+</div>
+<div class="space-y-2">
+<div class="h-3 w-full bg-white/20 rounded-full overflow-hidden">
+<div class="h-full bg-secondary-fixed shadow-[0_0_15px_rgba(107,250,216,0.5)] rounded-full transition-all duration-1000" style="width: 75%"></div>
+</div>
+<div class="flex justify-between text-[11px] text-white/70 font-medium">
+<span class="">基础巩固</span>
+<span class="">查漏补缺</span>
+<span class="">冲刺提升</span>
+</div>
+</div>
+</div>
+<!-- Decorative circles -->
+<div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
+<div class="absolute right-1/4 top-0 w-24 h-24 bg-secondary-container/10 rounded-full blur-xl"></div>
+</section>
+<!-- Dynamic Feature Grid -->
+<section class="space-y-4">
+<h3 class="font-headline-md text-on-surface">智能提分工具</h3>
+<div class="grid grid-cols-2 gap-4">
+<!-- Shortboard Test (Featured) -->
+<div class="col-span-2 group bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant hover:border-primary transition-all duration-300 bento-card-shadow active:scale-[0.98] flex items-center justify-between overflow-hidden relative">
+<div class="flex items-center gap-4 relative z-10">
+<div class="w-14 h-14 bg-error-container/30 text-error rounded-2xl flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-[32px] drop-shadow-sm" data-icon="analytics">analytics</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-headline-md text-on-surface">短板测试</h4>
+<span class="bg-error text-white text-[10px] px-1.5 py-0.5 rounded-md font-bold animate-pulse">AI 诊断</span>
+</div>
+<p class="font-body-md text-on-surface-variant mt-0.5">精准锁定知识盲区</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors z-10" data-icon="arrow_forward_ios">arrow_forward_ios</span>
+<div class="absolute right-0 bottom-0 opacity-5 -mb-4 -mr-4 rotate-12">
+<span class="material-symbols-outlined text-[100px]" data-icon="insights">insights</span>
+</div>
+</div>
+<!-- Photo Entry -->
+<div class="group bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant hover:border-primary transition-all duration-300 bento-card-shadow active:scale-[0.98] flex flex-col gap-4">
+<div class="w-12 h-12 bg-secondary-container/30 text-secondary rounded-xl flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-[28px]" data-icon="photo_camera">photo_camera</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[18px] text-on-surface">拍照录入</h4>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">秒级识别错题与解析</p>
+</div>
+</div>
+<!-- Independent Study -->
+<div class="group bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant hover:border-primary transition-all duration-300 bento-card-shadow active:scale-[0.98] flex flex-col gap-4">
+<div class="w-12 h-12 bg-primary-container/30 text-primary rounded-xl flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-[28px]" data-icon="auto_stories">auto_stories</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[18px] text-on-surface">自主学习</h4>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">名师精讲微课合集</p>
+</div>
+</div>
+<!-- Online Q&A -->
+<div class="col-span-2 group bg-tertiary-container/10 p-5 rounded-2xl border border-tertiary-container/30 hover:border-tertiary transition-all duration-300 bento-card-shadow active:scale-[0.98] flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-2xl flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-[32px]" data-icon="support_agent">support_agent</span>
+</div>
+<div>
+<h4 class="font-headline-md text-on-surface">在线答疑</h4>
+<p class="font-body-md text-on-surface-variant">真人在校导师 1对1 实时解惑</p>
+</div>
+</div>
+<div class="bg-tertiary text-white px-3 py-1 rounded-full text-xs font-medium">
+                        立即连接
+                    </div>
+</div>
+</div>
+</section>
+<!-- Recommended Section -->
+<section class="space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-md text-on-surface">为你推荐</h3>
+<button class="text-primary text-sm font-medium flex items-center gap-1">
+                    更多 <span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-container-padding px-container-padding">
+<div class="flex-none w-64 bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant/30">
+<div class="h-32 bg-primary-container/20 flex items-center justify-center overflow-hidden">
+<img alt="Course Cover" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATDNCrCXxEgYgSgeTS9mi5gZ_bfJ3AixxHhfbaNJ5--pxihZBmEbz-gPkj7D7LdM2FhtGCySM5-1KDf6t_vDbX4uVm2DBuT7fBRozTyp7kPbnju8Hr-HmjuCvYnQU-LFqsH-M32qYAdnyhKE0ap546XMpbgKSsSm_Tm6yHaeb83jH3RkOKgCcngzj8OEzJMRQN7EEcCI8E0p7VuBH0Qs08Z1aGSlOwWk8G5dObsfD6P0XuKahN63_2OKBz5KEWjAszfocsISgHhg">
+</div>
+<div class="p-4 space-y-1">
+<div class="text-[10px] font-bold text-primary uppercase tracking-tighter">数学 · 解析几何</div>
+<h5 class="font-bold text-on-surface truncate">三步搞定椭圆最值问题</h5>
+<p class="text-xs text-on-surface-variant">1,240 位同学正在学习</p>
+</div>
+</div>
+<div class="flex-none w-64 bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant/30">
+<div class="h-32 bg-secondary-container/20 flex items-center justify-center overflow-hidden">
+<img alt="Test Result" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwiWYJvoos_jOGwXz-gHf02giPv1_FycPnKZEMkxZnolg4C23FsIJlQZKbmT6JsCmLYIt4WvdCzq22tVkl_OepJQgrLSiO3y0JLAzavolIE7DDHGe0P9FTxGKwKVwPmDXfyYwszN5XG_HVtI2WQ44W7GmHicwfO4IP7Cajogz9ai279csHNW5VKgj69dWyRo7lAL16rt9Ouh3pIv_WPGVs_ZW7Vhz_MgsbBrVsYlwWL1adOawD7LXK5mcnkXS_DNGEzTs0mbvJzQ">
+</div>
+<div class="p-4 space-y-1">
+<div class="text-[10px] font-bold text-secondary uppercase tracking-tighter">英语 · 完型填空</div>
+<h5 class="font-bold text-on-surface truncate">高频词汇智能闪卡训练</h5>
+<p class="text-xs text-on-surface-variant">基于你昨天的错题生成</p>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Assistant Entry (Refined) -->
+<section class="bg-primary/5 border border-primary/10 rounded-2xl p-4 flex items-center gap-4">
+<div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center animate-pulse">
+<span class="material-symbols-outlined text-[20px]" data-icon="chat_bubble">chat_bubble</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium text-on-surface">有什么学习难题，随时问我</p>
+<p class="text-xs text-on-surface-variant">AI 助教 24h 全天候待命</p>
+</div>
+<button class="bg-primary text-white px-4 py-1.5 rounded-xl text-sm font-bold shadow-md shadow-primary/20">
+                去提问
+            </button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-12 pb-6 pt-3 bg-surface/90 backdrop-blur-xl border-t border-outline-variant/30 rounded-t-[32px] shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center gap-1 text-primary group" href="#">
+<div class="relative flex items-center justify-center">
+<div class="absolute -inset-2 bg-primary/10 rounded-2xl scale-110"></div>
+<span class="material-symbols-outlined active-icon text-[28px]" data-icon="home">home</span>
+</div>
+<span class="text-[11px] font-bold">首页</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors group" href="#">
+<div class="relative flex items-center justify-center">
+<span class="material-symbols-outlined text-[28px]" data-icon="person">person</span>
+</div>
+<span class="text-[11px] font-medium">我的</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,262 @@
+.exam-page {
+  padding-bottom: 190rpx;
+}
+
+.exam-progress-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 14rpx;
+}
+
+.question-index {
+  color: #005da7;
+  font-size: 40rpx;
+  font-weight: 900;
+  line-height: 48rpx;
+}
+
+.question-index text {
+  color: #717783;
+  font-size: 26rpx;
+  font-weight: 600;
+}
+
+.question-scope {
+  color: #717783;
+  font-size: 23rpx;
+  font-weight: 700;
+}
+
+.exam-track {
+  height: 16rpx;
+  overflow: hidden;
+  border-radius: 999rpx;
+  background: #eceef1;
+}
+
+.exam-fill {
+  height: 100%;
+  border-radius: 999rpx;
+  background: #006b58;
+}
+
+.question-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 26rpx;
+  margin-top: 32rpx;
+}
+
+.question-meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 14rpx;
+}
+
+.question-meta text {
+  flex: 1;
+  color: #717783;
+  font-size: 23rpx;
+  line-height: 32rpx;
+}
+
+.passage-box {
+  margin-top: 30rpx;
+  padding: 24rpx;
+  border-left: 8rpx solid rgba(0, 107, 88, 0.5);
+  border-radius: 14rpx;
+  background: #f2f4f7;
+  color: #414751;
+  font-size: 27rpx;
+  line-height: 44rpx;
+  font-style: italic;
+}
+
+.question-text {
+  margin-top: 30rpx;
+  color: #191c1e;
+  font-size: 33rpx;
+  font-weight: 500;
+  line-height: 52rpx;
+}
+
+.blank-line {
+  display: inline-block;
+  width: 58rpx;
+  border-bottom: 3rpx solid rgba(0, 93, 167, 0.28);
+}
+
+.hint-word {
+  padding: 0 8rpx;
+  border-bottom: 3rpx solid rgba(0, 93, 167, 0.28);
+  color: #2976c7;
+  font-style: italic;
+}
+
+.judge-question {
+  margin-top: 28rpx;
+}
+
+.option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22rpx;
+  margin-top: 34rpx;
+}
+
+.option-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 92rpx;
+  padding: 18rpx 70rpx 18rpx 18rpx;
+  border: 2rpx solid #c1c7d3;
+  border-radius: 20rpx;
+  background: #ffffff;
+}
+
+.option-item.selected {
+  border-color: #005da7;
+  background: rgba(212, 227, 255, 0.36);
+}
+
+.option-label {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56rpx;
+  height: 56rpx;
+  margin-right: 22rpx;
+  border-radius: 16rpx;
+  background: #eceef1;
+  color: #414751;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.option-item.selected .option-label {
+  background: #005da7;
+  color: #ffffff;
+}
+
+.option-text {
+  color: #191c1e;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.option-check {
+  position: absolute;
+  right: 24rpx;
+  color: #005da7;
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.fill-area {
+  margin-top: 34rpx;
+}
+
+.judge-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22rpx;
+  margin-top: 34rpx;
+}
+
+.judge-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100rpx;
+  border: 2rpx solid #c1c7d3;
+  border-radius: 22rpx;
+  color: #414751;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.judge-icon {
+  margin-right: 10rpx;
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.judge-button.selected.true {
+  border-color: #006b58;
+  background: rgba(103, 247, 213, 0.16);
+  color: #006b58;
+}
+
+.judge-button.selected.false {
+  border-color: #ba1a1a;
+  background: rgba(255, 218, 214, 0.45);
+  color: #ba1a1a;
+}
+
+.ai-monitor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 54rpx;
+  color: #717783;
+  font-size: 23rpx;
+  font-weight: 700;
+}
+
+.monitor-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96rpx;
+  height: 96rpx;
+  margin-bottom: 14rpx;
+  border-radius: 999rpx;
+  background: #d4e3ff;
+  color: #005da7;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.exam-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  gap: 28rpx;
+  padding: 24rpx 38rpx 34rpx;
+  border-top: 1rpx solid #e4e7ed;
+  background: #ffffff;
+  box-shadow: 0 -8rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+.footer-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92rpx;
+  border-radius: 22rpx;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.footer-button.secondary {
+  border: 2rpx solid #717783;
+  color: #414751;
+}
+
+.footer-button.secondary.disabled {
+  opacity: 0.45;
+}
+
+.footer-button.primary {
+  background: #005da7;
+  color: #ffffff;
+  box-shadow: 0 12rpx 26rpx rgba(0, 93, 167, 0.2);
+}

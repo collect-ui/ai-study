@@ -1,0 +1,104 @@
+.app-top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 112rpx;
+  margin: -32rpx -38rpx 0;
+  padding: 24rpx 38rpx 18rpx;
+  background: rgba(247, 249, 252, 0.94);
+  border-bottom: 1rpx solid rgba(193, 199, 211, 0.32);
+}
+
+.app-top-bar.compact {
+  min-height: 96rpx;
+}
+
+.bar-left,
+.bar-actions {
+  display: flex;
+  align-items: center;
+}
+
+.bar-left {
+  min-width: 0;
+}
+
+.bar-actions {
+  gap: 12rpx;
+  margin-left: 18rpx;
+}
+
+.brand-logo {
+  flex: none;
+  width: 54rpx;
+  height: 54rpx;
+  margin-right: 16rpx;
+}
+
+.bar-title {
+  max-width: 470rpx;
+  overflow: hidden;
+  color: #005da7;
+  font-size: 36rpx;
+  font-weight: 800;
+  line-height: 44rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brand-title {
+  font-size: 38rpx;
+}
+
+.bar-subtitle {
+  margin-top: 3rpx;
+  color: #717783;
+  font-size: 22rpx;
+  line-height: 28rpx;
+}
+
+.icon-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 999rpx;
+  color: #005da7;
+  font-size: 42rpx;
+  font-weight: 700;
+}
+
+.icon-button:active {
+  background: #e6e8eb;
+}
+
+.profile-icon {
+  background: #e6e8eb;
+  color: #414751;
+  font-size: 34rpx;
+}
+
+.bar-left .icon-button {
+  margin-right: 8rpx;
+}
+
+.bell-image {
+  width: 42rpx;
+  height: 42rpx;
+}
+
+.dot {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  width: 14rpx;
+  height: 14rpx;
+  border: 3rpx solid #f7f9fc;
+  border-radius: 999rpx;
+  background: #ba1a1a;
+}

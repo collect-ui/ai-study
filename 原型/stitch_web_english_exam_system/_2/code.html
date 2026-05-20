@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>English Exam Manager - 创建新题目</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#005bc0",
+                        "on-primary-fixed": "#001a41",
+                        "primary": "#1a73e8",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#00285c",
+                        "on-tertiary-fixed": "#002108",
+                        "outline-variant": "#e1e3e4",
+                        "secondary-fixed": "#d8e2ff",
+                        "on-background": "#191c1d",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#001a41",
+                        "tertiary-container": "#e6f4ea",
+                        "tertiary": "#006d2c",
+                        "on-surface-variant": "#5f6368",
+                        "inverse-surface": "#2e3132",
+                        "secondary-container": "#e8f0fe",
+                        "on-error-container": "#93000a",
+                        "secondary": "#005ac1",
+                        "on-surface": "#202124",
+                        "surface-variant": "#f1f3f4",
+                        "background": "#f8f9fa",
+                        "inverse-primary": "#adc7ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#6ddd81",
+                        "tertiary-fixed": "#89fa9b",
+                        "surface-container-low": "#f8f9fa",
+                        "surface": "#ffffff",
+                        "on-primary-fixed-variant": "#004493",
+                        "surface-dim": "#d9dadb",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e8eaed",
+                        "primary-container": "#e8f0fe",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#137333",
+                        "inverse-on-surface": "#f0f1f2",
+                        "error-container": "#fce8e6",
+                        "surface-container-high": "#f1f3f4",
+                        "primary-fixed": "#d2e3fc",
+                        "on-secondary-fixed-variant": "#004494",
+                        "surface-container": "#f1f3f4",
+                        "surface-bright": "#ffffff",
+                        "primary-fixed-dim": "#adc7ff",
+                        "outline": "#dadce0",
+                        "on-tertiary-fixed-variant": "#005320",
+                        "on-primary-container": "#174ea6",
+                        "error": "#d93025"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "4px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "12px",
+                        "base": "8px",
+                        "gutter": "24px",
+                        "margin": "32px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Work Sans", "sans-serif"],
+                        "label-md": ["Work Sans", "sans-serif"],
+                        "headline-lg-mobile": ["Work Sans", "sans-serif"],
+                        "headline-lg": ["Work Sans", "sans-serif"],
+                        "headline-sm": ["Work Sans", "sans-serif"],
+                        "body-lg": ["Work Sans", "sans-serif"],
+                        "body-md": ["Work Sans", "sans-serif"],
+                        "headline-md": ["Work Sans", "sans-serif"],
+                        "display-lg": ["Work Sans", "sans-serif"],
+                        "label-lg": ["Work Sans", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+        .custom-shadow {
+            box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+        }
+        .tab-active {
+            border-bottom: 3px solid #1a73e8;
+            color: #1a73e8;
+        }
+        .focus-within-ring:focus-within {
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+            border-color: #1a73e8;
+        }
+        /* Toggle for Rich Text / Normal */
+        .option-editor-normal .rich-text-ui { display: none; }
+        .option-editor-rich .normal-text-ui { display: none; }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<div class="flex min-h-screen">
+<!-- Main Content Canvas -->
+<main class="flex-1 p-margin max-w-[1280px] mx-auto w-full">
+<header class="mb-lg flex justify-between items-end border-b border-outline-variant pb-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">创建新题目</h1>
+<p class="text-body-md text-on-surface-variant">精准录入题目元数据与内容，构建高质量题库资源</p>
+</div>
+<div class="text-primary font-bold text-headline-sm tracking-tight">English Exam Manager</div>
+</header>
+<div class="grid grid-cols-12 gap-gutter items-start">
+<!-- Metadata Sidebar -->
+<aside class="col-span-12 lg:col-span-4 space-y-gutter">
+<!-- Basic Info Card -->
+<div class="bg-surface-container-lowest border border-outline rounded-xl p-md custom-shadow">
+<div class="flex items-center gap-base mb-md pb-base border-b border-outline-variant">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<h2 class="font-label-lg text-label-lg text-on-surface">题目元数据</h2>
+</div>
+<div class="space-y-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs">年级</label>
+<select class="w-full h-11 border border-outline rounded-lg px-sm focus:border-primary focus:ring-1 focus:ring-primary bg-white text-body-md">
+<option>七年级 (初一)</option>
+<option>八年级 (初二)</option>
+<option>九年级 (初三)</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs">单元</label>
+<select class="w-full h-11 border border-outline rounded-lg px-sm focus:border-primary focus:ring-1 focus:ring-primary bg-white text-body-md">
+<option>第一单元: 我的朋友</option>
+<option>第二单元: 日常生活</option>
+<option>第三单元: 旅游与文化</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs">难度系数</label>
+<div class="flex bg-surface-container rounded-lg p-1">
+<button class="flex-1 py-1.5 rounded-md bg-white shadow-sm font-label-md text-label-md text-primary ring-1 ring-black/5">基础</button>
+<button class="flex-1 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-highest transition-colors">中等</button>
+<button class="flex-1 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-highest transition-colors">困难</button>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs">知识点标签</label>
+<div class="flex flex-wrap gap-xs mb-sm">
+<span class="bg-surface-container-high text-on-surface px-sm py-1 rounded-full text-label-md flex items-center gap-xs border border-outline-variant">
+                                        时态 <span class="material-symbols-outlined text-xs cursor-pointer hover:text-error transition-colors">close</span>
+</span>
+<span class="bg-surface-container-high text-on-surface px-sm py-1 rounded-full text-label-md flex items-center gap-xs border border-outline-variant">
+                                        词汇 <span class="material-symbols-outlined text-xs cursor-pointer hover:text-error transition-colors">close</span>
+</span>
+<button class="border border-primary border-dashed text-primary px-sm py-1 rounded-full text-label-md flex items-center gap-xs hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-xs">add</span> 添加
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Sequence Info -->
+<div class="bg-surface-container-lowest border border-outline rounded-xl p-md custom-shadow">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs">试卷内序号</label>
+<input class="w-full h-11 border border-outline rounded-lg px-sm focus:border-primary focus:ring-1 focus:ring-primary font-body-md" type="number" value="1"/>
+</div>
+</aside>
+<!-- Editor Canvas -->
+<div class="col-span-12 lg:col-span-8 space-y-gutter">
+<!-- Type Selector Tabs -->
+<div class="bg-white border border-outline rounded-xl overflow-hidden flex custom-shadow">
+<button class="flex-1 py-md flex flex-col items-center justify-center gap-1 bg-primary-container text-primary font-label-lg transition-all border-r border-outline-variant relative">
+<span class="material-symbols-outlined">checklist</span>
+<span class="text-label-md">选择题</span>
+<div class="absolute bottom-0 left-0 right-0 h-1 bg-primary"></div>
+</button>
+<button class="flex-1 py-md flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container-high transition-all border-r border-outline-variant">
+<span class="material-symbols-outlined">rule</span>
+<span class="text-label-md">判断题</span>
+</button><button class="flex-1 py-md flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container-high transition-all border-r border-outline-variant"><span class="material-symbols-outlined">input</span><span class="text-label-md">填空题</span></button>
+<button class="flex-1 py-md flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container-high transition-all border-r border-outline-variant">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="text-label-md">简答题</span>
+</button>
+<button class="flex-1 py-md flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">calculate</span>
+<span class="text-label-md">计算题</span>
+</button>
+</div>
+<!-- Question Editor Form -->
+<div class="bg-surface-container-lowest border border-outline rounded-xl p-lg custom-shadow">
+<!-- Question Stem Section -->
+<div class="mb-lg">
+<div class="flex items-center justify-between mb-xs">
+<label class="font-label-lg text-label-lg text-on-surface">题干内容</label>
+<!-- Rich Text Toolbar -->
+<div class="p-1 bg-surface-container rounded-lg flex gap-1"><button class="px-2 h-8 flex items-center justify-center gap-1 rounded bg-primary/10 text-primary hover:bg-primary/20 transition-colors font-label-md"><span class="material-symbols-outlined text-sm">add_box</span><span>插入填空</span></button><div class="w-[1px] bg-outline-variant mx-0.5"></div>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">format_bold</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">format_italic</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">format_list_bulleted</span>
+</button>
+<div class="w-[1px] bg-outline-variant mx-0.5"></div>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">image</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">functions</span>
+</button>
+</div>
+</div>
+<div class="relative focus-within-ring rounded-lg transition-all border border-outline overflow-hidden">
+<textarea class="w-full border-none focus:ring-0 p-sm text-body-md resize-none" placeholder="请输入题目正文，支持 LaTeX 公式与富文本..." rows="5"></textarea>
+</div>
+</div>
+<!-- Options Section -->
+<div class="space-y-md mb-lg" id="options-section">
+<div class="flex items-center justify-between mb-xs">
+<label class="block font-label-lg text-label-lg text-on-surface">选项配置</label>
+</div>
+<div class="grid grid-cols-1 gap-md">
+<!-- Option A -->
+<div class="flex items-start gap-sm group option-editor-normal" id="option-a-container">
+<div class="flex-none w-10 h-10 rounded-full border-2 border-primary text-primary flex items-center justify-center font-bold bg-primary-container/30 mt-1">A</div>
+<div class="flex-1 flex flex-col bg-white border border-outline rounded-lg focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all overflow-hidden">
+<div class="flex items-center justify-between px-2 py-1 bg-surface-container-low border-b border-outline-variant">
+<div class="rich-text-ui flex items-center gap-1">
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_bold</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_italic</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_list_bulleted</span></button>
+<div class="w-[1px] h-4 bg-outline-variant mx-0.5"></div>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">image</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">functions</span></button>
+</div>
+<div class="normal-text-ui px-1">
+<span class="text-label-md text-on-surface-variant font-medium">普通模式</span>
+</div>
+<button class="text-primary hover:underline text-label-md flex items-center gap-xs" onclick="document.getElementById('option-a-container').classList.toggle('option-editor-normal'); document.getElementById('option-a-container').classList.toggle('option-editor-rich')">
+<span class="material-symbols-outlined text-[14px]">swap_horiz</span>
+<span class="rich-text-ui">切换为普通文本</span>
+<span class="normal-text-ui">切换为富文本</span>
+</button>
+</div>
+<div class="flex items-center flex-1">
+<div class="flex-1 flex flex-col">
+<input class="normal-text-ui w-full border-none focus:ring-0 px-sm py-2.5 text-body-md" placeholder="输入选项 A 内容"/>
+<textarea class="rich-text-ui w-full border-none focus:ring-0 px-sm py-2 text-body-md resize-none h-24" placeholder="输入选项 A 富文本内容..."></textarea>
+</div>
+</div>
+</div>
+</div>
+<!-- Option B -->
+<div class="flex items-start gap-sm group option-editor-normal" id="option-b-container">
+<div class="flex-none w-10 h-10 rounded-full border-2 border-outline-variant text-on-surface-variant flex items-center justify-center font-bold mt-1">B</div>
+<div class="flex-1 flex flex-col bg-white border border-outline rounded-lg focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all overflow-hidden">
+<div class="flex items-center justify-between px-2 py-1 bg-surface-container-low border-b border-outline-variant">
+<div class="rich-text-ui flex items-center gap-1">
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_bold</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_italic</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_list_bulleted</span></button>
+<div class="w-[1px] h-4 bg-outline-variant mx-0.5"></div>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">image</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">functions</span></button>
+</div>
+<div class="normal-text-ui px-1"><span class="text-label-md text-on-surface-variant font-medium">普通模式</span></div>
+<button class="text-primary hover:underline text-label-md flex items-center gap-xs" onclick="document.getElementById('option-b-container').classList.toggle('option-editor-normal'); document.getElementById('option-b-container').classList.toggle('option-editor-rich')">
+<span class="material-symbols-outlined text-[14px]">swap_horiz</span>
+<span class="rich-text-ui">切换为普通文本</span>
+<span class="normal-text-ui">切换为富文本</span>
+</button>
+</div>
+<div class="flex items-center flex-1">
+<div class="flex-1 flex flex-col">
+<input class="normal-text-ui w-full border-none focus:ring-0 px-sm py-2.5 text-body-md" placeholder="输入选项 B 内容"/>
+<textarea class="rich-text-ui w-full border-none focus:ring-0 px-sm py-2 text-body-md resize-none h-24" placeholder="输入选项 B 富文本内容..."></textarea>
+</div>
+</div>
+</div>
+</div>
+<!-- Option C -->
+<div class="flex items-start gap-sm group option-editor-normal" id="option-c-container">
+<div class="flex-none w-10 h-10 rounded-full border-2 border-outline-variant text-on-surface-variant flex items-center justify-center font-bold mt-1">C</div>
+<div class="flex-1 flex flex-col bg-white border border-outline rounded-lg focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all overflow-hidden">
+<div class="flex items-center justify-between px-2 py-1 bg-surface-container-low border-b border-outline-variant">
+<div class="rich-text-ui flex items-center gap-1">
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_bold</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_italic</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_list_bulleted</span></button>
+<div class="w-[1px] h-4 bg-outline-variant mx-0.5"></div>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">image</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">functions</span></button>
+</div>
+<div class="normal-text-ui px-1"><span class="text-label-md text-on-surface-variant font-medium">普通模式</span></div>
+<button class="text-primary hover:underline text-label-md flex items-center gap-xs" onclick="document.getElementById('option-c-container').classList.toggle('option-editor-normal'); document.getElementById('option-c-container').classList.toggle('option-editor-rich')">
+<span class="material-symbols-outlined text-[14px]">swap_horiz</span>
+<span class="rich-text-ui">切换为普通文本</span>
+<span class="normal-text-ui">切换为富文本</span>
+</button>
+</div>
+<div class="flex items-center flex-1">
+<div class="flex-1 flex flex-col">
+<input class="normal-text-ui w-full border-none focus:ring-0 px-sm py-2.5 text-body-md" placeholder="输入选项 C 内容"/>
+<textarea class="rich-text-ui w-full border-none focus:ring-0 px-sm py-2 text-body-md resize-none h-24" placeholder="输入选项 C 富文本内容..."></textarea>
+</div>
+</div>
+</div>
+</div>
+<!-- Option D -->
+<div class="flex items-start gap-sm group option-editor-normal" id="option-d-container">
+<div class="flex-none w-10 h-10 rounded-full border-2 border-outline-variant text-on-surface-variant flex items-center justify-center font-bold mt-1">D</div>
+<div class="flex-1 flex flex-col bg-white border border-outline rounded-lg focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all overflow-hidden">
+<div class="flex items-center justify-between px-2 py-1 bg-surface-container-low border-b border-outline-variant">
+<div class="rich-text-ui flex items-center gap-1">
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_bold</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_italic</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">format_list_bulleted</span></button>
+<div class="w-[1px] h-4 bg-outline-variant mx-0.5"></div>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">image</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">functions</span></button>
+</div>
+<div class="normal-text-ui px-1"><span class="text-label-md text-on-surface-variant font-medium">普通模式</span></div>
+<button class="text-primary hover:underline text-label-md flex items-center gap-xs" onclick="document.getElementById('option-d-container').classList.toggle('option-editor-normal'); document.getElementById('option-d-container').classList.toggle('option-editor-rich')">
+<span class="material-symbols-outlined text-[14px]">swap_horiz</span>
+<span class="rich-text-ui">切换为普通文本</span>
+<span class="normal-text-ui">切换为富文本</span>
+</button>
+</div>
+<div class="flex items-center flex-1">
+<div class="flex-1 flex flex-col">
+<input class="normal-text-ui w-full border-none focus:ring-0 px-sm py-2.5 text-body-md" placeholder="输入选项 D 内容"/>
+<textarea class="rich-text-ui w-full border-none focus:ring-0 px-sm py-2 text-body-md resize-none h-24" placeholder="输入选项 D 富文本内容..."></textarea>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="hidden space-y-md mb-lg" id="blank-answers-section"><div class="flex items-center justify-between mb-xs"><label class="block font-label-lg text-label-lg text-on-surface">填空答案配置</label><button class="text-primary hover:underline text-label-md flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]">add_circle</span> 添加备选答案</button></div><div class="space-y-sm"><div class="flex items-center gap-sm bg-surface-container-low p-sm rounded-lg border border-outline-variant"><div class="flex-none w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center font-bold">1</div><div class="flex-1 flex gap-base"><input class="flex-1 h-10 border border-outline rounded px-sm focus:border-primary focus:ring-1 focus:ring-primary text-body-md" placeholder="输入填空 1 的标准答案"/><input class="flex-1 h-10 border border-outline rounded px-sm focus:border-primary focus:ring-1 focus:ring-primary text-body-md" placeholder="输入备选答案 (可选)"/></div><button class="text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined">delete</span></button></div></div></div>
+<!-- Correct Answer Selection Section -->
+<div class="mb-lg p-md bg-surface-container-low border border-outline rounded-lg" id="answer-settings-section">
+<label class="block font-label-lg text-label-lg text-on-surface mb-md">正确答案设置</label>
+<div class="flex gap-lg">
+<label class="flex items-center gap-base cursor-pointer group">
+<input checked="" class="w-5 h-5 text-primary focus:ring-primary border-outline" name="final-correct" type="radio"/>
+<span class="text-body-md font-medium text-on-surface group-hover:text-primary transition-colors">选项 A</span>
+</label>
+<label class="flex items-center gap-base cursor-pointer group">
+<input class="w-5 h-5 text-primary focus:ring-primary border-outline" name="final-correct" type="radio"/>
+<span class="text-body-md font-medium text-on-surface group-hover:text-primary transition-colors">选项 B</span>
+</label>
+<label class="flex items-center gap-base cursor-pointer group">
+<input class="w-5 h-5 text-primary focus:ring-primary border-outline" name="final-correct" type="radio"/>
+<span class="text-body-md font-medium text-on-surface group-hover:text-primary transition-colors">选项 C</span>
+</label>
+<label class="flex items-center gap-base cursor-pointer group">
+<input class="w-5 h-5 text-primary focus:ring-primary border-outline" name="final-correct" type="radio"/>
+<span class="text-body-md font-medium text-on-surface group-hover:text-primary transition-colors">选项 D</span>
+</label>
+</div>
+</div>
+<!-- Analysis Detail -->
+<div>
+<label class="block font-label-lg text-label-lg text-on-surface mb-xs">题目解析与详解</label>
+<div class="focus-within-ring rounded-lg border border-outline overflow-hidden transition-all">
+<textarea class="w-full border-none focus:ring-0 p-sm text-body-md resize-none" placeholder="请输入针对本题的详细解析，帮助学生更好地理解知识点..." rows="4"></textarea>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<footer class="mt-xl flex items-center justify-between border-t border-outline-variant pt-lg mb-xl">
+<div class="flex items-center gap-md">
+<button class="px-lg h-11 rounded-lg border border-outline text-on-surface-variant hover:bg-surface-container-high transition-all font-label-lg">
+                        取消
+                    </button>
+<button class="flex items-center gap-xs px-lg h-11 rounded-lg border border-primary text-primary hover:bg-primary-container transition-all font-label-lg">
+<span class="material-symbols-outlined text-[20px]">visibility</span> 预览题目
+                    </button>
+</div>
+<button class="px-xl h-11 bg-primary text-on-primary rounded-lg font-label-lg hover:brightness-110 shadow-md shadow-primary/20 transition-all flex items-center gap-base">
+                    保存并继续录入
+                    <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</footer>
+</main>
+</div>
+</body></html>

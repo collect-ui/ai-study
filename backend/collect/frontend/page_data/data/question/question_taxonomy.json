@@ -1,0 +1,2508 @@
+{
+  "tag": "layout-fit",
+  "className": "question-taxonomy-page h100",
+  "title": "年级、科目、单元、知识点维护",
+  "style": {
+    "height": "100%",
+    "overflow": "hidden",
+    "background": "#f6f8fb"
+  },
+  "initStore": {
+    "masterTab": "grade",
+    "gradeDialogVisible": false,
+    "subjectDialogVisible": false,
+    "unitDialogVisible": false,
+    "knowledgeDialogVisible": false,
+    "gradeOp": "add",
+    "subjectOp": "add",
+    "unitOp": "add",
+    "knowledgeOp": "add",
+    "editingGradeID": "",
+    "editingSubjectID": "",
+    "editingUnitID": "",
+    "editingKnowledgeID": "",
+    "gradeSelection": [],
+    "subjectSelection": [],
+    "unitSelection": [],
+    "knowledgeSelection": [],
+    "selectedTaxonomyNode": {},
+    "gradeList": [],
+    "subjectList": [],
+    "unitList": [],
+    "allUnitList": [],
+    "knowledgeList": [],
+    "gradeSearchForm": {
+      "keyword": "",
+      "stage": "",
+      "status": ""
+    },
+    "subjectSearchForm": {
+      "keyword": "",
+      "status": ""
+    },
+    "unitSearchForm": {
+      "keyword": "",
+      "subject": "",
+      "grade": "",
+      "status": ""
+    },
+    "knowledgeSearchForm": {
+      "keyword": "",
+      "subject": "",
+      "grade": "",
+      "unit_id": "",
+      "status": ""
+    },
+    "gradeForm": {
+      "stage": "primary",
+      "grade_code": "",
+      "grade_name": "",
+      "order_index": 1,
+      "status": "enabled"
+    },
+    "subjectForm": {
+      "subject_code": "",
+      "subject_name": "",
+      "order_index": 1,
+      "status": "enabled"
+    },
+    "unitForm": {
+      "subject": "english",
+      "stage": "junior",
+      "grade": "grade_7",
+      "textbook_version": "pep",
+      "unit_code": "",
+      "unit_name": "",
+      "order_index": 1,
+      "status": "enabled"
+    },
+    "knowledgeForm": {
+      "subject": "english",
+      "stage": "junior",
+      "grade": "grade_7",
+      "parent_id": "",
+      "knowledge_code": "",
+      "knowledge_name": "",
+      "order_index": 1,
+      "status": "enabled"
+    },
+    "pinyinMap": {
+      "一": "yi",
+      "二": "er",
+      "三": "san",
+      "四": "si",
+      "五": "wu",
+      "六": "liu",
+      "七": "qi",
+      "八": "ba",
+      "九": "jiu",
+      "十": "shi",
+      "小": "xiao",
+      "初": "chu",
+      "高": "gao",
+      "年": "nian",
+      "级": "ji",
+      "语": "yu",
+      "文": "wen",
+      "数": "shu",
+      "学": "xue",
+      "英": "ying",
+      "科": "ke",
+      "目": "mu",
+      "单": "dan",
+      "元": "yuan",
+      "知": "zhi",
+      "识": "shi",
+      "点": "dian",
+      "测": "ce",
+      "试": "shi",
+      "上": "shang",
+      "下": "xia",
+      "册": "ce",
+      "人": "ren",
+      "教": "jiao",
+      "版": "ban",
+      "北": "bei",
+      "师": "shi",
+      "大": "da",
+      "基": "ji",
+      "础": "chu",
+      "阅": "yue",
+      "读": "du",
+      "写": "xie",
+      "作": "zuo",
+      "词": "ci",
+      "汇": "hui",
+      "法": "fa",
+      "函": "han",
+      "方": "fang",
+      "程": "cheng",
+      "几": "ji",
+      "何": "he",
+      "代": "dai",
+      "古": "gu",
+      "诗": "shi",
+      "现": "xian",
+      "口": "kou",
+      "算": "suan",
+      "应": "ying",
+      "用": "yong",
+      "题": "ti",
+      "计": "ji",
+      "加": "jia",
+      "减": "jian",
+      "乘": "cheng",
+      "除": "chu",
+      "分": "fen",
+      "百": "bai",
+      "比": "bi",
+      "空": "kong",
+      "间": "jian",
+      "图": "tu",
+      "形": "xing",
+      "统": "tong",
+      "概": "gai",
+      "率": "lv"
+    }
+  },
+  "initAction": [
+    {
+      "tag": "ajax",
+      "group": "grade-list",
+      "api": "post:/template_data/data?service=question.grade_query",
+      "appendFields": "${gradeSearchForm}",
+      "adapt": {
+        "gradeList": "${data}"
+      }
+    },
+    {
+      "tag": "ajax",
+      "group": "subject-list",
+      "api": "post:/template_data/data?service=question.subject_query",
+      "appendFields": "${subjectSearchForm}",
+      "adapt": {
+        "subjectList": "${data}"
+      }
+    },
+    {
+      "tag": "ajax",
+      "group": "unit-list",
+      "api": "post:/template_data/data?service=question.unit_query",
+      "appendFields": "${unitSearchForm}",
+      "adapt": {
+        "unitList": "${data}"
+      }
+    },
+    {
+      "tag": "ajax",
+      "group": "unit-options",
+      "api": "post:/template_data/data?service=question.unit_query",
+      "data": {
+        "status": "enabled"
+      },
+      "adapt": {
+        "allUnitList": "${data}"
+      }
+    },
+    {
+      "tag": "update-store",
+      "value": {
+        "knowledgeSearchForm": "${(()=>{const form=knowledgeSearchForm||{};if(form.grade&&form.subject)return form;const first=(Array.isArray(allUnitList)?allUnitList:[])[0]||{};return Object.assign({},form,{grade:form.grade||first.grade||'',subject:form.subject||first.subject||'',unit_id:''});})()}"
+      }
+    },
+    {
+      "tag": "update-form",
+      "formName": "knowledgeSearchForm",
+      "value": "${knowledgeSearchForm}"
+    },
+    {
+      "tag": "ajax",
+      "group": "knowledge-list",
+      "api": "post:/template_data/data?service=question.knowledge_query",
+      "appendFields": "${knowledgeSearchForm}",
+      "adapt": {
+        "knowledgeList": "${data}"
+      }
+    }
+  ],
+  "children": [
+    {
+      "tag": "css",
+      "css": ".question-taxonomy-page .taxonomy-shell { height: calc(100vh - 118px); min-height: 0; padding: 10px 14px 14px; box-sizing: border-box; overflow: hidden; }\n.question-taxonomy-page .taxonomy-panel { height: 100%; min-height: 0; overflow: hidden; background: #fff; border: 1px solid #d8dee8; border-radius: 8px; }\n.question-taxonomy-page .taxonomy-panel .layout-content, .question-taxonomy-page .taxonomy-panel .layout-content-inner { min-height: 0; overflow: hidden !important; }\n.question-taxonomy-page .taxonomy-panel .layout-content-inner > div { min-height: 0; overflow: hidden !important; }\n.question-taxonomy-page .taxonomy-tabs, .question-taxonomy-page .taxonomy-tab-page { height: 100%; min-height: 0; }\n.question-taxonomy-page .taxonomy-toolbar-form.co-ui-form { padding: 0 !important; }\n.question-taxonomy-page .taxonomy-toolbar-form .co-ui-form-item.ant-form-item { margin: 0 8px 8px 0 !important; }\n.question-taxonomy-page .taxonomy-knowledge-tree .layout-content-inner > div { height: 100%; min-height: 0; display: flex; flex-direction: column; overflow: hidden !important; }\n.question-taxonomy-page .taxonomy-tree-summary { flex: 0 0 auto; padding: 8px 12px; color: #4b5563; font-size: 12px; border-bottom: 1px solid #eef2f7; background: #fafcff; }\n.question-taxonomy-page .taxonomy-tree-wrap { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 8px 10px 10px; }\n.question-taxonomy-page .taxonomy-tree-wrap .co-ui-tree { font-size: 13px; }\n.question-taxonomy-page .taxonomy-dialog-form .co-ui-form-item.ant-form-item { margin-bottom: 12px; }\n.question-taxonomy-page .taxonomy-status-enabled { color: #0f7b3a; font-weight: 700; }\n.question-taxonomy-page .taxonomy-status-disabled { color: #8a2d2d; font-weight: 700; }\n.question-taxonomy-page .co-ui-button.ant-btn { border-radius: 6px; }\n.question-taxonomy-page .ant-table-wrapper, .question-taxonomy-page .ag-root-wrapper { min-height: 0; }\n.question-taxonomy-page .taxonomy-knowledge-split { height: 100%; min-height: 0; overflow: hidden; }\n.question-taxonomy-page .taxonomy-knowledge-split .taxonomy-subpanel { height: 100%; min-height: 0; overflow: hidden; background: #fff; }\n.question-taxonomy-page .taxonomy-action-cell { display: flex; align-items: center; justify-content: center; }\n.question-taxonomy-page .taxonomy-action-button { min-width: 52px; }"
+    },
+    {
+      "tag": "panel-group",
+      "className": "taxonomy-shell",
+      "direction": "horizontal",
+      "children": [
+        {
+          "tag": "panel",
+          "id": "taxonomy-master-panel",
+          "defaultSize": 42,
+          "minSize": 34,
+          "className": "taxonomy-panel",
+          "children": [
+            {
+              "tag": "layout-fit",
+              "title": "年级 / 科目 / 单元",
+              "style": {
+                "height": "100%",
+                "overflow": "hidden"
+              },
+              "children": [
+                {
+                  "tag": "tabs",
+                  "className": "taxonomy-tabs",
+                  "type": "card",
+                  "size": "small",
+                  "activeKey": "${masterTab}",
+                  "onlyRenderActive": true,
+                  "items": [
+                    {
+                      "label": "年级",
+                      "key": "grade",
+                      "children": [
+                        {
+                          "tag": "layout-fit",
+                          "className": "taxonomy-tab-page",
+                          "searchToolBar": [
+                            {
+                              "tag": "form",
+                              "name": "gradeSearchForm",
+                              "className": "taxonomy-toolbar-form",
+                              "initialValues": "${gradeSearchForm}",
+                              "changeAction": [
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "gradeSearchForm": "${({keyword:keyword||'',stage:stage||'',status:status||''})}"
+                                  }
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "grade-list"
+                                }
+                              ],
+                              "children": [
+                                {
+                                  "tag": "row",
+                                  "children": [
+                                    {
+                                      "tag": "col",
+                                      "span": 8,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "keyword",
+                                          "label": "搜索",
+                                          "children": [
+                                            {
+                                              "tag": "input",
+                                              "allowClear": true,
+                                              "placeholder": "年级名称/编码"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "col",
+                                      "span": 7,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "stage",
+                                          "label": "学段",
+                                          "children": [
+                                            {
+                                              "tag": "select",
+                                              "allowClear": true,
+                                              "options": [
+                                                {
+                                                  "label": "小学",
+                                                  "value": "primary"
+                                                },
+                                                {
+                                                  "label": "初中",
+                                                  "value": "junior"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "col",
+                                      "span": 7,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "status",
+                                          "label": "状态",
+                                          "children": [
+                                            {
+                                              "tag": "select",
+                                              "allowClear": true,
+                                              "options": [
+                                                {
+                                                  "label": "启用",
+                                                  "value": "enabled"
+                                                },
+                                                {
+                                                  "label": "停用",
+                                                  "value": "disabled"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "topRight": [
+                            {
+                              "tag": "button",
+                              "type": "primary",
+                              "icon": "PlusOutlined",
+                              "children": "新增年级",
+                              "action": [
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "gradeDialogVisible": true,
+                                    "gradeOp": "add",
+                                    "editingGradeID": "",
+                                    "gradeForm": {
+                                      "stage": "primary",
+                                      "grade_code": "",
+                                      "grade_name": "",
+                                      "order_index": 1,
+                                      "status": "enabled"
+                                    }
+                                  }
+                                },
+                                {
+                                  "tag": "reset-form",
+                                  "formName": "gradeForm"
+                                },
+                                {
+                                  "tag": "update-form",
+                                  "formName": "gradeForm",
+                                  "value": "${gradeForm}"
+                                }
+                              ]
+                            },
+                            {
+                              "tag": "button",
+                              "danger": true,
+                              "icon": "DeleteOutlined",
+                              "children": "批量删除",
+                              "disabled": "${!(Array.isArray(gradeSelection) && gradeSelection.length)}",
+                              "style": {
+                                "marginLeft": 8
+                              },
+                              "confirm": {
+                                "title": "${'确认删除已选 ' + (Array.isArray(gradeSelection) ? gradeSelection.length : 0) + ' 个年级？'}",
+                                "description": "删除后关联单元和知识点列表会重新刷新，请确认已检查选中项。"
+                              },
+                              "action": [
+                                {
+                                  "tag": "ajax",
+                                  "api": "post:/template_data/data?service=question.grade_delete",
+                                  "data": {
+                                    "grade_id_list": "${(Array.isArray(gradeSelection) ? gradeSelection : []).map(item => item.grade_id).filter(Boolean)}"
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "gradeSelection": []
+                                  }
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "grade-list"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "unit-list"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "unit-options"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "knowledge-list"
+                                }
+                              ]
+                            }
+                          ],
+                          "children": [
+                            {
+                              "tag": "table",
+                              "selection": "${gradeSelection}",
+                              "rowSelection": "multiple",
+                              "rowData": "${gradeList}",
+                              "columnDefs": [
+                                {
+                                  "headerName": "#",
+                                  "width": 60,
+                                  "valueGetter": "node.rowIndex + 1",
+                                  "sortable": false,
+                                  "pinned": "left"
+                                },
+                                {
+                                  "checkboxSelection": true,
+                                  "headerCheckboxSelection": true,
+                                  "headerName": "编码",
+                                  "field": "grade_code",
+                                  "width": 140,
+                                  "pinned": "left"
+                                },
+                                {
+                                  "headerName": "名称",
+                                  "field": "grade_name",
+                                  "width": 120
+                                },
+                                {
+                                  "headerName": "学段",
+                                  "field": "stage_name",
+                                  "width": 110,
+                                  "valueGetter": "data.stage_name || (data.stage === 'primary' ? '小学' : '初中')"
+                                },
+                                {
+                                  "headerName": "排序",
+                                  "field": "order_index",
+                                  "width": 90
+                                },
+                                {
+                                  "headerName": "状态",
+                                  "field": "status",
+                                  "width": 90,
+                                  "cellRender": {
+                                    "tag": "span",
+                                    "className": "${row.status === 'disabled' ? 'taxonomy-status-disabled' : 'taxonomy-status-enabled'}",
+                                    "children": "${row.status === 'disabled' ? '停用' : '启用'}"
+                                  }
+                                },
+                                {
+                                  "headerName": "操作",
+                                  "field": "op",
+                                  "width": 170,
+                                  "pinned": "right",
+                                  "cellRender": [
+                                    {
+                                      "tag": "button",
+                                      "type": "primary",
+                                      "size": "small",
+                                      "children": "编辑",
+                                      "action": [
+                                        {
+                                          "tag": "update-store",
+                                          "value": {
+                                            "gradeDialogVisible": true,
+                                            "gradeOp": "edit",
+                                            "editingGradeID": "${row.grade_id}",
+                                            "gradeForm": "${row}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "reset-form",
+                                          "formName": "gradeForm"
+                                        },
+                                        {
+                                          "tag": "update-form",
+                                          "formName": "gradeForm",
+                                          "value": "${row}"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "button",
+                                      "danger": true,
+                                      "size": "small",
+                                      "children": "删除",
+                                      "confirm": {
+                                        "title": "确认删除年级？",
+                                        "description": "${'确认删除【' + row.grade_name + '】吗？'}"
+                                      },
+                                      "action": [
+                                        {
+                                          "tag": "ajax",
+                                          "api": "post:/template_data/data?service=question.grade_delete",
+                                          "data": {
+                                            "grade_id_list": "${[row.grade_id]}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "grade-list"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "unit-list"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "knowledge-list"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "label": "科目",
+                      "key": "subject",
+                      "children": [
+                        {
+                          "tag": "layout-fit",
+                          "className": "taxonomy-tab-page",
+                          "searchToolBar": [
+                            {
+                              "tag": "form",
+                              "name": "subjectSearchForm",
+                              "className": "taxonomy-toolbar-form",
+                              "initialValues": "${subjectSearchForm}",
+                              "changeAction": [
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "subjectSearchForm": "${({keyword:keyword||'',status:status||''})}"
+                                  }
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "subject-list"
+                                }
+                              ],
+                              "children": [
+                                {
+                                  "tag": "row",
+                                  "children": [
+                                    {
+                                      "tag": "col",
+                                      "span": 10,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "keyword",
+                                          "label": "搜索",
+                                          "children": [
+                                            {
+                                              "tag": "input",
+                                              "allowClear": true,
+                                              "placeholder": "科目名称/编码"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "col",
+                                      "span": 8,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "status",
+                                          "label": "状态",
+                                          "children": [
+                                            {
+                                              "tag": "select",
+                                              "allowClear": true,
+                                              "options": [
+                                                {
+                                                  "label": "启用",
+                                                  "value": "enabled"
+                                                },
+                                                {
+                                                  "label": "停用",
+                                                  "value": "disabled"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "topRight": [
+                            {
+                              "tag": "button",
+                              "type": "primary",
+                              "icon": "PlusOutlined",
+                              "children": "新增科目",
+                              "action": [
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "subjectDialogVisible": true,
+                                    "subjectOp": "add",
+                                    "editingSubjectID": "",
+                                    "subjectForm": {
+                                      "subject_code": "",
+                                      "subject_name": "",
+                                      "order_index": 1,
+                                      "status": "enabled"
+                                    }
+                                  }
+                                },
+                                {
+                                  "tag": "reset-form",
+                                  "formName": "subjectForm"
+                                },
+                                {
+                                  "tag": "update-form",
+                                  "formName": "subjectForm",
+                                  "value": "${subjectForm}"
+                                }
+                              ]
+                            },
+                            {
+                              "tag": "button",
+                              "danger": true,
+                              "icon": "DeleteOutlined",
+                              "children": "批量删除",
+                              "disabled": "${!(Array.isArray(subjectSelection) && subjectSelection.length)}",
+                              "style": {
+                                "marginLeft": 8
+                              },
+                              "confirm": {
+                                "title": "${'确认删除已选 ' + (Array.isArray(subjectSelection) ? subjectSelection.length : 0) + ' 个科目？'}",
+                                "description": "删除后关联单元和知识点列表会重新刷新，请确认已检查选中项。"
+                              },
+                              "action": [
+                                {
+                                  "tag": "ajax",
+                                  "api": "post:/template_data/data?service=question.subject_delete",
+                                  "data": {
+                                    "subject_id_list": "${(Array.isArray(subjectSelection) ? subjectSelection : []).map(item => item.subject_id).filter(Boolean)}"
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "subjectSelection": []
+                                  }
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "subject-list"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "unit-list"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "unit-options"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "knowledge-list"
+                                }
+                              ]
+                            }
+                          ],
+                          "children": [
+                            {
+                              "tag": "table",
+                              "selection": "${subjectSelection}",
+                              "rowSelection": "multiple",
+                              "rowData": "${subjectList}",
+                              "columnDefs": [
+                                {
+                                  "headerName": "#",
+                                  "width": 60,
+                                  "valueGetter": "node.rowIndex + 1",
+                                  "sortable": false,
+                                  "pinned": "left"
+                                },
+                                {
+                                  "checkboxSelection": true,
+                                  "headerCheckboxSelection": true,
+                                  "headerName": "编码",
+                                  "field": "subject_code",
+                                  "width": 160,
+                                  "pinned": "left"
+                                },
+                                {
+                                  "headerName": "名称",
+                                  "field": "subject_name",
+                                  "width": 140
+                                },
+                                {
+                                  "headerName": "排序",
+                                  "field": "order_index",
+                                  "width": 90
+                                },
+                                {
+                                  "headerName": "状态",
+                                  "field": "status",
+                                  "width": 90,
+                                  "cellRender": {
+                                    "tag": "span",
+                                    "className": "${row.status === 'disabled' ? 'taxonomy-status-disabled' : 'taxonomy-status-enabled'}",
+                                    "children": "${row.status === 'disabled' ? '停用' : '启用'}"
+                                  }
+                                },
+                                {
+                                  "headerName": "操作",
+                                  "field": "op",
+                                  "width": 170,
+                                  "pinned": "right",
+                                  "cellRender": [
+                                    {
+                                      "tag": "button",
+                                      "type": "primary",
+                                      "size": "small",
+                                      "children": "编辑",
+                                      "action": [
+                                        {
+                                          "tag": "update-store",
+                                          "value": {
+                                            "subjectDialogVisible": true,
+                                            "subjectOp": "edit",
+                                            "editingSubjectID": "${row.subject_id}",
+                                            "subjectForm": "${row}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "reset-form",
+                                          "formName": "subjectForm"
+                                        },
+                                        {
+                                          "tag": "update-form",
+                                          "formName": "subjectForm",
+                                          "value": "${row}"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "button",
+                                      "danger": true,
+                                      "size": "small",
+                                      "children": "删除",
+                                      "confirm": {
+                                        "title": "确认删除科目？",
+                                        "description": "${'确认删除【' + row.subject_name + '】吗？'}"
+                                      },
+                                      "action": [
+                                        {
+                                          "tag": "ajax",
+                                          "api": "post:/template_data/data?service=question.subject_delete",
+                                          "data": {
+                                            "subject_id_list": "${[row.subject_id]}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "subject-list"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "unit-list"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "knowledge-list"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "label": "单元",
+                      "key": "unit",
+                      "children": [
+                        {
+                          "tag": "layout-fit",
+                          "className": "taxonomy-tab-page",
+                          "searchToolBar": [
+                            {
+                              "tag": "form",
+                              "name": "unitSearchForm",
+                              "className": "taxonomy-toolbar-form",
+                              "initialValues": "${unitSearchForm}",
+                              "changeAction": [
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "unitSearchForm": "${({keyword:keyword||'',grade:grade||'',subject:subject||'',status:status||''})}"
+                                  }
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "unit-list"
+                                }
+                              ],
+                              "children": [
+                                {
+                                  "tag": "row",
+                                  "children": [
+                                    {
+                                      "tag": "col",
+                                      "span": 7,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "keyword",
+                                          "label": "搜索",
+                                          "children": [
+                                            {
+                                              "tag": "input",
+                                              "allowClear": true,
+                                              "placeholder": "单元名称/编码"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "col",
+                                      "span": 6,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "grade",
+                                          "label": "年级",
+                                          "children": [
+                                            {
+                                              "tag": "select",
+                                              "allowClear": true,
+                                              "showSearch": true,
+                                              "fieldNames": {
+                                                "label": "grade_name",
+                                                "value": "grade_code"
+                                              },
+                                              "options": "${gradeList}"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "col",
+                                      "span": 6,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "subject",
+                                          "label": "科目",
+                                          "children": [
+                                            {
+                                              "tag": "select",
+                                              "allowClear": true,
+                                              "showSearch": true,
+                                              "fieldNames": {
+                                                "label": "subject_name",
+                                                "value": "subject_code"
+                                              },
+                                              "options": "${subjectList}"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "col",
+                                      "span": 5,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "status",
+                                          "label": "状态",
+                                          "children": [
+                                            {
+                                              "tag": "select",
+                                              "allowClear": true,
+                                              "options": [
+                                                {
+                                                  "label": "启用",
+                                                  "value": "enabled"
+                                                },
+                                                {
+                                                  "label": "停用",
+                                                  "value": "disabled"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "topRight": [
+                            {
+                              "tag": "button",
+                              "type": "primary",
+                              "icon": "PlusOutlined",
+                              "children": "新增单元",
+                              "action": [
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "unitDialogVisible": true,
+                                    "unitOp": "add",
+                                    "editingUnitID": "",
+                                    "unitForm": {
+                                      "subject": "${((Array.isArray(subjectList) ? subjectList : [])[0] || {}).subject_code || 'english'}",
+                                      "stage": "${((Array.isArray(gradeList) ? gradeList : []).find(item => item.grade_code === 'grade_7') || (Array.isArray(gradeList) ? gradeList : [])[0] || {}).stage || 'junior'}",
+                                      "grade": "${((Array.isArray(gradeList) ? gradeList : []).find(item => item.grade_code === 'grade_7') || (Array.isArray(gradeList) ? gradeList : [])[0] || {}).grade_code || 'grade_7'}",
+                                      "textbook_version": "pep",
+                                      "unit_code": "",
+                                      "unit_name": "",
+                                      "order_index": 1,
+                                      "status": "enabled"
+                                    }
+                                  }
+                                },
+                                {
+                                  "tag": "reset-form",
+                                  "formName": "unitForm"
+                                },
+                                {
+                                  "tag": "update-form",
+                                  "formName": "unitForm",
+                                  "value": "${unitForm}"
+                                }
+                              ]
+                            },
+                            {
+                              "tag": "button",
+                              "danger": true,
+                              "icon": "DeleteOutlined",
+                              "children": "批量删除",
+                              "disabled": "${!(Array.isArray(unitSelection) && unitSelection.length)}",
+                              "style": {
+                                "marginLeft": 8
+                              },
+                              "confirm": {
+                                "title": "${'确认删除已选 ' + (Array.isArray(unitSelection) ? unitSelection.length : 0) + ' 个单元？'}",
+                                "description": "删除后知识点列表会重新刷新，请确认已检查选中项。"
+                              },
+                              "action": [
+                                {
+                                  "tag": "ajax",
+                                  "api": "post:/template_data/data?service=question.unit_delete",
+                                  "data": {
+                                    "unit_id_list": "${(Array.isArray(unitSelection) ? unitSelection : []).map(item => item.unit_id).filter(Boolean)}"
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "unitSelection": []
+                                  }
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "unit-list"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "unit-options"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "knowledge-list"
+                                }
+                              ]
+                            }
+                          ],
+                          "children": [
+                            {
+                              "tag": "table",
+                              "selection": "${unitSelection}",
+                              "rowSelection": "multiple",
+                              "rowData": "${unitList}",
+                              "columnDefs": [
+                                {
+                                  "headerName": "#",
+                                  "width": 60,
+                                  "valueGetter": "node.rowIndex + 1",
+                                  "sortable": false,
+                                  "pinned": "left"
+                                },
+                                {
+                                  "checkboxSelection": true,
+                                  "headerCheckboxSelection": true,
+                                  "headerName": "编码",
+                                  "field": "unit_code",
+                                  "width": 130,
+                                  "pinned": "left"
+                                },
+                                {
+                                  "headerName": "单元名称",
+                                  "field": "unit_name",
+                                  "width": 190,
+                                  "tooltipField": "unit_name"
+                                },
+                                {
+                                  "headerName": "年级",
+                                  "field": "grade_name",
+                                  "width": 110
+                                },
+                                {
+                                  "headerName": "科目",
+                                  "field": "subject_name",
+                                  "width": 100
+                                },
+                                {
+                                  "headerName": "教材",
+                                  "field": "textbook_version_name",
+                                  "width": 110
+                                },
+                                {
+                                  "headerName": "排序",
+                                  "field": "order_index",
+                                  "width": 80
+                                },
+                                {
+                                  "headerName": "状态",
+                                  "field": "status",
+                                  "width": 80,
+                                  "cellRender": {
+                                    "tag": "span",
+                                    "className": "${row.status === 'disabled' ? 'taxonomy-status-disabled' : 'taxonomy-status-enabled'}",
+                                    "children": "${row.status === 'disabled' ? '停用' : '启用'}"
+                                  }
+                                },
+                                {
+                                  "headerName": "操作",
+                                  "field": "op",
+                                  "width": 170,
+                                  "pinned": "right",
+                                  "cellRender": [
+                                    {
+                                      "tag": "button",
+                                      "type": "primary",
+                                      "size": "small",
+                                      "children": "编辑",
+                                      "action": [
+                                        {
+                                          "tag": "update-store",
+                                          "value": {
+                                            "unitDialogVisible": true,
+                                            "unitOp": "edit",
+                                            "editingUnitID": "${row.unit_id}",
+                                            "unitForm": "${row}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "reset-form",
+                                          "formName": "unitForm"
+                                        },
+                                        {
+                                          "tag": "update-form",
+                                          "formName": "unitForm",
+                                          "value": "${row}"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "button",
+                                      "danger": true,
+                                      "size": "small",
+                                      "children": "删除",
+                                      "confirm": {
+                                        "title": "确认删除单元？",
+                                        "description": "${'确认删除【' + row.unit_name + '】吗？'}"
+                                      },
+                                      "action": [
+                                        {
+                                          "tag": "ajax",
+                                          "api": "post:/template_data/data?service=question.unit_delete",
+                                          "data": {
+                                            "unit_id_list": "${[row.unit_id]}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "unit-list"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "unit-options"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "knowledge-list"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "panel-resize",
+          "style": {
+            "width": 8,
+            "minWidth": 8,
+            "cursor": "col-resize",
+            "background": "linear-gradient(90deg, transparent 0, transparent 3px, #c1c6d6 3px, #c1c6d6 5px, transparent 5px)",
+            "margin": "0 10px"
+          }
+        },
+        {
+          "tag": "panel",
+          "id": "taxonomy-knowledge-panel",
+          "defaultSize": 58,
+          "minSize": 42,
+          "className": "taxonomy-panel",
+          "children": [
+            {
+              "tag": "layout-fit",
+              "title": "知识点维护",
+              "style": {
+                "height": "100%",
+                "overflow": "hidden"
+              },
+              "topRight": [
+                {
+                  "tag": "button",
+                  "type": "primary",
+                  "icon": "PlusOutlined",
+                  "children": "新增知识点",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "knowledgeDialogVisible": true,
+                        "knowledgeOp": "add",
+                        "editingKnowledgeID": "",
+                        "knowledgeForm": {
+                          "subject": "${(()=>{const form=knowledgeSearchForm||{};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>(!form.grade||item.grade===form.grade)&&(!form.subject||item.subject===form.subject));const current=units.find(item=>item.unit_id===form.unit_id)||units[0]||{};return current.subject||form.subject||'english';})()}",
+                          "stage": "${(()=>{const form=knowledgeSearchForm||{};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>(!form.grade||item.grade===form.grade)&&(!form.subject||item.subject===form.subject));const current=units.find(item=>item.unit_id===form.unit_id)||units[0]||{};const gradeCode=current.grade||form.grade||'grade_7';const gradeRow=(Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===gradeCode)||{};return current.stage||gradeRow.stage||'junior';})()}",
+                          "grade": "${(()=>{const form=knowledgeSearchForm||{};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>(!form.grade||item.grade===form.grade)&&(!form.subject||item.subject===form.subject));const current=units.find(item=>item.unit_id===form.unit_id)||units[0]||{};return current.grade||form.grade||'grade_7';})()}",
+                          "parent_id": "${(()=>{const form=knowledgeSearchForm||{};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>(!form.grade||item.grade===form.grade)&&(!form.subject||item.subject===form.subject));const current=units.find(item=>item.unit_id===form.unit_id)||units[0]||{};return current.unit_id||'';})()}",
+                          "knowledge_code": "",
+                          "knowledge_name": "",
+                          "order_index": 1,
+                          "status": "enabled"
+                        }
+                      }
+                    },
+                    {
+                      "tag": "reset-form",
+                      "formName": "knowledgeForm"
+                    },
+                    {
+                      "tag": "update-form",
+                      "formName": "knowledgeForm",
+                      "value": "${knowledgeForm}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "button",
+                  "danger": true,
+                  "icon": "DeleteOutlined",
+                  "children": "批量删除",
+                  "disabled": "${!(Array.isArray(knowledgeSelection) && knowledgeSelection.length)}",
+                  "style": {
+                    "marginLeft": 8
+                  },
+                  "confirm": {
+                    "title": "${'确认删除已选 ' + (Array.isArray(knowledgeSelection) ? knowledgeSelection.length : 0) + ' 个知识点？'}",
+                    "description": "删除后知识点列表会重新刷新，请确认已检查选中项。"
+                  },
+                  "action": [
+                    {
+                      "tag": "ajax",
+                      "api": "post:/template_data/data?service=question.knowledge_delete",
+                      "data": {
+                        "knowledge_id_list": "${(Array.isArray(knowledgeSelection) ? knowledgeSelection : []).map(item => item.knowledge_id).filter(Boolean)}"
+                      }
+                    },
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "knowledgeSelection": []
+                      }
+                    },
+                    {
+                      "tag": "reload-init-action",
+                      "group": "knowledge-list"
+                    }
+                  ]
+                }
+              ],
+              "children": [
+                {
+                  "tag": "panel-group",
+                  "className": "taxonomy-knowledge-split",
+                  "direction": "horizontal",
+                  "children": [
+                    {
+                      "tag": "panel",
+                      "id": "taxonomy-knowledge-unit-tree-panel",
+                      "defaultSize": 24,
+                      "minSize": 18,
+                      "className": "taxonomy-subpanel",
+                      "children": [
+                        {
+                          "tag": "layout-fit",
+                          "title": "年级 / 单元",
+                          "style": {
+                            "height": "100%",
+                            "overflow": "hidden"
+                          },
+                          "children": [
+                            {
+                              "tag": "div",
+                              "className": "taxonomy-tree-wrap",
+                              "children": [
+                                {
+                                  "tag": "tree",
+                                  "height": "100%",
+                                  "showIcon": true,
+                                  "openLevel": 2,
+                                  "treeSelected": "selectedTaxonomyNode",
+                                  "selectedKeys": "${selectedTaxonomyNode&&selectedTaxonomyNode.key?[selectedTaxonomyNode.key]:[]}",
+                                  "treeKey": "${item.key || item.id}",
+                                  "treeTitle": "${item.title || item.name}",
+                                  "treeIcon": "${item.icon}",
+                                  "treeData": "${(()=>{const form=knowledgeSearchForm||{};const subject=form.subject||'';if(!subject)return [];const keyword=String(form.keyword||'').trim().toLowerCase();const text=row=>[row.unit_code,row.unit_name,row.knowledge_code,row.knowledge_name,row.grade_name,row.subject_name].filter(Boolean).join(' ').toLowerCase();const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>item&&item.subject===subject);const rows=(Array.isArray(knowledgeList)?knowledgeList:[]);const gradeRows=(Array.isArray(gradeList)?gradeList:[]);return gradeRows.filter(grade=>units.some(unit=>unit.grade===grade.grade_code)).map(grade=>{const children=units.filter(unit=>unit.grade===grade.grade_code).map(unit=>{const hasRow=rows.some(row=>(row.unit_id||row.parent_id)===unit.unit_id);return Object.assign({},unit,{key:'unit_'+unit.unit_id,id:'unit_'+unit.unit_id,type:'unit',title:unit.unit_name||unit.unit_code||'未命名单元',name:unit.unit_name||unit.unit_code||'未命名单元',icon:'FolderOpenOutlined',children:[],__hasKnowledgeMatch:hasRow});}).filter(unit=>!keyword||text(unit).includes(keyword)||unit.__hasKnowledgeMatch);return {key:'grade_'+grade.grade_code,id:'grade_'+grade.grade_code,type:'grade',grade:grade.grade_code,subject,name:grade.grade_name||grade.grade_code,title:grade.grade_name||grade.grade_code,icon:'ApartmentOutlined',children};}).filter(grade=>grade.children.length>0||!keyword);})()}",
+                                  "selectAction": [
+                                    {
+                                      "tag": "update-store",
+                                      "value": {
+                                        "selectedTaxonomyNode": "${selected?{key:node.key||node.id||'',type:node.type||'',grade:node.grade||'',subject:node.subject||'',unit_id:node.unit_id||'',name:node.name||node.title||''}:{}}",
+                                        "knowledgeSearchForm": "${(()=>{const form=knowledgeSearchForm||{};if(!selected)return Object.assign({},form,{unit_id:''});return Object.assign({},form,{grade:node.grade||form.grade||'',subject:node.subject||form.subject||'',unit_id:node.type==='unit'?(node.unit_id||''):''});})()}"
+                                      }
+                                    },
+                                    {
+                                      "tag": "update-form",
+                                      "formName": "knowledgeSearchForm",
+                                      "value": "${knowledgeSearchForm}"
+                                    },
+                                    {
+                                      "tag": "reload-init-action",
+                                      "group": "knowledge-list",
+                                      "enable": "${!!((knowledgeSearchForm||{}).grade && (knowledgeSearchForm||{}).subject)}"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "panel-resize",
+                      "style": {
+                        "width": 6,
+                        "minWidth": 6,
+                        "cursor": "col-resize",
+                        "background": "linear-gradient(90deg, transparent 0, transparent 2px, #c1c6d6 2px, #c1c6d6 4px, transparent 4px)",
+                        "margin": "0 8px"
+                      }
+                    },
+                    {
+                      "tag": "panel",
+                      "id": "taxonomy-knowledge-list-panel",
+                      "defaultSize": 76,
+                      "minSize": 58,
+                      "className": "taxonomy-subpanel",
+                      "children": [
+                        {
+                          "tag": "layout-fit",
+                          "title": "知识点列表",
+                          "style": {
+                            "height": "100%",
+                            "overflow": "hidden"
+                          },
+                          "children": [
+                            {
+                              "tag": "table",
+                              "selection": "${knowledgeSelection}",
+                              "rowSelection": "multiple",
+                              "rowData": "${knowledgeList}",
+                              "columnDefs": [
+                                {
+                                  "headerName": "#",
+                                  "width": 60,
+                                  "valueGetter": "node.rowIndex + 1",
+                                  "sortable": false,
+                                  "pinned": "left"
+                                },
+                                {
+                                  "checkboxSelection": true,
+                                  "headerCheckboxSelection": true,
+                                  "headerName": "编码",
+                                  "field": "knowledge_code",
+                                  "width": 150,
+                                  "pinned": "left"
+                                },
+                                {
+                                  "headerName": "知识点",
+                                  "field": "knowledge_name",
+                                  "width": 150,
+                                  "tooltipField": "knowledge_name"
+                                },
+                                {
+                                  "headerName": "单元",
+                                  "field": "unit_name",
+                                  "width": 140,
+                                  "tooltipField": "unit_name"
+                                },
+                                {
+                                  "headerName": "年级",
+                                  "field": "grade_name",
+                                  "width": 80
+                                },
+                                {
+                                  "headerName": "科目",
+                                  "field": "subject_name",
+                                  "width": 70
+                                },
+                                {
+                                  "headerName": "排序",
+                                  "field": "order_index",
+                                  "width": 70
+                                },
+                                {
+                                  "headerName": "状态",
+                                  "field": "status",
+                                  "width": 70,
+                                  "cellRender": {
+                                    "tag": "span",
+                                    "className": "${row.status === 'disabled' ? 'taxonomy-status-disabled' : 'taxonomy-status-enabled'}",
+                                    "children": "${row.status === 'disabled' ? '停用' : '启用'}"
+                                  }
+                                },
+                                {
+                                  "headerName": "操作",
+                                  "field": "op",
+                                  "width": 160,
+                                  "minWidth": 150,
+                                  "maxWidth": 180,
+                                  "pinned": "right",
+                                  "sortable": false,
+                                  "filter": false,
+                                  "resizable": false,
+                                  "suppressSizeToFit": true,
+                                  "cellClass": "taxonomy-action-cell",
+                                  "cellRender": [
+                                    {
+                                      "tag": "button",
+                                      "type": "primary",
+                                      "size": "small",
+                                      "className": "taxonomy-action-button",
+                                      "children": "编辑",
+                                      "action": [
+                                        {
+                                          "tag": "update-store",
+                                          "value": {
+                                            "knowledgeDialogVisible": true,
+                                            "knowledgeOp": "edit",
+                                            "editingKnowledgeID": "${row.knowledge_id}",
+                                            "knowledgeForm": "${Object.assign({}, row, {parent_id: row.parent_id || row.unit_id || ''})}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "reset-form",
+                                          "formName": "knowledgeForm"
+                                        },
+                                        {
+                                          "tag": "update-form",
+                                          "formName": "knowledgeForm",
+                                          "value": "${Object.assign({}, row, {parent_id: row.parent_id || row.unit_id || ''})}"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "button",
+                                      "danger": true,
+                                      "size": "small",
+                                      "className": "taxonomy-action-button",
+                                      "style": {
+                                        "marginLeft": 8
+                                      },
+                                      "children": "删除",
+                                      "confirm": {
+                                        "title": "确认删除知识点？",
+                                        "description": "${'确认删除【' + row.knowledge_name + '】吗？'}"
+                                      },
+                                      "action": [
+                                        {
+                                          "tag": "ajax",
+                                          "api": "post:/template_data/data?service=question.knowledge_delete",
+                                          "data": {
+                                            "knowledge_id_list": "${[row.knowledge_id]}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "knowledge-list"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "className": "taxonomy-knowledge-tree",
+              "searchToolBar": [
+                {
+                  "tag": "form",
+                  "name": "knowledgeSearchForm",
+                  "className": "taxonomy-toolbar-form",
+                  "initialValues": "${knowledgeSearchForm}",
+                  "changeAction": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "selectedTaxonomyNode": {},
+                        "knowledgeSearchForm": "${(()=>{const prev=knowledgeSearchForm||{};const next={keyword:keyword||'',subject:subject||'',status:status||'',grade:grade||prev.grade||'',unit_id:unit_id||prev.unit_id||''};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>!next.subject||item.subject===next.subject);const validGrade=!!(next.grade&&units.some(item=>item.grade===next.grade));const validUnit=!!(next.unit_id&&units.some(item=>item.unit_id===next.unit_id&&(!next.grade||item.grade===next.grade)));const first=units[0]||{};return Object.assign({},next,{grade:validGrade?next.grade:(first.grade||''),unit_id:validUnit?next.unit_id:''});})()}"
+                      }
+                    },
+                    {
+                      "tag": "update-form",
+                      "formName": "knowledgeSearchForm",
+                      "value": "${knowledgeSearchForm}"
+                    },
+                    {
+                      "tag": "reload-init-action",
+                      "group": "knowledge-list",
+                      "enable": "${!!((knowledgeSearchForm||{}).grade && (knowledgeSearchForm||{}).subject)}"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "tag": "form-item",
+                      "name": "grade",
+                      "hidden": true,
+                      "children": [
+                        {
+                          "tag": "input"
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "form-item",
+                      "name": "unit_id",
+                      "hidden": true,
+                      "children": [
+                        {
+                          "tag": "input"
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "row",
+                      "children": [
+                        {
+                          "tag": "col",
+                          "span": 8,
+                          "children": [
+                            {
+                              "tag": "form-item",
+                              "name": "subject",
+                              "label": "科目",
+                              "rules": [
+                                {
+                                  "required": true,
+                                  "message": "请选择科目"
+                                }
+                              ],
+                              "children": [
+                                {
+                                  "tag": "select",
+                                  "placeholder": "选择科目",
+                                  "fieldNames": {
+                                    "label": "subject_name",
+                                    "value": "subject_code"
+                                  },
+                                  "options": "${subjectList}"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "tag": "col",
+                          "span": 10,
+                          "children": [
+                            {
+                              "tag": "form-item",
+                              "name": "keyword",
+                              "label": "过滤",
+                              "children": [
+                                {
+                                  "tag": "input",
+                                  "allowClear": true,
+                                  "placeholder": "知识点/单元快捷过滤"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "tag": "col",
+                          "span": 6,
+                          "children": [
+                            {
+                              "tag": "form-item",
+                              "name": "status",
+                              "label": "状态",
+                              "children": [
+                                {
+                                  "tag": "select",
+                                  "allowClear": true,
+                                  "options": [
+                                    {
+                                      "label": "启用",
+                                      "value": "enabled"
+                                    },
+                                    {
+                                      "label": "停用",
+                                      "value": "disabled"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "dialog",
+      "title": "${gradeOp === 'add' ? '新增年级' : '编辑年级'}",
+      "open": "${gradeDialogVisible}",
+      "width": 520,
+      "action": [
+        {
+          "tag": "submit-form",
+          "formName": "gradeForm",
+          "saveField": "gradeForm"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${gradeOp === 'add'}",
+          "api": "post:/template_data/data?service=question.grade_save",
+          "appendFields": "${gradeForm}"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${gradeOp === 'edit'}",
+          "api": "post:/template_data/data?service=question.grade_update",
+          "appendFields": "${gradeForm}",
+          "data": {
+            "grade_id": "${editingGradeID}"
+          }
+        },
+        {
+          "tag": "update-store",
+          "value": {
+            "gradeDialogVisible": false
+          }
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "grade-list"
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "unit-list"
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "unit-options"
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "knowledge-list"
+        }
+      ],
+      "children": [
+        {
+          "tag": "form",
+          "name": "gradeForm",
+          "className": "taxonomy-dialog-form",
+          "initialValues": "${gradeForm}",
+          "labelCol": {
+            "span": 5
+          },
+          "changeAction": [
+            {
+              "tag": "update-store",
+              "value": {
+                "gradePinyinTypingName": "${gradeOp === 'add' ? String(grade_name || '').trim() : ''}",
+                "gradePinyinLastName": "${gradeOp === 'add' && !String(grade_name || '').trim() ? '' : (gradePinyinLastName || '')}"
+              }
+            },
+            {
+              "tag": "update-form",
+              "enable": "${gradeOp === 'add' && !String(grade_name || '').trim()}",
+              "formName": "gradeForm",
+              "value": {
+                "grade_code": ""
+              }
+            },
+            {
+              "tag": "ajax",
+              "enable": "${gradeOp === 'add' && !!String(grade_name || '').trim() && String(grade_name || '').trim() !== (gradePinyinLastName || '')}",
+              "api": "post:/template_data/data?service=question.name_to_pinyin",
+              "silent": true,
+              "data": {
+                "text": "${grade_name}"
+              },
+              "saveField": "gradePinyinResult"
+            },
+            {
+              "tag": "update-store",
+              "enable": "${gradeOp === 'add' && gradePinyinTypingName === String(grade_name || '').trim() && (gradePinyinResult || {}).success}",
+              "value": {
+                "gradePinyinLastName": "${String(grade_name || '').trim()}"
+              }
+            },
+            {
+              "tag": "update-form",
+              "enable": "${gradeOp === 'add' && gradePinyinTypingName === String(grade_name || '').trim() && (gradePinyinResult || {}).success}",
+              "formName": "gradeForm",
+              "value": {
+                "grade_code": "${((gradePinyinResult || {}).data || {}).code || ''}"
+              }
+            }
+          ],
+          "children": [
+            {
+              "tag": "form-item",
+              "name": "stage",
+              "label": "学段",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择学段"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "select",
+                  "options": [
+                    {
+                      "label": "小学",
+                      "value": "primary"
+                    },
+                    {
+                      "label": "初中",
+                      "value": "junior"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "grade_name",
+              "label": "名称",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入年级名称"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "例如：一年级、初一"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "grade_code",
+              "label": "编码",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入年级编码"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "自动按名称生成，可手动修改"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "order_index",
+              "label": "排序",
+              "children": [
+                {
+                  "tag": "input",
+                  "isNumber": true
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "status",
+              "label": "状态",
+              "children": [
+                {
+                  "tag": "select",
+                  "options": [
+                    {
+                      "label": "启用",
+                      "value": "enabled"
+                    },
+                    {
+                      "label": "停用",
+                      "value": "disabled"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "dialog",
+      "title": "${subjectOp === 'add' ? '新增科目' : '编辑科目'}",
+      "open": "${subjectDialogVisible}",
+      "width": 520,
+      "action": [
+        {
+          "tag": "submit-form",
+          "formName": "subjectForm",
+          "saveField": "subjectForm"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${subjectOp === 'add'}",
+          "api": "post:/template_data/data?service=question.subject_save",
+          "appendFields": "${subjectForm}"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${subjectOp === 'edit'}",
+          "api": "post:/template_data/data?service=question.subject_update",
+          "appendFields": "${subjectForm}",
+          "data": {
+            "subject_id": "${editingSubjectID}"
+          }
+        },
+        {
+          "tag": "update-store",
+          "value": {
+            "subjectDialogVisible": false
+          }
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "subject-list"
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "unit-list"
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "unit-options"
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "knowledge-list"
+        }
+      ],
+      "children": [
+        {
+          "tag": "form",
+          "name": "subjectForm",
+          "className": "taxonomy-dialog-form",
+          "initialValues": "${subjectForm}",
+          "labelCol": {
+            "span": 5
+          },
+          "changeAction": [
+            {
+              "tag": "update-store",
+              "value": {
+                "subjectPinyinTypingName": "${subjectOp === 'add' ? String(subject_name || '').trim() : ''}",
+                "subjectPinyinLastName": "${subjectOp === 'add' && !String(subject_name || '').trim() ? '' : (subjectPinyinLastName || '')}"
+              }
+            },
+            {
+              "tag": "update-form",
+              "enable": "${subjectOp === 'add' && !String(subject_name || '').trim()}",
+              "formName": "subjectForm",
+              "value": {
+                "subject_code": ""
+              }
+            },
+            {
+              "tag": "ajax",
+              "enable": "${subjectOp === 'add' && !!String(subject_name || '').trim() && String(subject_name || '').trim() !== (subjectPinyinLastName || '')}",
+              "api": "post:/template_data/data?service=question.name_to_pinyin",
+              "silent": true,
+              "data": {
+                "text": "${subject_name}"
+              },
+              "saveField": "subjectPinyinResult"
+            },
+            {
+              "tag": "update-store",
+              "enable": "${subjectOp === 'add' && subjectPinyinTypingName === String(subject_name || '').trim() && (subjectPinyinResult || {}).success}",
+              "value": {
+                "subjectPinyinLastName": "${String(subject_name || '').trim()}"
+              }
+            },
+            {
+              "tag": "update-form",
+              "enable": "${subjectOp === 'add' && subjectPinyinTypingName === String(subject_name || '').trim() && (subjectPinyinResult || {}).success}",
+              "formName": "subjectForm",
+              "value": {
+                "subject_code": "${((subjectPinyinResult || {}).data || {}).code || ''}"
+              }
+            }
+          ],
+          "children": [
+            {
+              "tag": "form-item",
+              "name": "subject_name",
+              "label": "名称",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入科目名称"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "例如：语文、数学、英语"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "subject_code",
+              "label": "编码",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入科目编码"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "自动按名称生成，可手动修改"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "order_index",
+              "label": "排序",
+              "children": [
+                {
+                  "tag": "input",
+                  "isNumber": true
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "status",
+              "label": "状态",
+              "children": [
+                {
+                  "tag": "select",
+                  "options": [
+                    {
+                      "label": "启用",
+                      "value": "enabled"
+                    },
+                    {
+                      "label": "停用",
+                      "value": "disabled"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "dialog",
+      "title": "${unitOp === 'add' ? '新增单元' : '编辑单元'}",
+      "open": "${unitDialogVisible}",
+      "width": 620,
+      "action": [
+        {
+          "tag": "submit-form",
+          "formName": "unitForm",
+          "saveField": "unitForm"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${unitOp === 'add'}",
+          "api": "post:/template_data/data?service=question.unit_save",
+          "appendFields": "${unitForm}"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${unitOp === 'edit'}",
+          "api": "post:/template_data/data?service=question.unit_update",
+          "appendFields": "${unitForm}",
+          "data": {
+            "unit_id": "${editingUnitID}"
+          }
+        },
+        {
+          "tag": "update-store",
+          "value": {
+            "unitDialogVisible": false
+          }
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "unit-list"
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "unit-options"
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "knowledge-list"
+        }
+      ],
+      "children": [
+        {
+          "tag": "form",
+          "name": "unitForm",
+          "className": "taxonomy-dialog-form",
+          "initialValues": "${unitForm}",
+          "labelCol": {
+            "span": 5
+          },
+          "changeAction": [
+            {
+              "tag": "update-form",
+              "formName": "unitForm",
+              "value": {
+                "stage": "${grade ? (((Array.isArray(gradeList) ? gradeList : []).find(item => item.grade_code === grade) || {}).stage || stage || 'junior') : (stage || 'junior')}"
+              }
+            },
+            {
+              "tag": "update-store",
+              "value": {
+                "unitPinyinTypingName": "${unitOp === 'add' ? String(unit_name || '').trim() : ''}",
+                "unitPinyinLastName": "${unitOp === 'add' && !String(unit_name || '').trim() ? '' : (unitPinyinLastName || '')}"
+              }
+            },
+            {
+              "tag": "update-form",
+              "enable": "${unitOp === 'add' && !String(unit_name || '').trim()}",
+              "formName": "unitForm",
+              "value": {
+                "unit_code": ""
+              }
+            },
+            {
+              "tag": "ajax",
+              "enable": "${unitOp === 'add' && !!String(unit_name || '').trim() && String(unit_name || '').trim() !== (unitPinyinLastName || '')}",
+              "api": "post:/template_data/data?service=question.name_to_pinyin",
+              "silent": true,
+              "data": {
+                "text": "${unit_name}"
+              },
+              "saveField": "unitPinyinResult"
+            },
+            {
+              "tag": "update-store",
+              "enable": "${unitOp === 'add' && unitPinyinTypingName === String(unit_name || '').trim() && (unitPinyinResult || {}).success}",
+              "value": {
+                "unitPinyinLastName": "${String(unit_name || '').trim()}"
+              }
+            },
+            {
+              "tag": "update-form",
+              "enable": "${unitOp === 'add' && unitPinyinTypingName === String(unit_name || '').trim() && (unitPinyinResult || {}).success}",
+              "formName": "unitForm",
+              "value": {
+                "unit_code": "${((unitPinyinResult || {}).data || {}).code || ''}"
+              }
+            }
+          ],
+          "children": [
+            {
+              "tag": "form-item",
+              "name": "stage",
+              "hidden": true,
+              "children": [
+                {
+                  "tag": "input"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "grade",
+              "label": "年级",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择年级"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "select",
+                  "fieldNames": {
+                    "label": "grade_name",
+                    "value": "grade_code"
+                  },
+                  "options": "${gradeList}"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "subject",
+              "label": "科目",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择科目"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "select",
+                  "fieldNames": {
+                    "label": "subject_name",
+                    "value": "subject_code"
+                  },
+                  "options": "${subjectList}"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "textbook_version",
+              "label": "教材",
+              "children": [
+                {
+                  "tag": "select",
+                  "options": [
+                    {
+                      "label": "人教版",
+                      "value": "pep"
+                    },
+                    {
+                      "label": "北师大版",
+                      "value": "bsd"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "unit_name",
+              "label": "名称",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入单元名称"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "例如：第一单元"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "unit_code",
+              "label": "编码",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入单元编码"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "自动按名称生成，可手动修改"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "order_index",
+              "label": "排序",
+              "children": [
+                {
+                  "tag": "input",
+                  "isNumber": true
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "status",
+              "label": "状态",
+              "children": [
+                {
+                  "tag": "select",
+                  "options": [
+                    {
+                      "label": "启用",
+                      "value": "enabled"
+                    },
+                    {
+                      "label": "停用",
+                      "value": "disabled"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "dialog",
+      "title": "${knowledgeOp === 'add' ? '新增知识点' : '编辑知识点'}",
+      "open": "${knowledgeDialogVisible}",
+      "width": 620,
+      "action": [
+        {
+          "tag": "submit-form",
+          "formName": "knowledgeForm",
+          "saveField": "knowledgeForm"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${knowledgeOp === 'add'}",
+          "api": "post:/template_data/data?service=question.knowledge_save",
+          "appendFields": "${knowledgeForm}"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${knowledgeOp === 'edit'}",
+          "api": "post:/template_data/data?service=question.knowledge_update",
+          "appendFields": "${knowledgeForm}",
+          "data": {
+            "knowledge_id": "${editingKnowledgeID}"
+          }
+        },
+        {
+          "tag": "update-store",
+          "value": {
+            "knowledgeDialogVisible": false
+          }
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "knowledge-list"
+        }
+      ],
+      "children": [
+        {
+          "tag": "form",
+          "name": "knowledgeForm",
+          "className": "taxonomy-dialog-form",
+          "initialValues": "${knowledgeForm}",
+          "labelCol": {
+            "span": 5
+          },
+          "changeAction": [
+            {
+              "tag": "update-store",
+              "value": {
+                "knowledgePinyinTypingName": "${knowledgeOp === 'add' ? String(knowledge_name || '').trim() : ''}",
+                "knowledgePinyinLastName": "${knowledgeOp === 'add' && !String(knowledge_name || '').trim() ? '' : (knowledgePinyinLastName || '')}"
+              }
+            },
+            {
+              "tag": "update-form",
+              "enable": "${knowledgeOp === 'add' && !String(knowledge_name || '').trim()}",
+              "formName": "knowledgeForm",
+              "value": {
+                "knowledge_code": ""
+              }
+            },
+            {
+              "tag": "ajax",
+              "enable": "${knowledgeOp === 'add' && !!String(knowledge_name || '').trim() && String(knowledge_name || '').trim() !== (knowledgePinyinLastName || '')}",
+              "api": "post:/template_data/data?service=question.name_to_pinyin",
+              "silent": true,
+              "data": {
+                "text": "${knowledge_name}"
+              },
+              "saveField": "knowledgePinyinResult"
+            },
+            {
+              "tag": "update-store",
+              "enable": "${knowledgeOp === 'add' && knowledgePinyinTypingName === String(knowledge_name || '').trim() && (knowledgePinyinResult || {}).success}",
+              "value": {
+                "knowledgePinyinLastName": "${String(knowledge_name || '').trim()}"
+              }
+            },
+            {
+              "tag": "update-form",
+              "enable": "${knowledgeOp === 'add' && knowledgePinyinTypingName === String(knowledge_name || '').trim() && (knowledgePinyinResult || {}).success}",
+              "formName": "knowledgeForm",
+              "value": {
+                "knowledge_code": "${((knowledgePinyinResult || {}).data || {}).code || ''}"
+              }
+            }
+          ],
+          "children": [
+            {
+              "tag": "form-item",
+              "name": "stage",
+              "hidden": true,
+              "children": [
+                {
+                  "tag": "input"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "grade",
+              "label": "年级",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择年级"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "select",
+                  "placeholder": "选择年级",
+                  "fieldNames": {
+                    "label": "grade_name",
+                    "value": "grade_code"
+                  },
+                  "options": "${gradeList}",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "knowledgeForm": "${(()=>{const prev=knowledgeForm||{};const row=(Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===value)||{};return Object.assign({},prev,{grade:value||'',stage:row.stage||'',parent_id:''});})()}"
+                      }
+                    },
+                    {
+                      "tag": "update-form",
+                      "formName": "knowledgeForm",
+                      "value": "${knowledgeForm}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "subject",
+              "label": "科目",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择科目"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "select",
+                  "placeholder": "选择科目",
+                  "fieldNames": {
+                    "label": "subject_name",
+                    "value": "subject_code"
+                  },
+                  "options": "${subjectList}",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "knowledgeForm": "${(()=>{const prev=knowledgeForm||{};return Object.assign({},prev,{subject:value||'',parent_id:''});})()}"
+                      }
+                    },
+                    {
+                      "tag": "update-form",
+                      "formName": "knowledgeForm",
+                      "value": "${knowledgeForm}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "parent_id",
+              "label": "单元",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择单元"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "tree-select",
+                  "allowClear": true,
+                  "showSearch": true,
+                  "placeholder": "先选年级和科目，再选择单元",
+                  "disabled": "${!((knowledgeForm||{}).grade && (knowledgeForm||{}).subject)}",
+                  "valueKey": "${item.unit_id}",
+                  "treeTitle": "${(item.unit_name || item.unit_code || '未命名单元') + (item.textbook_version_name ? ' / ' + item.textbook_version_name : '')}",
+                  "treeIcon": "FolderOutlined",
+                  "showIcon": true,
+                  "treeLine": true,
+                  "openLevel": 1,
+                  "treeData": "${(()=>{const form=knowledgeForm||{};const gradeCode=form.grade||'';const subjectCode=form.subject||'';if(!gradeCode||!subjectCode)return [];return (Array.isArray(allUnitList)?allUnitList:[]).filter(item=>item&&item.grade===gradeCode&&item.subject===subjectCode).map(item=>Object.assign({},item,{key:item.unit_id,title:item.unit_name||item.unit_code||'未命名单元',icon:'FolderOutlined'}));})()}",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "knowledgeForm": "${(()=>{const prev=knowledgeForm||{};return Object.assign({},prev,{parent_id:value||''});})()}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "knowledge_name",
+              "label": "名称",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入知识点名称"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "例如：词汇拼写"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "knowledge_code",
+              "label": "编码",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入知识点编码"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "自动按名称生成，可手动修改"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "order_index",
+              "label": "排序",
+              "children": [
+                {
+                  "tag": "input",
+                  "isNumber": true
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "status",
+              "label": "状态",
+              "children": [
+                {
+                  "tag": "select",
+                  "options": [
+                    {
+                      "label": "启用",
+                      "value": "enabled"
+                    },
+                    {
+                      "label": "停用",
+                      "value": "disabled"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

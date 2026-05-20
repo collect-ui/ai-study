@@ -1,0 +1,60 @@
+.runtime/
+.tools/
+feature/remote-assets/staging/
+wx_login/*
+!wx_login/.gitkeep
+
+# Local/private settings
+project.private.config.json
+backend/conf/application.properties
+
+# Runtime and generated output
+test-results/
+reports/
+backend/database/
+*.log
+*.pid
+*.out
+__pycache__/
+*.pyc
+node_modules/
+dist/
+build/
+release/
+
+# Database files and backups
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlitebackup
+*.sqlitebackup*
+*.bak
+*.bak.*
+
+# Attachments and media files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.svg
+*.mp3
+*.mp4
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+
+# Archives and compressed files
+*.zip
+*.tar
+*.tgz
+*.tar.gz
+*.rar
+*.7z
+*.gz
+
+# Allowed deployed frontend gzip assets
+!backend/frontend/**/*.js.gz

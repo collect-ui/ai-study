@@ -1,0 +1,226 @@
+page {
+  min-height: 100%;
+  background: #f7f9fc;
+  color: #172033;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+view,
+text,
+input,
+button,
+textarea {
+  box-sizing: border-box;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+}
+
+button::after {
+  border: 0;
+}
+
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 32rpx;
+}
+
+.section-title {
+  margin: 36rpx 0 20rpx;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #172033;
+}
+
+.card {
+  box-sizing: border-box;
+  border: 1rpx solid #e5e7eb;
+  border-radius: 16rpx;
+  background: #ffffff;
+  box-shadow: 0 10rpx 30rpx rgba(23, 32, 51, 0.06);
+}
+
+.muted {
+  color: #6b7280;
+}
+
+.primary-button {
+  height: 88rpx;
+  border-radius: 12rpx;
+  background: #167a5a;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 600;
+  line-height: 88rpx;
+}
+
+.secondary-button {
+  height: 80rpx;
+  border: 1rpx solid #cbd5e1;
+  border-radius: 12rpx;
+  background: #ffffff;
+  color: #172033;
+  font-size: 28rpx;
+  line-height: 80rpx;
+}
+
+.stitch-page {
+  min-height: 100vh;
+  padding: 32rpx 38rpx 150rpx;
+  background: #f7f9fc;
+  color: #191c1e;
+}
+
+.stitch-page.with-fixed-footer {
+  padding-bottom: 250rpx;
+}
+
+.stitch-page.no-bottom-nav {
+  padding-bottom: 64rpx;
+}
+
+.stitch-section {
+  margin-top: 32rpx;
+}
+
+.stitch-section-title {
+  color: #191c1e;
+  font-size: 36rpx;
+  font-weight: 800;
+  line-height: 46rpx;
+}
+
+.stitch-card {
+  border: 1rpx solid #e4e7ed;
+  border-radius: 24rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 28rpx rgba(0, 93, 167, 0.06);
+}
+
+.stitch-card-pad {
+  padding: 32rpx;
+}
+
+.stitch-muted {
+  color: #717783;
+}
+
+.stitch-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  background: #d4e3ff;
+  color: #004883;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.stitch-chip.green {
+  background: #67f7d5;
+  color: #00705c;
+}
+
+.stitch-chip.warn {
+  background: #ffddb4;
+  color: #633f00;
+}
+
+.stitch-chip.red {
+  background: #ffdad6;
+  color: #93000a;
+}
+
+.stitch-progress-track {
+  width: 100%;
+  height: 16rpx;
+  overflow: hidden;
+  border-radius: 999rpx;
+  background: #eceef1;
+}
+
+.stitch-progress-fill {
+  height: 100%;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #005da7 0%, #67f7d5 100%);
+}
+
+.stitch-primary-button,
+.stitch-secondary-button,
+.stitch-ghost-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92rpx;
+  border-radius: 22rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.stitch-primary-button {
+  background: #005da7;
+  color: #ffffff;
+  box-shadow: 0 12rpx 28rpx rgba(0, 93, 167, 0.22);
+}
+
+.stitch-secondary-button {
+  border: 2rpx solid #005da7;
+  background: #ffffff;
+  color: #005da7;
+}
+
+.stitch-ghost-button {
+  border: 1rpx solid #c1c7d3;
+  background: #ffffff;
+  color: #414751;
+}
+
+.stitch-input {
+  width: 100%;
+  min-height: 88rpx;
+  padding: 0 28rpx;
+  border-radius: 18rpx;
+  background: #f2f4f7;
+  color: #191c1e;
+  font-size: 28rpx;
+}
+
+.stitch-input-placeholder {
+  color: #717783;
+}
+
+.stitch-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 20rpx;
+  background: #d4e3ff;
+  color: #005da7;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.stitch-two-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24rpx;
+}
+
+.stitch-three-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20rpx;
+}

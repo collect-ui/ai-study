@@ -1,0 +1,11 @@
+<view class="action-card {{tone}} {{wide ? 'wide' : ''}}" bindtap="emitAction">
+  <view class="action-icon">{{icon}}</view>
+  <view class="action-copy">
+    <view class="action-title-row">
+      <text class="action-title">{{title}}</text>
+      <text wx:if="{{tag}}" class="action-tag">{{tag}}</text>
+    </view>
+    <view class="action-desc">{{desc}}</view>
+  </view>
+  <view class="action-arrow">›</view>
+</view>

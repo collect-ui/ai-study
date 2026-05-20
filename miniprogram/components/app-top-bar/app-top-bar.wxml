@@ -1,0 +1,30 @@
+<view class="app-top-bar {{compact ? 'compact' : ''}}">
+  <view class="bar-left">
+    <view wx:if="{{showBack}}" class="icon-button" bindtap="goBack">‹</view>
+    <block wx:if="{{brand}}">
+      <image class="brand-logo" src="{{assets.logo}}" mode="aspectFit" />
+      <view>
+        <view class="bar-title brand-title">{{title}}</view>
+        <view wx:if="{{subtitle}}" class="bar-subtitle">{{subtitle}}</view>
+      </view>
+    </block>
+    <block wx:else>
+      <view>
+        <view class="bar-title">{{title}}</view>
+        <view wx:if="{{subtitle}}" class="bar-subtitle">{{subtitle}}</view>
+      </view>
+    </block>
+  </view>
+
+  <view class="bar-actions">
+    <view wx:if="{{showSearch}}" class="icon-button" data-action="search" bindtap="emitAction">⌕</view>
+    <view wx:if="{{showBell}}" class="icon-button with-dot" data-action="bell" bindtap="emitAction">
+      <image class="bell-image" src="{{assets.bell}}" mode="aspectFit" />
+      <view class="dot"></view>
+    </view>
+    <view wx:if="{{showProfile}}" class="icon-button profile-icon" data-action="profile" bindtap="emitAction">◎</view>
+    <view wx:if="{{showShare}}" class="icon-button" data-action="share" bindtap="emitAction">↗</view>
+    <view wx:if="{{showSettings}}" class="icon-button" data-action="settings" bindtap="emitAction">⚙</view>
+    <view wx:if="{{showMore}}" class="icon-button" data-action="more" bindtap="emitAction">⋯</view>
+  </view>
+</view>

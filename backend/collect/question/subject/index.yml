@@ -1,0 +1,74 @@
+service:
+  - key: subject_query
+    http: true
+    module: sql
+    params:
+      keyword:
+        template: "{{ if .keyword }}%{{.keyword}}%{{end}}"
+    data_file: subject_query.sql
+
+  - key: subject_save
+    http: true
+    module: model_save
+    table: question_subject
+    params:
+      subject_id:
+        template: "{{uuid}}"
+      subject_code:
+        check:
+          template: "{{must .subject_code}}"
+          err_msg: 科目编码不能为空
+      subject_name:
+        check:
+          template: "{{must .subject_name}}"
+          err_msg: 科目名称不能为空
+      order_index:
+        type: int
+        default: 1
+      status:
+        default: enabled
+      is_delete:
+        default: "0"
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+
+  - key: subject_update
+    http: true
+    module: model_update
+    table: question_subject
+    params:
+      subject_id:
+        check:
+          template: "{{must .subject_id}}"
+          err_msg: subject_id不能为空
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - subject_code
+      - subject_name
+      - order_index
+      - status
+      - modify_time
+      - modify_user
+    filter:
+      subject_id: "[subject_id]"
+
+  - key: subject_delete
+    http: true
+    module: model_delete
+    table: question_subject
+    params:
+      subject_id_list:
+        check:
+          template: "{{must .subject_id_list}}"
+          err_msg: 科目不能为空
+    filter:
+      subject_id__in: "[subject_id_list]"

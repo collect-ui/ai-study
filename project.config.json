@@ -1,0 +1,50 @@
+{
+  "description": "ai-study WeChat Mini Program",
+  "appid": "wxd23932c04171118f",
+  "projectname": "ai-study",
+  "miniprogramRoot": "miniprogram/",
+  "compileType": "miniprogram",
+  "libVersion": "3.8.12",
+  "packOptions": {
+    "ignore": [
+      {
+        "type": "folder",
+        "value": ".tools"
+      },
+      {
+        "type": "folder",
+        "value": "wx_login"
+      },
+      {
+        "type": "folder",
+        "value": ".runtime"
+      }
+    ]
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": false,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "scopeDataCheck": false,
+    "uglifyFileName": false,
+    "checkInvalidKey": true,
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": false,
+    "useMultiFrameRuntime": true,
+    "useApiHook": true,
+    "useApiHostProcess": true
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}

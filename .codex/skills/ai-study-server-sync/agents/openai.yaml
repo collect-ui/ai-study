@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Study Server Sync"
+  short_description: "Deploy AI Study backend to the remote server"
+  default_prompt: "Use $ai-study-server-sync to deploy the AI Study backend to the remote server and verify it."

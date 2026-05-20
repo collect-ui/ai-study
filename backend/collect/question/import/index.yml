@@ -1,0 +1,217 @@
+service:
+  - key: ai_pdf_text
+    http: true
+    module: question_pdf_text
+    params:
+      file_path:
+        default: ""
+      max_chars:
+        type: int
+        default: 120000
+
+  - key: ai_parse
+    http: true
+    module: question_ai_parse
+    params:
+      parse_mode:
+        default: chunked
+      provider:
+        default: codex
+      model:
+        default: ""
+      api_key:
+        default: ""
+      base_url:
+        default: ""
+      raw_text:
+        default: ""
+      fixed_text:
+        default: ""
+      mock_response:
+        default: ""
+      enable_cache:
+        type: bool
+        default: false
+      file_path:
+        default: ""
+      subject:
+        default: english
+      stage:
+        default: junior
+      grade:
+        default: grade_7
+      textbook_version:
+        default: pep
+      unit_id:
+        default: ""
+      unit_code:
+        default: ""
+      unit_name:
+        default: ""
+      question_type:
+        default: single_choice
+      question_category:
+        default: normal
+      difficulty:
+        default: basic
+      score:
+        type: int
+        default: 5
+      max_chars:
+        type: int
+        default: 24000
+      source_max_chars:
+        type: int
+        default: 120000
+      chunk_chars:
+        type: int
+        default: 12000
+      max_chunks:
+        type: int
+        default: 20
+      concurrency:
+        type: int
+        default: 0
+
+  - key: ai_import_save
+    http: true
+    module: bulk_service
+    params:
+      rows:
+        default: []
+    batch:
+      foreach: "[rows]"
+      item: item
+      loop_max: 1
+      service:
+        service: question.question_choice_save
+      append_item_param: true
+      save_field: save_result
+
+  - key: import_batch_query
+    http: true
+    module: sql
+    params:
+      page:
+        type: int
+        default: 1
+      size:
+        type: int
+        default: 20
+      start:
+        template: "({{.page}}-1) * {{.size}}"
+        exec: true
+        type: int
+      count:
+        default: true
+    data_file: import_batch_query.sql
+    count_file: import_batch_query_count.sql
+    pagination: pagination
+    count: "[count]"
+
+  - key: import_batch_save
+    http: true
+    module: model_save
+    table: question_import_batch
+    params:
+      batch_id:
+        template: "{{uuid}}"
+      status:
+        default: parsing
+      total_count:
+        type: int
+        default: 0
+      success_count:
+        type: int
+        default: 0
+      fail_count:
+        type: int
+        default: 0
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+
+  - key: import_batch_update
+    http: true
+    module: model_update
+    table: question_import_batch
+    params:
+      batch_id:
+        check:
+          template: "{{must .batch_id}}"
+          err_msg: batch_id不能为空
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - file_name
+      - file_url
+      - subject
+      - stage
+      - grade
+      - textbook_version
+      - status
+      - total_count
+      - success_count
+      - fail_count
+      - error_summary
+      - modify_time
+      - modify_user
+    filter:
+      batch_id: "[batch_id]"
+
+  - key: import_row_query
+    http: true
+    module: sql
+    params:
+      batch_id:
+        check:
+          template: "{{must .batch_id}}"
+          err_msg: batch_id不能为空
+      page:
+        type: int
+        default: 1
+      size:
+        type: int
+        default: 100
+      start:
+        template: "({{.page}}-1) * {{.size}}"
+        exec: true
+        type: int
+      count:
+        default: true
+    data_file: import_row_query.sql
+    count_file: import_row_query_count.sql
+    pagination: pagination
+    count: "[count]"
+
+  - key: import_row_save
+    http: true
+    module: model_save
+    table: question_import_row
+    params:
+      row_id:
+        template: "{{uuid}}"
+      batch_id:
+        check:
+          template: "{{must .batch_id}}"
+          err_msg: batch_id不能为空
+      row_index:
+        type: int
+        default: 1
+      raw_json:
+        default: "{}"
+      parsed_json:
+        default: "{}"
+      validate_status:
+        default: pending
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"

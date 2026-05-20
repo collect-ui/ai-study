@@ -1,0 +1,595 @@
+{
+  "tag": "layout-fit",
+  "className": "overflow-auto",
+  "storeName": "dashboard",
+  "initStore": {},
+  "initAction": [],
+  "children": [
+    {
+      "tag": "div",
+      "className": "padding20",
+      "style": {
+        "minHeight": "100%",
+        "background": "#f5f7fb"
+      },
+      "children": [
+        {
+          "tag": "div",
+          "style": {
+            "padding": "22px 24px",
+            "borderRadius": 8,
+            "background": "linear-gradient(135deg, #0f766e 0%, #1d4ed8 100%)",
+            "color": "#fff",
+            "marginBottom": 16
+          },
+          "children": [
+            {
+              "tag": "div",
+              "style": {
+                "display": "flex",
+                "alignItems": "center",
+                "justifyContent": "space-between",
+                "gap": 20
+              },
+              "children": [
+                {
+                  "tag": "div",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "style": {
+                        "fontSize": 24,
+                        "fontWeight": 700,
+                        "marginBottom": 8
+                      },
+                      "children": "AI Study 学习管理后台"
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "fontSize": 14,
+                        "opacity": 0.86
+                      },
+                      "children": "面向学生学习诊断、个性化练习、错题追踪和家校反馈的运营工作台"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "style": {
+                    "fontSize": 13,
+                    "lineHeight": "22px",
+                    "textAlign": "right",
+                    "opacity": 0.9
+                  },
+                  "children": "今日重点：完成学习测评闭环，跟进薄弱知识点学生"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "row",
+          "gutter": 16,
+          "children": [
+            {
+              "tag": "col",
+              "span": 6,
+              "children": [
+                {
+                  "tag": "div",
+                  "style": {
+                    "background": "#fff",
+                    "borderRadius": 8,
+                    "padding": 18,
+                    "border": "1px solid #e5e7eb"
+                  },
+                  "children": [
+                    {
+                      "tag": "icon",
+                      "icon": "FaUsers",
+                      "style": {
+                        "fontSize": 22,
+                        "color": "#0f766e"
+                      }
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "fontSize": 28,
+                        "fontWeight": 700,
+                        "marginTop": 10
+                      },
+                      "children": "128"
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "color": "#64748b"
+                      },
+                      "children": "今日活跃学习人数"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "col",
+              "span": 6,
+              "children": [
+                {
+                  "tag": "div",
+                  "style": {
+                    "background": "#fff",
+                    "borderRadius": 8,
+                    "padding": 18,
+                    "border": "1px solid #e5e7eb"
+                  },
+                  "children": [
+                    {
+                      "tag": "icon",
+                      "icon": "FaClipboardCheck",
+                      "style": {
+                        "fontSize": 22,
+                        "color": "#2563eb"
+                      }
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "fontSize": 28,
+                        "fontWeight": 700,
+                        "marginTop": 10
+                      },
+                      "children": "36"
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "color": "#64748b"
+                      },
+                      "children": "已完成智能测评"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "col",
+              "span": 6,
+              "children": [
+                {
+                  "tag": "div",
+                  "style": {
+                    "background": "#fff",
+                    "borderRadius": 8,
+                    "padding": 18,
+                    "border": "1px solid #e5e7eb"
+                  },
+                  "children": [
+                    {
+                      "tag": "icon",
+                      "icon": "FaExclamationTriangle",
+                      "style": {
+                        "fontSize": 22,
+                        "color": "#dc2626"
+                      }
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "fontSize": 28,
+                        "fontWeight": 700,
+                        "marginTop": 10
+                      },
+                      "children": "12"
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "color": "#64748b"
+                      },
+                      "children": "待跟进薄弱项"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "col",
+              "span": 6,
+              "children": [
+                {
+                  "tag": "div",
+                  "style": {
+                    "background": "#fff",
+                    "borderRadius": 8,
+                    "padding": 18,
+                    "border": "1px solid #e5e7eb"
+                  },
+                  "children": [
+                    {
+                      "tag": "icon",
+                      "icon": "FaBookOpen",
+                      "style": {
+                        "fontSize": 22,
+                        "color": "#7c3aed"
+                      }
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "fontSize": 28,
+                        "fontWeight": 700,
+                        "marginTop": 10
+                      },
+                      "children": "84%"
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "color": "#64748b"
+                      },
+                      "children": "本周学习任务完成率"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "row",
+          "gutter": 16,
+          "style": {
+            "marginTop": 16
+          },
+          "children": [
+            {
+              "tag": "col",
+              "span": 15,
+              "children": [
+                {
+                  "tag": "div",
+                  "style": {
+                    "background": "#fff",
+                    "borderRadius": 8,
+                    "padding": 20,
+                    "border": "1px solid #e5e7eb"
+                  },
+                  "children": [
+                    {
+                      "tag": "div",
+                      "style": {
+                        "fontSize": 18,
+                        "fontWeight": 700,
+                        "marginBottom": 14
+                      },
+                      "children": "学习运营概览"
+                    },
+                    {
+                      "tag": "table",
+                      "domLayout": "autoHeight",
+                      "rowData": [
+                        {
+                          "module": "入门测评",
+                          "today": "36 人完成",
+                          "trend": "+18%",
+                          "owner": "教研组",
+                          "status": "进行中"
+                        },
+                        {
+                          "module": "AI 个性化练习",
+                          "today": "246 份练习提交",
+                          "trend": "+12%",
+                          "owner": "学习运营",
+                          "status": "稳定"
+                        },
+                        {
+                          "module": "错题巩固",
+                          "today": "72 个薄弱点更新",
+                          "trend": "-6%",
+                          "owner": "班主任",
+                          "status": "需跟进"
+                        },
+                        {
+                          "module": "学习报告",
+                          "today": "18 份待发送",
+                          "trend": "+9%",
+                          "owner": "家校服务",
+                          "status": "待处理"
+                        }
+                      ],
+                      "columnDefs": [
+                        {
+                          "headerName": "模块",
+                          "field": "module",
+                          "minWidth": 130
+                        },
+                        {
+                          "headerName": "今日数据",
+                          "field": "today",
+                          "minWidth": 150
+                        },
+                        {
+                          "headerName": "本周趋势",
+                          "field": "trend",
+                          "width": 110
+                        },
+                        {
+                          "headerName": "负责人",
+                          "field": "owner",
+                          "width": 120
+                        },
+                        {
+                          "headerName": "状态",
+                          "field": "status",
+                          "width": 110
+                        }
+                      ],
+                      "defaultColDef": {
+                        "resizable": true,
+                        "sortable": false
+                      },
+                      "style": {
+                        "height": 220,
+                        "width": "100%"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "col",
+              "span": 9,
+              "children": [
+                {
+                  "tag": "div",
+                  "style": {
+                    "background": "#fff",
+                    "borderRadius": 8,
+                    "padding": 20,
+                    "border": "1px solid #e5e7eb",
+                    "minHeight": 262
+                  },
+                  "children": [
+                    {
+                      "tag": "div",
+                      "style": {
+                        "fontSize": 18,
+                        "fontWeight": 700,
+                        "marginBottom": 14
+                      },
+                      "children": "今日待办"
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "display": "grid",
+                        "gap": 12
+                      },
+                      "children": [
+                        {
+                          "tag": "div",
+                          "children": "1. 复核初中英语词汇测评异常记录"
+                        },
+                        {
+                          "tag": "div",
+                          "children": "2. 为 12 名薄弱项学生生成巩固任务"
+                        },
+                        {
+                          "tag": "div",
+                          "children": "3. 发布本周学习报告给家长端"
+                        },
+                        {
+                          "tag": "div",
+                          "children": "4. 检查课程资源封面与附件完整性"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "div",
+          "style": {
+            "background": "#fff",
+            "borderRadius": 8,
+            "padding": 20,
+            "border": "1px solid #e5e7eb",
+            "marginTop": 16
+          },
+          "children": [
+            {
+              "tag": "div",
+              "style": {
+                "fontSize": 18,
+                "fontWeight": 700,
+                "marginBottom": 14
+              },
+              "children": "AI 学习能力模块"
+            },
+            {
+              "tag": "row",
+              "gutter": 16,
+              "children": [
+                {
+                  "tag": "col",
+                  "span": 6,
+                  "children": [
+                    {
+                      "tag": "div",
+                      "style": {
+                        "border": "1px solid #e2e8f0",
+                        "borderRadius": 8,
+                        "padding": 16,
+                        "height": 132
+                      },
+                      "children": [
+                        {
+                          "tag": "icon",
+                          "icon": "FaBrain",
+                          "style": {
+                            "fontSize": 22,
+                            "color": "#0f766e"
+                          }
+                        },
+                        {
+                          "tag": "div",
+                          "style": {
+                            "fontWeight": 700,
+                            "marginTop": 10
+                          },
+                          "children": "智能诊断"
+                        },
+                        {
+                          "tag": "div",
+                          "style": {
+                            "color": "#64748b",
+                            "fontSize": 13,
+                            "marginTop": 6
+                          },
+                          "children": "识别学生知识点掌握情况与能力短板"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "col",
+                  "span": 6,
+                  "children": [
+                    {
+                      "tag": "div",
+                      "style": {
+                        "border": "1px solid #e2e8f0",
+                        "borderRadius": 8,
+                        "padding": 16,
+                        "height": 132
+                      },
+                      "children": [
+                        {
+                          "tag": "icon",
+                          "icon": "FaRoute",
+                          "style": {
+                            "fontSize": 22,
+                            "color": "#2563eb"
+                          }
+                        },
+                        {
+                          "tag": "div",
+                          "style": {
+                            "fontWeight": 700,
+                            "marginTop": 10
+                          },
+                          "children": "学习路径"
+                        },
+                        {
+                          "tag": "div",
+                          "style": {
+                            "color": "#64748b",
+                            "fontSize": 13,
+                            "marginTop": 6
+                          },
+                          "children": "按测评结果推荐课程、练习与复习节奏"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "col",
+                  "span": 6,
+                  "children": [
+                    {
+                      "tag": "div",
+                      "style": {
+                        "border": "1px solid #e2e8f0",
+                        "borderRadius": 8,
+                        "padding": 16,
+                        "height": 132
+                      },
+                      "children": [
+                        {
+                          "tag": "icon",
+                          "icon": "FaCheckCircle",
+                          "style": {
+                            "fontSize": 22,
+                            "color": "#16a34a"
+                          }
+                        },
+                        {
+                          "tag": "div",
+                          "style": {
+                            "fontWeight": 700,
+                            "marginTop": 10
+                          },
+                          "children": "错题巩固"
+                        },
+                        {
+                          "tag": "div",
+                          "style": {
+                            "color": "#64748b",
+                            "fontSize": 13,
+                            "marginTop": 6
+                          },
+                          "children": "沉淀错题标签，持续跟踪薄弱项改善"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "col",
+                  "span": 6,
+                  "children": [
+                    {
+                      "tag": "div",
+                      "style": {
+                        "border": "1px solid #e2e8f0",
+                        "borderRadius": 8,
+                        "padding": 16,
+                        "height": 132
+                      },
+                      "children": [
+                        {
+                          "tag": "icon",
+                          "icon": "FaChartLine",
+                          "style": {
+                            "fontSize": 22,
+                            "color": "#7c3aed"
+                          }
+                        },
+                        {
+                          "tag": "div",
+                          "style": {
+                            "fontWeight": 700,
+                            "marginTop": 10
+                          },
+                          "children": "学习报告"
+                        },
+                        {
+                          "tag": "div",
+                          "style": {
+                            "color": "#64748b",
+                            "fontSize": 13,
+                            "marginTop": 6
+                          },
+                          "children": "输出学生成长趋势和下一步学习建议"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

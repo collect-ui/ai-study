@@ -1,0 +1,70 @@
+<view class="stitch-page setup-page">
+  <app-top-bar brand="{{true}}" title="智学AI" showProfile="{{true}}" />
+
+  <view class="setup-hero stitch-section">
+    <view class="stitch-section-title">专项学习设置</view>
+    <view class="setup-subtitle">定制你的 AI 英语学习路径</view>
+  </view>
+
+  <view class="step-block stitch-section">
+    <view class="step-title"><text>1</text>选择年级</view>
+    <view class="grade-row">
+      <view
+        wx:for="{{setup.grades}}"
+        wx:key="id"
+        class="pill-choice {{selectedGrade == item.id ? 'active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="selectGrade"
+      >{{item.name}}</view>
+    </view>
+  </view>
+
+  <view class="step-block stitch-section">
+    <view class="step-title"><text>2</text>选择科目</view>
+    <view class="subject-card stitch-card">
+      <view class="subject-icon">英</view>
+      <view>{{setup.subject.name}}</view>
+      <view class="subject-check">✓</view>
+    </view>
+  </view>
+
+  <view class="step-block stitch-section">
+    <view class="step-title"><text>3</text>选择单元/章节</view>
+    <view class="unit-list stitch-card">
+      <view
+        wx:for="{{setup.units}}"
+        wx:key="id"
+        class="unit-row {{selectedUnit == item.id ? 'active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="selectUnit"
+      >
+        <view class="unit-icon">{{item.icon}}</view>
+        <view class="unit-title">{{item.title}}</view>
+        <view class="radio">{{selectedUnit == item.id ? '●' : '○'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="step-block stitch-section">
+    <view class="step-title"><text>4</text>选择学习模式</view>
+    <view class="mode-list">
+      <view
+        wx:for="{{setup.modes}}"
+        wx:key="id"
+        class="mode-card stitch-card {{selectedMode == item.id ? 'active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="selectMode"
+      >
+        <view class="mode-icon">{{item.icon}}</view>
+        <view class="mode-copy">
+          <view>{{item.title}}</view>
+          <text>{{item.desc}}</text>
+        </view>
+        <view class="radio">{{selectedMode == item.id ? '●' : '○'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="stitch-primary-button start-button" bindtap="startStudy">开始学习</view>
+  <bottom-nav selected="home" />
+</view>

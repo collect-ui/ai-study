@@ -1,0 +1,92 @@
+<view class="stitch-page dashboard-page">
+  <app-top-bar brand="{{true}}" title="AI 学习助手" showSearch="{{true}}" showBell="{{true}}" />
+
+  <view class="greeting stitch-section">
+    <view class="greeting-copy">
+      <view class="greeting-title">早安，小明同学 <text>👋</text></view>
+      <view class="greeting-subtitle">准备好开始今天的 AI 提分之旅了吗？</view>
+    </view>
+    <view class="mentor-avatar">
+      <view class="mentor-face">AI</view>
+      <view class="online-pill">在线</view>
+    </view>
+  </view>
+
+  <view class="achievement stitch-section" bindtap="openKnowledge">
+    <view class="achievement-head">
+      <view>
+        <view class="achievement-label">今日学习成就</view>
+        <view class="achievement-score">{{dashboard.achievement.percent}}<text>%</text></view>
+      </view>
+      <view class="task-pill">✓ 还剩 {{dashboard.achievement.remain}} 个任务</view>
+    </view>
+    <view class="achievement-track">
+      <view class="achievement-fill" style="width: {{dashboard.achievement.percent}}%;"></view>
+    </view>
+    <view class="stage-row">
+      <text wx:for="{{dashboard.achievement.stages}}" wx:key="*this">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="stitch-section">
+    <view class="stitch-section-title dashboard-title">智能提分工具</view>
+    <view class="tool-grid">
+      <view
+        wx:for="{{dashboard.tools}}"
+        wx:key="id"
+        class="tool-card stitch-card {{item.wide ? 'wide' : ''}} {{item.tone}}"
+        data-key="{{item.id}}"
+        bindtap="handleToolTap"
+      >
+        <view class="tool-main">
+          <view class="tool-icon">{{item.icon}}</view>
+          <view class="tool-copy">
+            <view class="tool-head">
+              <text>{{item.title}}</text>
+              <view wx:if="{{item.tag && item.id == 'short-test'}}" class="tool-tag">{{item.tag}}</view>
+            </view>
+            <view class="tool-desc">{{item.desc}}</view>
+          </view>
+        </view>
+        <view wx:if="{{item.tag && item.id != 'short-test'}}" class="connect-tag">{{item.tag}}</view>
+        <view wx:else class="tool-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="stitch-section">
+    <view class="recommend-head">
+      <view class="stitch-section-title dashboard-title">为你推荐</view>
+      <view class="more-link">更多 ›</view>
+    </view>
+    <scroll-view scroll-x="{{true}}" class="recommend-scroll">
+      <view
+        wx:for="{{dashboard.recommended}}"
+        wx:key="id"
+        class="recommend-card stitch-card {{item.tone}}"
+        data-id="{{item.id}}"
+        bindtap="openRecommend"
+      >
+        <view class="recommend-cover">
+          <view>{{item.icon}}</view>
+        </view>
+        <view class="recommend-body">
+          <view class="recommend-subject">{{item.subject}}</view>
+          <view class="recommend-title">{{item.title}}</view>
+          <view class="recommend-desc">{{item.desc}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="assistant-entry stitch-section">
+    <view class="assistant-icon">问</view>
+    <view class="assistant-copy">
+      <view>有什么学习难题，随时问我</view>
+      <text>AI 助教 24h 全天候待命</text>
+    </view>
+    <view class="assistant-button" bindtap="askAssistant">去提问</view>
+  </view>
+
+  <bottom-nav selected="home" />
+</view>

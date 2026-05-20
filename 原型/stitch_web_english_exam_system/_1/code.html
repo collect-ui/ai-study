@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>全学科题库管理系统</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#005bbf",
+                    "primary-container": "#1a73e8",
+                    "surface": "#f8f9fa",
+                    "on-surface": "#191c1d",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-tint": "#005bc0",
+                    "on-secondary-fixed-variant": "#004494",
+                    "inverse-primary": "#adc7ff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#005320",
+                    "on-secondary-fixed": "#001a41",
+                    "inverse-surface": "#2e3132",
+                    "inverse-on-surface": "#f0f1f2",
+                    "tertiary-fixed": "#89fa9b",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#00285c",
+                    "tertiary-fixed-dim": "#6ddd81",
+                    "on-error": "#ffffff",
+                    "outline": "#727785",
+                    "on-tertiary-container": "#ffffff",
+                    "tertiary": "#006d2c",
+                    "on-tertiary-fixed": "#002108",
+                    "secondary-container": "#4d8efe",
+                    "on-primary-fixed-variant": "#004493",
+                    "background": "#f8f9fa",
+                    "tertiary-container": "#008939",
+                    "on-background": "#191c1d",
+                    "secondary-fixed": "#d8e2ff",
+                    "on-primary-container": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#e7e8e9",
+                    "on-primary": "#ffffff",
+                    "primary-fixed": "#d8e2ff",
+                    "outline-variant": "#c1c6d6",
+                    "error": "#ba1a1a",
+                    "surface-container": "#edeeef",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "surface-container-low": "#f3f4f5",
+                    "error-container": "#ffdad6",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#e1e3e4",
+                    "primary-fixed-dim": "#adc7ff",
+                    "surface-dim": "#d9dadb",
+                    "on-surface-variant": "#414754",
+                    "on-primary-fixed": "#001a41",
+                    "secondary": "#005ac1",
+                    "surface-bright": "#f8f9fa"
+            },
+            "borderRadius": {
+                    "DEFAULT": "4px",
+                    "lg": "4px",
+                    "xl": "4px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin": "32px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "sm": "12px",
+                    "base": "8px",
+                    "xl": "64px",
+                    "md": "24px",
+                    "lg": "40px"
+            },
+            "fontFamily": {
+                    "body-sm": ["Work Sans"],
+                    "label-md": ["Work Sans"],
+                    "body-lg": ["Work Sans"],
+                    "headline-sm": ["Work Sans"],
+                    "body-md": ["Work Sans"],
+                    "label-lg": ["Work Sans"],
+                    "display-lg": ["Work Sans"],
+                    "headline-lg": ["Work Sans"],
+                    "headline-md": ["Work Sans"]
+            },
+            "fontSize": {
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Work Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<div class="flex max-w-[1440px] mx-auto h-screen overflow-hidden">
+<!-- SideNavBar / Filter Sidebar -->
+<aside class="w-64 border-r border-outline-variant bg-surface flex flex-col h-full px-sm gap-sm shrink-0 overflow-y-auto py-sm">
+<div class="px-sm">
+<h2 class="font-headline-sm text-headline-sm text-primary">全学科题库管理</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">K12教育数字化平台</p>
+</div>
+<!-- 科目选择 -->
+<div class="space-y-base">
+<p class="px-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">科目</p>
+<div class="px-sm">
+<select class="w-full bg-surface-container-low border border-outline-variant rounded p-base font-body-sm text-body-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+<option>全部科目</option>
+<option>语文</option>
+<option>数学</option>
+<option>英语</option>
+<option>物理</option>
+<option>化学</option>
+</select>
+</div>
+</div>
+<!-- 教程类型 -->
+<div class="space-y-base">
+<p class="px-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">教程类型</p>
+<div class="px-sm">
+<select class="w-full bg-surface-container-low border border-outline-variant rounded p-base font-body-sm text-body-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+<option>人教版</option>
+<option>北师大版</option>
+<option>苏教版</option>
+</select>
+</div>
+</div>
+<div class="space-y-base">
+<p class="px-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">年级</p>
+<div class="flex flex-col gap-xs">
+<button class="flex items-center gap-sm bg-primary/10 text-primary rounded px-sm py-base font-label-lg text-label-lg w-full text-left">
+<span class="material-symbols-outlined text-[20px]">school</span>
+<span>七年级</span>
+</button>
+<button class="flex items-center gap-sm text-on-surface-variant px-sm py-base font-label-lg text-label-lg hover:bg-surface-container-high rounded transition-all w-full text-left">
+<span class="material-symbols-outlined text-[20px]">school</span>
+<span>八年级</span>
+</button>
+<button class="flex items-center gap-sm text-on-surface-variant px-sm py-base font-label-lg text-label-lg hover:bg-surface-container-high rounded transition-all w-full text-left">
+<span class="material-symbols-outlined text-[20px]">school</span>
+<span>九年级</span>
+</button>
+</div>
+</div>
+<!-- 单元选择 -->
+<div class="space-y-base">
+<p class="px-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">单元</p>
+<div class="px-sm">
+<select class="w-full bg-surface-container-low border border-outline-variant rounded p-base font-body-sm text-body-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+<option>全部单元</option>
+<option>第一单元</option>
+<option>第二单元</option>
+<option>第三单元</option>
+<option>第四单元</option>
+</select>
+</div>
+</div>
+<div class="space-y-base">
+<p class="px-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">难度系数</p>
+<div class="px-sm space-y-sm">
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">基础</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input checked="" class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface font-medium text-primary">进阶</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">困难</span>
+</label>
+</div>
+</div>
+<div class="space-y-base">
+<p class="px-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">题目类型</p>
+<div class="px-sm">
+<select class="w-full bg-surface-container-low border border-outline-variant rounded p-base font-body-sm text-body-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+<option>全部题型</option>
+<option>选择题</option>
+<option>填空题</option>
+<option>判断题</option>
+<option>简答题</option>
+<option>计算题</option>
+</select>
+</div>
+</div>
+<div class="mt-auto px-sm pt-md border-t border-outline-variant">
+<button class="w-full bg-primary text-on-primary py-base rounded font-label-lg text-label-lg flex items-center justify-center gap-sm hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>新建题目</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-surface-bright">
+<div class="p-md lg:p-lg space-y-md">
+<!-- Search and Actions Bar -->
+<div class="flex flex-col md:flex-row gap-md items-center justify-between">
+<div class="relative w-full md:max-w-md">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full pl-xl pr-base py-sm bg-white border border-outline-variant rounded font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="输入题目关键字、知识点搜索..." type="text"/>
+</div>
+<div class="flex gap-sm w-full md:w-auto">
+<button class="flex-1 md:flex-none flex items-center justify-center gap-xs px-md py-sm border border-outline text-on-surface-variant font-label-lg text-label-lg rounded hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]">file_download</span>
+                        批量导入
+                    </button>
+<button class="flex-1 md:flex-none flex items-center justify-center gap-xs px-md py-sm bg-primary text-on-primary font-label-lg text-label-lg rounded hover:bg-primary/90 transition-all">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+                        新建题目
+                    </button>
+</div>
+</div>
+<!-- Statistics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="bg-white border border-outline-variant p-sm px-md rounded flex items-center gap-md">
+<div class="w-10 h-10 rounded bg-primary/5 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">database</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-md text-label-md">全学科题库总数</p>
+<p class="text-headline-sm font-bold text-on-surface leading-tight">5,620</p>
+</div>
+</div>
+<div class="bg-white border border-outline-variant p-sm px-md rounded flex items-center gap-md">
+<div class="w-10 h-10 rounded bg-tertiary-container/10 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">verified</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-md text-label-md">今日新增</p>
+<p class="text-headline-sm font-bold text-on-surface leading-tight">42</p>
+</div>
+</div>
+<div class="bg-white border border-outline-variant p-sm px-md rounded flex items-center gap-md">
+<div class="w-10 h-10 rounded bg-secondary-container/10 text-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">pending_actions</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-md text-label-md">待审核</p>
+<p class="text-headline-sm font-bold text-on-surface leading-tight">18</p>
+</div>
+</div>
+</div>
+<!-- Question List Table Card -->
+<div class="bg-white border border-outline-variant rounded overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant w-16">编号</th>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant min-w-[400px]">题目预览</th>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant w-32">类型</th>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant w-24">难度</th>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant w-32">更新日期</th>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant text-right w-32">操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant"><tr class="hover:bg-surface-container-lowest transition-colors group"><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">#5102</td><td class="px-md py-base"><div class="space-y-xs"><div class="flex items-center gap-base"><span class="px-base py-0.5 bg-on-tertiary-fixed-variant/10 text-on-tertiary-fixed-variant rounded text-[10px] font-bold shrink-0">语文</span><p class="font-body-md text-body-md text-on-surface font-medium line-clamp-1">下列词语中划线字的注音全部正确的一项是...</p></div><div class="flex flex-wrap gap-xs"><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">七年级</span><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">第一单元</span><span class="px-xs py-[1px] bg-surface-container-high rounded text-[10px] text-on-surface-variant uppercase">字音字形</span></div></div></td><td class="px-md py-base"><span class="px-base py-0.5 bg-secondary-fixed text-on-secondary-fixed rounded text-[11px] font-medium">选择题</span></td><td class="px-md py-base"><span class="text-tertiary font-medium text-body-sm">基础</span></td><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">2023-12-01</td><td class="px-md py-base text-right"><div class="flex justify-end gap-xs opacity-0 group-hover:opacity-100 transition-opacity"><button class="p-xs text-primary hover:bg-primary/5 rounded"><span class="material-symbols-outlined text-[18px]">visibility</span></button><button class="p-xs text-on-surface-variant hover:bg-surface-container-highest rounded"><span class="material-symbols-outlined text-[18px]">edit</span></button><button class="p-xs text-error hover:bg-error/5 rounded"><span class="material-symbols-outlined text-[18px]">delete</span></button></div></td></tr><tr class="hover:bg-surface-container-lowest transition-colors group"><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">#5105</td><td class="px-md py-base"><div class="space-y-xs"><div class="flex items-center gap-base"><span class="px-base py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold shrink-0">数学</span><p class="font-body-md text-body-md text-on-surface font-medium line-clamp-1">已知二次函数 y=ax²+bx+c 的图像如图所示，则下列结论正确的是...</p></div><div class="flex flex-wrap gap-xs"><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">九年级</span><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">第三单元</span><span class="px-xs py-[1px] bg-surface-container-high rounded text-[10px] text-on-surface-variant uppercase">函数</span></div></div></td><td class="px-md py-base"><span class="px-base py-0.5 bg-surface-variant text-on-surface-variant rounded text-[11px] font-medium">简答题</span></td><td class="px-md py-base"><span class="text-error font-medium text-body-sm">困难</span></td><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">2023-11-28</td><td class="px-md py-base text-right"><div class="flex justify-end gap-xs opacity-0 group-hover:opacity-100 transition-opacity"><button class="p-xs text-primary hover:bg-primary/5 rounded"><span class="material-symbols-outlined text-[18px]">visibility</span></button><button class="p-xs text-error hover:bg-error/5 rounded"><span class="material-symbols-outlined text-[18px]">delete</span></button></div></td></tr><tr class="hover:bg-surface-container-lowest transition-colors group"><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">#3920</td><td class="px-md py-base"><div class="space-y-xs"><div class="flex items-center gap-base"><span class="px-base py-0.5 bg-on-secondary-fixed-variant/10 text-on-secondary-fixed-variant rounded text-[10px] font-bold shrink-0">英语</span><p class="font-body-md text-body-md text-on-surface font-medium line-clamp-1">Choose the correct word to complete: "I ____ to school every morning."</p></div><div class="flex flex-wrap gap-xs"><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">八年级</span><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">第二单元</span><span class="px-xs py-[1px] bg-surface-container-high rounded text-[10px] text-on-surface-variant uppercase">语法</span></div></div></td><td class="px-md py-base"><span class="px-base py-0.5 bg-secondary-fixed text-on-secondary-fixed rounded text-[11px] font-medium">选择题</span></td><td class="px-md py-base"><span class="text-tertiary font-medium text-body-sm">基础</span></td><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">2023-11-20</td><td class="px-md py-base text-right"><div class="flex justify-end gap-xs opacity-0 group-hover:opacity-100 transition-opacity"><button class="p-xs text-primary hover:bg-primary/5 rounded"><span class="material-symbols-outlined text-[18px]">visibility</span></button><button class="p-xs text-error hover:bg-error/5 rounded"><span class="material-symbols-outlined text-[18px]">delete</span></button></div></td></tr><tr class="hover:bg-surface-container-lowest transition-colors group"><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">#5112</td><td class="px-md py-base"><div class="space-y-xs"><div class="flex items-center gap-base"><span class="px-base py-0.5 bg-amber-100 text-amber-800 rounded text-[10px] font-bold shrink-0">物理</span><p class="font-body-md text-body-md text-on-surface font-medium line-clamp-1">关于牛顿第一定律，下列说法中正确的是...</p></div><div class="flex flex-wrap gap-xs"><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">八年级</span><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">第四单元</span><span class="px-xs py-[1px] bg-surface-container-high rounded text-[10px] text-on-surface-variant uppercase">力学</span></div></div></td><td class="px-md py-base"><span class="px-base py-0.5 bg-tertiary-fixed text-on-tertiary-fixed rounded text-[11px] font-medium">填空题</span></td><td class="px-md py-base"><span class="text-primary-container font-medium text-body-sm">进阶</span></td><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">2023-11-25</td><td class="px-md py-base text-right"><div class="flex justify-end gap-xs opacity-0 group-hover:opacity-100 transition-opacity"><button class="p-xs text-primary hover:bg-primary/5 rounded"><span class="material-symbols-outlined text-[18px]">visibility</span></button><button class="p-xs text-error hover:bg-error/5 rounded"><span class="material-symbols-outlined text-[18px]">delete</span></button></div></td></tr><tr class="hover:bg-surface-container-lowest transition-colors group"><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">#5120</td><td class="px-md py-base"><div class="space-y-xs"><div class="flex items-center gap-base"><span class="px-base py-0.5 bg-on-tertiary-fixed-variant/10 text-on-tertiary-fixed-variant rounded text-[10px] font-bold shrink-0">语文</span><p class="font-body-md text-body-md text-on-surface font-medium line-clamp-1">阅读下面的文言文，完成各题...</p></div><div class="flex flex-wrap gap-xs"><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">七年级</span><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">第二单元</span><span class="px-xs py-[1px] bg-surface-container-high rounded text-[10px] text-on-surface-variant uppercase">文言文</span></div></div></td><td class="px-md py-base"><span class="px-base py-0.5 bg-surface-variant text-on-surface-variant rounded text-[11px] font-medium">阅读题</span></td><td class="px-md py-base"><span class="text-primary-container font-medium text-body-sm">进阶</span></td><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">2023-12-05</td><td class="px-md py-base text-right"><div class="flex justify-end gap-xs opacity-0 group-hover:opacity-100 transition-opacity"><button class="p-xs text-primary hover:bg-primary/5 rounded"><span class="material-symbols-outlined text-[18px]">visibility</span></button></div></td></tr><tr class="hover:bg-surface-container-lowest transition-colors group"><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">#5125</td><td class="px-md py-base"><div class="space-y-xs"><div class="flex items-center gap-base"><span class="px-base py-0.5 bg-primary/10 text-primary rounded text-[10px] font-bold shrink-0">数学</span><p class="font-body-md text-body-md text-on-surface font-medium line-clamp-1">计算：(-2)^2 + |1 - √3| - 2sin60°...</p></div><div class="flex flex-wrap gap-xs"><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">九年级</span><span class="px-xs py-[1px] border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">第一单元</span><span class="px-xs py-[1px] bg-surface-container-high rounded text-[10px] text-on-surface-variant uppercase">计算题</span></div></div></td><td class="px-md py-base"><span class="px-base py-0.5 bg-tertiary-fixed text-on-tertiary-fixed rounded text-[11px] font-medium">计算题</span></td><td class="px-md py-base"><span class="text-tertiary font-medium text-body-sm">基础</span></td><td class="px-md py-base font-body-sm text-body-sm text-on-surface-variant">2023-12-08</td><td class="px-md py-base text-right"><div class="flex justify-end gap-xs opacity-0 group-hover:opacity-100 transition-opacity"><button class="p-xs text-primary hover:bg-primary/5 rounded"><span class="material-symbols-outlined text-[18px]">visibility</span></button></div></td></tr></tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-md bg-surface-container-low flex justify-between items-center border-t border-outline-variant">
+<p class="font-body-sm text-body-sm text-on-surface-variant">显示 1-10 条，共 5,620 条题目</p>
+<div class="flex gap-xs">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant bg-white text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-primary bg-primary text-on-primary font-label-md text-label-md">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant bg-white text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant bg-white text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-colors">3</button>
+<span class="w-8 h-8 flex items-center justify-center text-on-surface-variant">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant bg-white text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-colors">562</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant bg-white text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

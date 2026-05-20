@@ -1,0 +1,107 @@
+{
+  "source_pdf": "/data/project/ai-study/题目/【小升初】英语复习题三十套全国通用（含详细解析）.pdf",
+  "cases": [
+    {
+      "id": "pdf_01_header_single_choice",
+      "name": "真实PDF：标题+语法单选+答案区",
+      "file": "pdf_01_header_single_choice.txt",
+      "expected_count": 6,
+      "params": {
+        "question_type": "single_choice",
+        "question_category": "normal"
+      }
+    },
+    {
+      "id": "pdf_02_cloze_choice",
+      "name": "真实PDF：完形精练",
+      "file": "pdf_02_cloze_choice.txt",
+      "expected_count": 1,
+      "params": {
+        "question_type": "single_choice",
+        "question_category": "cloze_choice"
+      },
+      "expected_choice_items": 10
+    },
+    {
+      "id": "pdf_03_reading_choice",
+      "name": "真实PDF：阅读理解选择",
+      "file": "pdf_03_reading_choice.txt",
+      "expected_count": 1,
+      "params": {
+        "question_type": "single_choice",
+        "question_category": "reading_choice"
+      },
+      "expected_choice_items": 5
+    },
+    {
+      "id": "pdf_04_blank_given_words",
+      "name": "真实PDF：用所给词适当形式填空",
+      "file": "pdf_04_blank_given_words.txt",
+      "expected_count": 7,
+      "params": {
+        "question_type": "blank",
+        "question_category": "fill_word"
+      }
+    },
+    {
+      "id": "pdf_05_short_answer",
+      "name": "真实PDF：阅读回答问题",
+      "file": "pdf_05_short_answer.txt",
+      "expected_count": 5,
+      "params": {
+        "question_type": "short_answer",
+        "question_category": "reading_short_answer"
+      }
+    },
+    {
+      "id": "pdf_06_sentence_completion",
+      "name": "真实PDF：句型转换/完成句子",
+      "file": "pdf_06_sentence_completion.txt",
+      "expected_count": 7,
+      "params": {
+        "question_type": "blank",
+        "question_category": "fill_word"
+      }
+    },
+    {
+      "id": "pdf_07_dialogue_completion",
+      "name": "真实PDF：用适当句子完成对话",
+      "file": "pdf_07_dialogue_completion.txt",
+      "expected_count": 6,
+      "params": {
+        "question_type": "short_answer",
+        "question_category": "dialogue_completion"
+      }
+    },
+    {
+      "id": "pdf_08_dialogue_choice",
+      "name": "真实PDF：A-G 补全对话",
+      "file": "pdf_08_dialogue_choice.txt",
+      "expected_count": 5,
+      "params": {
+        "question_type": "single_choice",
+        "question_category": "dialogue_completion"
+      }
+    },
+    {
+      "id": "pdf_09_judge_and_cloze",
+      "name": "真实PDF：判断正误+完形填空",
+      "file": "pdf_09_judge_and_cloze.txt",
+      "expected_count": 6,
+      "params": {
+        "question_type": "judge",
+        "question_category": "judge_tf"
+      }
+    },
+    {
+      "id": "pdf_10_odd_word_and_cloze",
+      "name": "真实PDF：选出不同词+完形填空",
+      "file": "pdf_10_odd_word_and_cloze.txt",
+      "expected_count": 6,
+      "params": {
+        "question_type": "single_choice",
+        "question_category": "vocabulary_choice"
+      }
+    }
+  ]
+}

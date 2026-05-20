@@ -1,0 +1,64 @@
+<view class="stitch-page report-page no-bottom-nav">
+  <view class="report-top-bar">
+    <view class="report-avatar">学</view>
+    <view class="report-title">英语能力测评报告</view>
+    <image class="report-bell" src="{{assets.bell}}" mode="aspectFit" />
+  </view>
+
+  <view class="score-card stitch-section stitch-card">
+    <view class="score-ring">
+      <view class="score-inner">
+        <view class="score-value">{{report.score}}</view>
+        <view class="score-label">总分</view>
+      </view>
+    </view>
+    <view class="score-title">测评结果：{{report.level}}</view>
+    <view class="beat-pill">超越了全校 {{report.beatRate}}% 的同学</view>
+  </view>
+
+  <view class="stitch-two-grid stitch-section">
+    <metric-card label="正确题目" value="{{report.correct}}题" tone="green" />
+    <metric-card label="错误题目" value="{{report.wrong}}题" tone="red" />
+  </view>
+
+  <view class="mastery-card stitch-section stitch-card stitch-card-pad" bindtap="openKnowledge">
+    <view class="mastery-title">知识点掌握情况</view>
+    <view wx:for="{{report.mastery}}" wx:key="name" class="mastery-row">
+      <progress-bar label="{{item.name}}" value="{{item.percent}}%" percent="{{item.percent}}" />
+    </view>
+  </view>
+
+  <view class="consult-card stitch-section stitch-card stitch-card-pad">
+    <view class="consult-title">获取专家详细建议</view>
+    <view class="field-block">
+      <view class="field-label">姓名 *</view>
+      <input
+        class="stitch-input"
+        value="{{contactName}}"
+        placeholder="请输入您的姓名"
+        placeholder-class="stitch-input-placeholder"
+        bindinput="handleNameInput"
+      />
+    </view>
+    <view class="field-block">
+      <view class="field-label">联系电话 *</view>
+      <input
+        class="stitch-input"
+        value="{{contactPhone}}"
+        type="number"
+        maxlength="11"
+        placeholder="请输入您的联系电话"
+        placeholder-class="stitch-input-placeholder"
+        bindinput="handlePhoneInput"
+      />
+    </view>
+    <view class="stitch-primary-button submit-button {{submitted ? 'done' : ''}}" bindtap="submitConsult">
+      {{submitted ? '已提交，等待联系' : '提交并咨询'}}
+    </view>
+  </view>
+
+  <view class="report-actions stitch-section">
+    <view class="report-muted-button" bindtap="openMistakes">▣ 查看错题解析</view>
+    <view class="stitch-primary-button" bindtap="makePractice">生成专属提升练习</view>
+  </view>
+</view>

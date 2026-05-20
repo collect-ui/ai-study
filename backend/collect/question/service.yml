@@ -1,0 +1,15 @@
+service:
+  - name: 年级
+    path: grade/index.yml
+  - name: 科目
+    path: subject/index.yml
+  - name: 题目
+    path: question/index.yml
+  - name: 单元
+    path: unit/index.yml
+  - name: 知识点
+    path: knowledge/index.yml
+  - name: 拼音
+    path: pinyin/index.yml
+  - name: 导入
+    path: import/index.yml

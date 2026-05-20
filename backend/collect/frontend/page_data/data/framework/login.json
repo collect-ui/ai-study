@@ -1,0 +1,265 @@
+{
+  "tag": "layout-fit",
+  "className": "auto-login-page",
+  "children": [
+    {
+      "tag": "css",
+      "src": "/data/login.css"
+    },
+    {
+      "tag": "div",
+      "className": "login-main-area",
+      "children": [
+        {
+          "tag": "div",
+          "className": "login-main",
+          "children": [
+            {
+              "tag": "div",
+              "className": "login-brand",
+              "children": [
+                {
+                  "tag": "div",
+                  "className": "login-brand-mark",
+                  "children": "AI"
+                },
+                {
+                  "tag": "div",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "login-brand-name",
+                      "children": "AI Study"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "login-brand-subtitle",
+                      "children": "智能学习运营平台"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "div",
+              "className": "login-hero",
+              "children": [
+                {
+                  "tag": "div",
+                  "className": "login-hero-kicker",
+                  "children": "AI 学习运营中枢"
+                },
+                {
+                  "tag": "div",
+                  "className": "login-hero-title",
+                  "children": "看清学情，精准安排学习任务"
+                },
+                {
+                  "tag": "div",
+                  "className": "login-hero-desc",
+                  "children": "从测评诊断、薄弱项分析到任务复盘，统一沉淀学生学习过程，让每一次辅导都有依据。"
+                }
+              ]
+            },
+            {
+              "tag": "div",
+              "className": "login-metrics",
+              "children": [
+                {
+                  "tag": "div",
+                  "className": "login-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "login-metric-value",
+                      "children": "92%"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "login-metric-label",
+                      "children": "任务完成率"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "login-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "login-metric-value",
+                      "children": "4.8k"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "login-metric-label",
+                      "children": "学习行为样本"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "login-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "login-metric-value",
+                      "children": "128"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "login-metric-label",
+                      "children": "智能诊断建议"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "div",
+          "className": "login-form",
+          "children": [
+            {
+              "tag": "div",
+              "className": "login-form-kicker",
+              "children": "AI Study 管理后台"
+            },
+            {
+              "tag": "div",
+              "className": "login-title",
+              "children": "欢迎登录"
+            },
+            {
+              "tag": "div",
+              "className": "login-subtitle",
+              "children": "进入工作台管理测评、学习任务、学情报告和 AI 辅导反馈。"
+            },
+            {
+              "tag": "div",
+              "className": "login-feature-strip",
+              "children": [
+                {
+                  "tag": "span",
+                  "children": "智能测评"
+                },
+                {
+                  "tag": "span",
+                  "children": "学情报告"
+                },
+                {
+                  "tag": "span",
+                  "children": "任务追踪"
+                }
+              ]
+            },
+
+            {
+              "tag": "form",
+              "className": "login-form-data",
+              "name": "userLoginForm",
+              "layout":"vertical",
+              "action": [
+                {
+                  "tag": "ajax",
+                  "api": "post:/template_data/data?service=system.login",
+                  "appendFormFields": "userLoginForm"
+                },
+                {
+                  "tag": "redirect",
+                  "url": "${(()=>{const raw=window.sessionStorage.getItem('ai-study:pending-route')||'/collect-ui/#/collect-ui/framework';window.sessionStorage.removeItem('ai-study:pending-route');const target=new window.URL(raw, window.location.origin);target.searchParams.set('login_redirect_at', String(Date.now()));return target.pathname+target.search+target.hash;})()}"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "form-item",
+                  "name": "username",
+                  "label": "用户名",
+                  "style": {
+                    "marginBottom": 24
+                  },
+
+                  "rules": [
+                    {
+                      "required": true,
+                      "message": "请输入您的用户名"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "tag": "input",
+                      "prefixIcon": "FaUser",
+                      "placeholder": "请输入用户名"
+                    }
+                  ]
+                },
+                {
+                  "tag": "form-item",
+                  "label": "密码",
+                  "name": "password",
+                  "style": {
+                    "marginBottom": 44
+                  },
+                  "rules": [
+                    {
+                      "required": true,
+                      "message": "请输入您的密码"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "tag": "input",
+                      "prefixIcon": "FaLock",
+                      "type": "password",
+                      "placeholder": "请输入密码"
+                    }
+                  ]
+                },
+                {
+                  "tag":"form-item",
+                  "children": [
+                    {
+                      "tag": "button",
+                      "className": "login-btn",
+                      "htmlType":"submit",
+                      "children": "登录管理后台"
+                    }
+                  ]
+                }
+
+              ]
+            },
+            {
+              "tag": "div",
+              "className": "login-register",
+              "children": [
+                {
+                  "tag": "span",
+                  "className": "login-register-tip",
+                  "children": "还没有账号？"
+                },
+                {
+                  "tag": "button",
+                  "className": "login-register-button",
+                  "children": "立即注册",
+                  "action": [
+                    {
+                      "tag": "redirect",
+                      "url": "/collect-ui/#/collect-ui/login"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "div",
+              "className": "login-contact-tip",
+              "children": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

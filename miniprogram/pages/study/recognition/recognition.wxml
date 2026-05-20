@@ -1,0 +1,43 @@
+<view class="stitch-page recognition-page with-fixed-footer">
+  <app-top-bar showBack="{{true}}" title="认读模式" showMore="{{true}}" compact="{{true}}" />
+
+  <view class="recognition-progress stitch-section">
+    <progress-bar
+      label="当前进度"
+      value="{{displayIndex}} / {{displayTotal}}"
+      percent="{{progressPercent}}"
+      tone="green"
+    />
+  </view>
+
+  <view class="word-card stitch-card">
+    <view class="word-title">{{current.word}}</view>
+    <view class="phonetic">{{current.phonetic}}</view>
+    <view class="speaker-button" bindtap="playWord">▶</view>
+
+    <view wx:if="{{showMeaning}}" class="meaning-box">
+      <view class="meaning-label">词义</view>
+      <view class="meaning">{{current.meaning}}</view>
+      <view class="meaning-detail">{{current.detail}}</view>
+    </view>
+    <view wx:else class="hidden-meaning" bindtap="toggleMeaning">点击查看词义</view>
+
+    <view class="helper-grid">
+      <view class="helper-button" data-name="音标课程待接入" bindtap="openHelper">音标课程</view>
+      <view class="helper-button" data-name="词组库待接入" bindtap="openHelper">词组库</view>
+    </view>
+  </view>
+
+  <view class="recognition-tip">查看词义后，请根据记忆情况选择</view>
+
+  <view class="recognition-footer">
+    <view class="action-row">
+      <view class="fuzzy-button" bindtap="markFuzzy">模糊 / 不确定</view>
+      <view class="known-button" bindtap="markKnown">认识</view>
+    </view>
+    <view class="memory-row">
+      <text>上次记忆：{{current.last}}</text>
+      <text>掌握度：{{current.mastery}}%</text>
+    </view>
+  </view>
+</view>

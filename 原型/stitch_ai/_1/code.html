@@ -1,0 +1,204 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#eceef1",
+                    "secondary-fixed-dim": "#48ddbc",
+                    "secondary-container": "#67f7d5",
+                    "inverse-on-surface": "#eff1f4",
+                    "on-surface": "#191c1e",
+                    "surface-dim": "#d8dadd",
+                    "surface-tint": "#0060ac",
+                    "surface-container-high": "#e6e8eb",
+                    "inverse-surface": "#2d3133",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#00705c",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#2976c7",
+                    "surface-container-low": "#f2f4f7",
+                    "outline-variant": "#c1c7d3",
+                    "primary": "#005da7",
+                    "tertiary-fixed-dim": "#ffb953",
+                    "tertiary": "#7f5300",
+                    "on-secondary-fixed": "#002019",
+                    "on-primary-fixed-variant": "#004883",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#633f00",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e0e3e6",
+                    "on-tertiary-fixed": "#291800",
+                    "on-background": "#191c1e",
+                    "tertiary-container": "#a06900",
+                    "outline": "#717783",
+                    "primary-fixed": "#d4e3ff",
+                    "on-primary-fixed": "#001c39",
+                    "surface-variant": "#e0e3e6",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#ffddb4",
+                    "on-secondary-fixed-variant": "#005142",
+                    "inverse-primary": "#a4c9ff",
+                    "primary-fixed-dim": "#a4c9ff",
+                    "secondary-fixed": "#6bfad8",
+                    "on-primary-container": "#fdfcff",
+                    "surface": "#f7f9fc",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#414751",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#f7f9fc",
+                    "on-tertiary-container": "#fffbff",
+                    "background": "#f7f9fc",
+                    "secondary": "#006b58"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-gap": "16px",
+                    "container-padding": "20px",
+                    "section-margin": "32px",
+                    "inline-gap": "12px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-md": ["Be Vietnam Pro"],
+                    "body-lg": ["Be Vietnam Pro"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Be Vietnam Pro"]
+            },
+            "fontSize": {
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md-mobile": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .exam-card-shadow {
+            box-shadow: 0 4px 20px -2px rgba(0, 93, 167, 0.08);
+        }
+        .progress-pill {
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body {
+            background-color: #f7f9fc;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- Top Bar Component -->
+<header class="fixed top-0 w-full z-50 bg-surface flex justify-between items-center h-16 px-container-padding">
+<div class="flex items-center gap-inline-gap">
+<button class="transition-all duration-200 active:scale-95 flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-primary">arrow_back_ios_new</span>
+</button>
+<h1 class="font-headline-md-mobile text-headline-md-mobile text-primary">英语测评</h1>
+</div>
+<div class="flex flex-col items-end">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[18px]">timer</span>
+<span class="font-label-md text-label-md font-bold">剩余 35:20</span>
+</div>
+<div class="text-[10px] text-on-surface-variant uppercase tracking-wider">Time Remaining</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-20 pb-28 px-container-padding max-w-md mx-auto">
+<!-- Global Progress Indicator -->
+<div class="mb-stack-gap">
+<div class="flex justify-between items-end mb-2">
+<span class="font-headline-md text-primary">01 <span class="text-on-surface-variant font-body-md">/ 20</span></span>
+<span class="font-label-md text-on-surface-variant">词汇与语法练习</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary progress-pill rounded-full" style="width: 5%;"></div>
+</div>
+</div>
+<div class="space-y-stack-gap">
+<!-- Question 1: Multiple Choice -->
+<section class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant exam-card-shadow">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">单选题</span>
+<p class="text-on-surface-variant font-label-md">请根据句意选择最恰当的单词填空。</p>
+</div>
+<p class="font-body-lg text-on-surface mb-6 leading-relaxed">The Great Wall is one of the <span class="border-b-2 border-primary/30 px-4"> </span> wonders in the world.</p>
+<div class="space-y-3"><button class="w-full flex items-center p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-primary-fixed/20 transition-all text-left group"><span class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-on-surface-variant font-bold mr-4 group-hover:bg-primary group-hover:text-white transition-colors">A</span><span class="font-body-md">great</span></button><button class="w-full flex items-center p-4 rounded-xl border-2 border-primary bg-primary-fixed/10 transition-all text-left relative"><span class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white font-bold mr-4">B</span><span class="font-body-md text-primary font-medium">greatest</span><span class="material-symbols-outlined absolute right-4 text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></button><button class="w-full flex items-center p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-primary-fixed/20 transition-all text-left group"><span class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-on-surface-variant font-bold mr-4 group-hover:bg-primary group-hover:text-white transition-colors">C</span><span class="font-body-md">greater</span></button><button class="w-full flex items-center p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-primary-fixed/20 transition-all text-left group"><span class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-on-surface-variant font-bold mr-4 group-hover:bg-primary group-hover:text-white transition-colors">D</span><span class="font-body-md">greatly</span></button></div>
+</section>
+<!-- Question 2: Fill in the blank -->
+<section class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant exam-card-shadow">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">填空题</span>
+<p class="text-on-surface-variant font-label-md">写出括号内动词的正确形式。</p>
+</div>
+<p class="font-body-lg text-on-surface mb-6 leading-relaxed">My mother <span class="border-b-2 border-primary/30 px-2 italic text-primary-container">(cook)</span> dinner when I got home yesterday.</p>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none rounded-xl py-4 px-5 font-body-lg focus:ring-2 focus:ring-primary/20 placeholder:text-outline italic" placeholder="输入答案..." type="text">
+</div>
+</section>
+<!-- Question 3: True/False -->
+<section class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant exam-card-shadow">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">判断题</span>
+<p class="text-on-surface-variant font-label-md">判断下列陈述是否正确。</p>
+</div>
+<div class="p-4 bg-surface rounded-lg mb-6 italic border-l-4 border-secondary/40">"Li Hua is a 14-year-old student. He likes sports very much. He plays basketball every afternoon. His favorite subject is English because he thinks it's very useful."</div>
+<p class="font-body-md text-on-surface mb-6">句子表达的意思是：Li Hua 最喜欢的科目是体育，因为他喜欢运动。</p>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-2 py-4 rounded-xl border border-outline-variant hover:bg-secondary-container/10 hover:border-secondary transition-all group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary">check_circle</span>
+<span class="font-headline-md text-on-surface-variant group-hover:text-secondary">正确</span>
+</button>
+<button class="flex items-center justify-center gap-2 py-4 rounded-xl border border-outline-variant hover:bg-error-container/10 hover:border-error transition-all group border-error bg-error-container/10"><span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">cancel</span><span class="font-headline-md text-error">错误</span></button>
+</div>
+</section>
+<!-- AI Insight Illustration -->
+<div class="flex flex-col items-center py-6 opacity-60">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-primary text-3xl">smart_toy</span>
+</div>
+<p class="font-label-md text-outline">智能助教正在监测作答进度</p>
+</div>
+</div>
+</main>
+<!-- Navigation Footer -->
+<footer class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest px-container-padding py-4 pb-safe flex justify-between items-center border-t border-outline-variant shadow-[0_-4px_16px_rgba(0,0,0,0.04)]">
+<button class="flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-outline text-on-surface-variant font-headline-md transition-all active:scale-95">
+<span class="material-symbols-outlined">chevron_left</span>
+            上一题
+        </button>
+<button class="flex items-center justify-center gap-2 px-10 py-3 rounded-xl bg-primary text-white font-headline-md shadow-md shadow-primary/20 transition-all active:scale-95">
+            下一题
+            <span class="material-symbols-outlined">chevron_right</span>
+</button>
+</footer>
+</body></html>

@@ -1,0 +1,160 @@
+service:
+  - key: knowledge_name_to_pinyin
+    http: true
+    module: empty
+    handler_params:
+      - key: pinyin
+        field: "[text]"
+        save_field: pinyin_result
+      - key: param2result
+        field: "[pinyin_result]"
+
+  - key: knowledge_query
+    http: true
+    module: sql
+    params:
+      keyword:
+        template: "{{ if .keyword }}%{{.keyword}}%{{end}}"
+    data_file: knowledge_query.sql
+
+  - key: knowledge_save
+    http: true
+    module: model_save
+    table: question_knowledge
+    params:
+      knowledge_id:
+        template: "{{uuid}}"
+      subject:
+        check:
+          template: "{{must .subject}}"
+          err_msg: 科目不能为空
+      stage:
+        check:
+          template: "{{must .stage}}"
+          err_msg: 学段不能为空
+      grade:
+        check:
+          template: "{{must .grade}}"
+          err_msg: 年级不能为空
+      parent_id:
+        check:
+          template: "{{must .parent_id}}"
+          err_msg: 单元不能为空
+      knowledge_code:
+        check:
+          template: "{{must .knowledge_code}}"
+          err_msg: 知识点编码不能为空
+      knowledge_name:
+        check:
+          template: "{{must .knowledge_name}}"
+          err_msg: 知识点名称不能为空
+      order_index:
+        type: int
+        default: 1
+      status:
+        default: enabled
+      is_delete:
+        default: "0"
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+
+  - key: knowledge_update
+    http: true
+    module: model_update
+    table: question_knowledge
+    params:
+      knowledge_id:
+        check:
+          template: "{{must .knowledge_id}}"
+          err_msg: knowledge_id不能为空
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - subject
+      - stage
+      - grade
+      - parent_id
+      - knowledge_code
+      - knowledge_name
+      - order_index
+      - status
+      - modify_time
+      - modify_user
+    filter:
+      knowledge_id: "[knowledge_id]"
+
+  - key: knowledge_delete
+    http: true
+    module: model_delete
+    table: question_knowledge
+    params:
+      knowledge_id_list:
+        check:
+          template: "{{must .knowledge_id_list}}"
+          err_msg: 知识点不能为空
+    filter:
+      knowledge_id__in: "[knowledge_id_list]"
+
+  - key: knowledge_rel_query
+    http: true
+    module: sql
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+    data_file: knowledge_rel_query.sql
+
+  - key: knowledge_rel_save
+    http: true
+    module: model_save
+    table: question_knowledge_rel
+    params:
+      rel_id:
+        template: "{{uuid}}"
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+      knowledge_id:
+        check:
+          template: "{{must .knowledge_id}}"
+          err_msg: knowledge_id不能为空
+      knowledge_name:
+        default: ""
+      order_index:
+        type: int
+        default: 1
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+
+  - key: knowledge_rel_bulk_save
+    http: true
+    module: bulk_create
+    table: question_knowledge_rel
+    params:
+      knowledge_rels:
+        default: []
+    model_field: "[knowledge_rels]"
+
+  - key: knowledge_rel_delete_by_question
+    http: true
+    module: model_delete
+    table: question_knowledge_rel
+    params:
+      question_id:
+        check:
+          template: "{{must .question_id}}"
+          err_msg: question_id不能为空
+    filter:
+      question_id: "[question_id]"

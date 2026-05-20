@@ -1,0 +1,42 @@
+.metric-card {
+  min-height: 150rpx;
+  padding: 24rpx;
+  border: 1rpx solid #e4e7ed;
+  border-radius: 22rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 24rpx rgba(0, 93, 167, 0.05);
+}
+
+.metric-value {
+  color: #005da7;
+  font-size: 42rpx;
+  font-weight: 900;
+  line-height: 52rpx;
+}
+
+.metric-card.green .metric-value {
+  color: #006b58;
+}
+
+.metric-card.gold .metric-value {
+  color: #7f5300;
+}
+
+.metric-card.red .metric-value {
+  color: #ba1a1a;
+}
+
+.metric-label {
+  margin-top: 8rpx;
+  color: #414751;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 32rpx;
+}
+
+.metric-desc {
+  margin-top: 8rpx;
+  color: #717783;
+  font-size: 22rpx;
+  line-height: 30rpx;
+}

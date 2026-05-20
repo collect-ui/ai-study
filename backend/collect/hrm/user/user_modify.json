@@ -1,0 +1,8 @@
+{
+  "fields": [
+    {"rule": "array_obj_value", "left_field": "[username]", "right_field": "[username]", "field": "[nick]", "name": "昵称", "left": "[user_list]", "right": "[local_user_list]", "left_value_field": "[nick]", "right_value_field": "[nick]", "operation": "modify", "append_right_fields": ["[user_id]"], "append_left_fields": ["[*]"]},
+    {"rule": "array_obj_value", "left_field": "[username]", "right_field": "[username]", "field": "[email]", "name": "邮箱", "left": "[user_list]", "right": "[local_user_list]", "left_value_field": "[email]", "right_value_field": "[email]", "operation": "modify", "append_right_fields": ["[user_id]"], "append_left_fields": ["[*]"]},
+    {"rule": "array_obj_value", "left_field": "[username]", "right_field": "[username]", "field": "[phone]", "name": "手机号", "left": "[user_list]", "right": "[local_user_list]", "left_value_field": "[phone]", "right_value_field": "[phone]", "operation": "modify", "append_right_fields": ["[user_id]"], "append_left_fields": ["[*]"]},
+    {"rule": "array_obj_value", "left_field": "[username]", "right_field": "[username]", "field": "[status]", "name": "状态", "left": "[user_list]", "right": "[local_user_list]", "left_value_field": "[status]", "right_value_field": "[status]", "operation": "modify", "append_right_fields": ["[user_id]"], "append_left_fields": ["[*]"]}
+  ]
+}

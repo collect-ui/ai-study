@@ -1,0 +1,26 @@
+<view class="page learn-page">
+  <view class="study-card card">
+    <view class="word-row">
+      <view>
+        <view class="word">{{current.word}}</view>
+        <view class="phonetic">{{current.phonetic}}</view>
+      </view>
+      <button class="sound-button" bindtap="playPronunciation">听</button>
+    </view>
+    <view class="meaning">{{current.meaning}}</view>
+    <view class="example">{{current.example}}</view>
+    <view class="tag">{{current.tag}}</view>
+  </view>
+
+  <view class="controls">
+    <button class="secondary-button" bindtap="nextWord">下一个</button>
+    <button class="primary-button" bindtap="markLearned">学会了</button>
+  </view>
+
+  <view class="section-title">学习提示</view>
+  <view class="tips card">
+    <view class="tip-line">1. 先读单词，再读例句。</view>
+    <view class="tip-line">2. 用自己的话复述例句含义。</view>
+    <view class="tip-line">3. 点击“学会了”记录进度。</view>
+  </view>
+</view>

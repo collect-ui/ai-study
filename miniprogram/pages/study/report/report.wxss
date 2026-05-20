@@ -1,0 +1,132 @@
+.study-report-page {
+  padding-bottom: 180rpx;
+}
+
+.study-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 46rpx 28rpx;
+}
+
+.study-ring {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 260rpx;
+  height: 260rpx;
+  border-radius: 999rpx;
+  background: conic-gradient(#0060ac 0 92%, #e0e3e6 92% 100%);
+}
+
+.study-ring-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 214rpx;
+  height: 214rpx;
+  border-radius: 999rpx;
+  background: #ffffff;
+}
+
+.study-score-value {
+  color: #005da7;
+  font-size: 48rpx;
+  font-weight: 900;
+}
+
+.study-score-label {
+  margin-top: 8rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
+  background: #006b58;
+  color: #ffffff;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.study-comment {
+  margin-top: 26rpx;
+  color: #717783;
+  font-size: 27rpx;
+  line-height: 38rpx;
+  text-align: center;
+}
+
+.play-all {
+  margin-top: 32rpx;
+}
+
+.play-all.active {
+  background: #006b58;
+}
+
+.detail-card {
+  display: flex;
+  align-items: center;
+  margin-top: 20rpx;
+  padding: 24rpx;
+}
+
+.detail-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.detail-sentence {
+  color: #191c1e;
+  font-size: 28rpx;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 40rpx;
+}
+
+.detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 12rpx;
+  color: #717783;
+  font-size: 22rpx;
+}
+
+.detail-meta text:first-child {
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+  background: #d4e3ff;
+  color: #004883;
+  font-weight: 800;
+}
+
+.play-button {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72rpx;
+  height: 72rpx;
+  margin-left: 18rpx;
+  border-radius: 999rpx;
+  color: #005da7;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.play-button.active {
+  background: #d4e3ff;
+}
+
+.study-report-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22rpx;
+  padding: 24rpx 38rpx 34rpx;
+  border-top: 1rpx solid #e4e7ed;
+  background: #ffffff;
+}

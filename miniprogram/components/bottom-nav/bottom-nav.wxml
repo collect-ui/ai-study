@@ -1,0 +1,13 @@
+<view class="bottom-nav {{variant == 'full' ? 'full' : 'primary'}}">
+  <view
+    wx:for="{{items}}"
+    wx:key="key"
+    class="nav-item {{selected == item.key ? 'active' : ''}}"
+    data-key="{{item.key}}"
+    data-path="{{item.path}}"
+    bindtap="navTo"
+  >
+    <view class="nav-icon">{{item.icon}}</view>
+    <view class="nav-label">{{item.label}}</view>
+  </view>
+</view>

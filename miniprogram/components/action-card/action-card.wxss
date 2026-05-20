@@ -1,0 +1,91 @@
+.action-card {
+  display: flex;
+  align-items: center;
+  min-height: 164rpx;
+  padding: 24rpx;
+  border: 1rpx solid #e4e7ed;
+  border-radius: 24rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 28rpx rgba(0, 93, 167, 0.05);
+}
+
+.action-card:active {
+  transform: scale(0.99);
+}
+
+.action-icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88rpx;
+  height: 88rpx;
+  margin-right: 22rpx;
+  border-radius: 24rpx;
+  background: #d4e3ff;
+  color: #005da7;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.action-card.green .action-icon {
+  background: #d7fff5;
+  color: #006b58;
+}
+
+.action-card.gold .action-icon {
+  background: #ffddb4;
+  color: #7f5300;
+}
+
+.action-card.red .action-icon {
+  background: #ffdad6;
+  color: #ba1a1a;
+}
+
+.action-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.action-title-row {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.action-title {
+  overflow: hidden;
+  color: #191c1e;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 40rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-tag {
+  flex: none;
+  margin-left: 12rpx;
+  padding: 3rpx 10rpx;
+  border-radius: 10rpx;
+  background: #ba1a1a;
+  color: #ffffff;
+  font-size: 18rpx;
+  font-weight: 800;
+}
+
+.action-desc {
+  margin-top: 6rpx;
+  color: #717783;
+  font-size: 24rpx;
+  line-height: 32rpx;
+}
+
+.action-arrow {
+  flex: none;
+  margin-left: 16rpx;
+  color: #717783;
+  font-size: 44rpx;
+  line-height: 44rpx;
+}

@@ -1,0 +1,84 @@
+[
+  {
+    "menu_code": "login",
+    "menu_name": "登录",
+    "url": "/login",
+    "api": "post:/template_data/data?service=frontend.login",
+    "data": "framework/login.json",
+    "in_menu": false
+  },
+  {
+    "menu_code": "first",
+    "menu_name": "首页",
+    "icon": "FaTachometerAlt",
+    "is_index": "1",
+    "router_group": "/framework",
+    "group_path": "/framework",
+    "group_data": "framework.json",
+    "group_api": "post:/template_data/data?service=frontend.framework",
+    "api": "post:/template_data/data?service=frontend.home",
+    "data": "framework/home.json",
+    "url": "/framework/"
+  },
+  {
+    "menu_code": "system_admin",
+    "menu_name": "系统管理",
+    "icon": "FaCog",
+    "children": [
+      {
+        "menu_code": "user",
+        "menu_name": "用户管理",
+        "icon": "FaUsers",
+        "router_group": "/framework",
+        "api": "post:/template_data/data?service=frontend.user",
+        "url": "/framework/user",
+        "data": "system/user.json"
+      },
+      {
+        "menu_code": "role",
+        "menu_name": "角色管理",
+        "icon": "FaUserShield",
+        "router_group": "/framework",
+        "api": "post:/template_data/data?service=frontend.role",
+        "url": "/framework/role",
+        "data": "system/role.json"
+      },
+      {
+        "menu_code": "menu_manage",
+        "menu_name": "菜单管理",
+        "icon": "FaListUl",
+        "router_group": "/framework",
+        "api": "post:/template_data/data?service=frontend.menu_manage",
+        "url": "/framework/menu_manage",
+        "data": "system/menu_manage.json"
+      },
+      {
+        "menu_code": "sys_code",
+        "menu_name": "码表管理",
+        "icon": "FaCode",
+        "router_group": "/framework",
+        "api": "post:/template_data/data?service=frontend.sys_code",
+        "url": "/framework/sys_code",
+        "data": "system/sys_code.json"
+      }
+    ]
+  },
+  {
+    "menu_code": "question_root",
+    "menu_name": "题库管理",
+    "icon": "FaBookOpen",
+    "router_group": "/framework",
+    "api": "post:/template_data/data?service=frontend.question_bank",
+    "url": "/framework/question-bank",
+    "data": "question/question_bank.json"
+  },
+  {
+    "menu_code": "question_taxonomy",
+    "menu_name": "年级科目维护",
+    "icon": "FaLayerGroup",
+    "router_group": "/framework",
+    "api": "post:/template_data/data?service=frontend.question_taxonomy",
+    "url": "/framework/question-taxonomy",
+    "data": "question/question_taxonomy.json"
+  }
+]

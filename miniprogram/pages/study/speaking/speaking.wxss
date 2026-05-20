@@ -1,0 +1,170 @@
+.speaking-page {
+  padding-bottom: 288rpx;
+}
+
+.reading-card {
+  margin-top: 32rpx;
+  border-radius: 34rpx;
+}
+
+.reading-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sample-button {
+  padding: 12rpx 18rpx;
+  border-radius: 18rpx;
+  color: #005da7;
+  font-size: 25rpx;
+  font-weight: 900;
+}
+
+.sentence-text {
+  margin-top: 42rpx;
+  color: #006b58;
+  font-size: 46rpx;
+  font-weight: 900;
+  line-height: 62rpx;
+}
+
+.focus-word {
+  color: #ba1a1a;
+  font-weight: 900;
+  border-bottom: 8rpx solid rgba(186, 26, 26, 0.26);
+}
+
+.cn-text {
+  margin-top: 34rpx;
+  padding-top: 28rpx;
+  border-top: 1rpx solid #e0e3e6;
+  color: #414751;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.feedback-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 160rpx;
+  border-radius: 24rpx;
+  background: #f2f4f7;
+}
+
+.feedback-label {
+  color: #717783;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.feedback-score {
+  margin-top: 8rpx;
+  color: #006b58;
+  font-size: 54rpx;
+  font-weight: 900;
+}
+
+.feedback-score text {
+  margin-left: 5rpx;
+  color: #717783;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+.feedback-word {
+  margin-top: 16rpx;
+  color: #005da7;
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.advice-card {
+  padding: 32rpx;
+  border: 1rpx solid rgba(0, 93, 167, 0.12);
+  border-radius: 30rpx;
+  background: rgba(212, 227, 255, 0.28);
+}
+
+.advice-title {
+  color: #005da7;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.advice-text {
+  margin-top: 18rpx;
+  color: #414751;
+  font-size: 28rpx;
+  line-height: 44rpx;
+}
+
+.speaking-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  padding: 34rpx 38rpx 34rpx;
+  border-top: 1rpx solid rgba(193, 199, 211, 0.6);
+  border-radius: 34rpx 34rpx 0 0;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -10rpx 32rpx rgba(0, 0, 0, 0.07);
+}
+
+.record-tip {
+  color: #717783;
+  font-size: 22rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+  text-align: center;
+}
+
+.record-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24rpx;
+  padding: 0 42rpx;
+}
+
+.round-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #717783;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.round-action view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 82rpx;
+  height: 82rpx;
+  margin-bottom: 8rpx;
+  border: 1rpx solid #c1c7d3;
+  border-radius: 999rpx;
+  font-size: 42rpx;
+}
+
+.mic-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 156rpx;
+  height: 156rpx;
+  border-radius: 999rpx;
+  background: #67f7d5;
+  color: #002019;
+  font-size: 62rpx;
+  box-shadow: 0 14rpx 34rpx rgba(103, 247, 213, 0.45);
+}
+
+.mic-button.recording {
+  background: #ffdad6;
+  box-shadow: 0 0 0 18rpx rgba(255, 218, 214, 0.35);
+}

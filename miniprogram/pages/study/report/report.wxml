@@ -1,0 +1,49 @@
+<view class="stitch-page study-report-page with-fixed-footer">
+  <app-top-bar showBack="{{true}}" title="学习报告" showShare="{{true}}" compact="{{true}}" />
+
+  <view class="study-score stitch-card stitch-section">
+    <view class="study-ring">
+      <view class="study-ring-inner">
+        <view class="study-score-value">{{report.score}}分</view>
+        <view class="study-score-label">{{report.label}}</view>
+      </view>
+    </view>
+    <view class="study-comment">{{report.comment}}</view>
+  </view>
+
+  <view class="stitch-three-grid stitch-section">
+    <metric-card
+      wx:for="{{report.metrics}}"
+      wx:key="label"
+      label="{{item.label}}"
+      value="{{item.value}}"
+    />
+  </view>
+
+  <view class="stitch-primary-button play-all {{playingAll ? 'active' : ''}}" bindtap="playAll">
+    {{playingAll ? '暂停所有录音' : '一键播放所有录音'}}
+  </view>
+
+  <view class="detail-section stitch-section">
+    <view class="stitch-section-title">练习详情</view>
+    <view
+      wx:for="{{report.details}}"
+      wx:key="sentence"
+      class="detail-card stitch-card"
+    >
+      <view class="detail-copy">
+        <view class="detail-sentence">"{{item.sentence}}"</view>
+        <view class="detail-meta">
+          <text>{{item.score}}分</text>
+          <text>{{item.feedback}}</text>
+        </view>
+      </view>
+      <view class="play-button {{playingId == item.sentence ? 'active' : ''}}" data-id="{{item.sentence}}" bindtap="playItem">▶</view>
+    </view>
+  </view>
+
+  <view class="study-report-footer">
+    <view class="stitch-secondary-button" bindtap="backHome">返回首页</view>
+    <view class="stitch-primary-button" bindtap="nextGroup">下一组练习</view>
+  </view>
+</view>

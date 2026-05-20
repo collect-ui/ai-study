@@ -1,0 +1,166 @@
+.setup-page {
+  padding-bottom: 172rpx;
+}
+
+.setup-subtitle {
+  margin-top: 8rpx;
+  color: #717783;
+  font-size: 26rpx;
+}
+
+.step-title {
+  display: flex;
+  align-items: center;
+  color: #191c1e;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.step-title text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42rpx;
+  height: 42rpx;
+  margin-right: 14rpx;
+  border-radius: 999rpx;
+  background: #005da7;
+  color: #ffffff;
+  font-size: 22rpx;
+}
+
+.grade-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 20rpx;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.pill-choice {
+  flex: none;
+  padding: 16rpx 26rpx;
+  border: 1rpx solid #c1c7d3;
+  border-radius: 999rpx;
+  background: #e0e3e6;
+  color: #414751;
+  font-size: 25rpx;
+  font-weight: 800;
+}
+
+.pill-choice.active {
+  border-color: #005da7;
+  background: #005da7;
+  color: #ffffff;
+}
+
+.subject-card {
+  display: flex;
+  align-items: center;
+  min-height: 92rpx;
+  margin-top: 20rpx;
+  padding: 18rpx 22rpx;
+  color: #191c1e;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
+.subject-icon,
+.unit-icon,
+.mode-icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58rpx;
+  height: 58rpx;
+  margin-right: 18rpx;
+  border-radius: 16rpx;
+  background: #d4e3ff;
+  color: #005da7;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.subject-check {
+  margin-left: auto;
+  color: #005da7;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.unit-list {
+  margin-top: 20rpx;
+  overflow: hidden;
+}
+
+.unit-row {
+  display: flex;
+  align-items: center;
+  min-height: 98rpx;
+  padding: 18rpx 22rpx;
+  border-bottom: 1rpx solid rgba(193, 199, 211, 0.45);
+}
+
+.unit-row:last-child {
+  border-bottom: 0;
+}
+
+.unit-row.active {
+  background: rgba(212, 227, 255, 0.28);
+}
+
+.unit-title {
+  flex: 1;
+  min-width: 0;
+  color: #191c1e;
+  font-size: 26rpx;
+  font-weight: 700;
+  line-height: 34rpx;
+}
+
+.radio {
+  flex: none;
+  margin-left: 16rpx;
+  color: #005da7;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.mode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  margin-top: 20rpx;
+}
+
+.mode-card {
+  display: flex;
+  align-items: center;
+  padding: 22rpx;
+}
+
+.mode-card.active {
+  border-color: #005da7;
+  background: rgba(212, 227, 255, 0.24);
+}
+
+.mode-copy {
+  flex: 1;
+  min-width: 0;
+  color: #191c1e;
+  font-size: 29rpx;
+  font-weight: 900;
+}
+
+.mode-copy text {
+  display: block;
+  margin-top: 6rpx;
+  color: #717783;
+  font-size: 23rpx;
+  font-weight: 500;
+}
+
+.start-button {
+  margin-top: 38rpx;
+}

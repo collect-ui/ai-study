@@ -1,0 +1,160 @@
+.recognition-page {
+  padding-bottom: 250rpx;
+}
+
+.word-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 650rpx;
+  margin-top: 36rpx;
+  padding: 54rpx 38rpx 38rpx;
+}
+
+.word-title {
+  color: #191c1e;
+  font-size: 58rpx;
+  font-weight: 900;
+  line-height: 68rpx;
+}
+
+.phonetic {
+  margin-top: 14rpx;
+  color: #717783;
+  font-size: 30rpx;
+  font-style: italic;
+}
+
+.speaker-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 112rpx;
+  height: 112rpx;
+  margin-top: 34rpx;
+  border-radius: 999rpx;
+  background: #2976c7;
+  color: #ffffff;
+  font-size: 34rpx;
+  font-weight: 900;
+  box-shadow: 0 12rpx 24rpx rgba(0, 93, 167, 0.18);
+}
+
+.meaning-box {
+  width: 100%;
+  margin-top: 44rpx;
+  padding-top: 34rpx;
+  border-top: 1rpx solid #e0e3e6;
+}
+
+.meaning-label {
+  padding-left: 16rpx;
+  border-left: 8rpx solid #005da7;
+  color: #191c1e;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.meaning {
+  margin-top: 22rpx;
+  color: #006b58;
+  font-size: 40rpx;
+  font-weight: 900;
+}
+
+.meaning-detail {
+  margin-top: 8rpx;
+  color: #717783;
+  font-size: 27rpx;
+}
+
+.hidden-meaning {
+  width: 100%;
+  margin-top: 44rpx;
+  padding: 34rpx;
+  border: 2rpx dashed #c1c7d3;
+  border-radius: 22rpx;
+  color: #005da7;
+  font-size: 28rpx;
+  font-weight: 900;
+  text-align: center;
+}
+
+.helper-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18rpx;
+  width: 100%;
+  margin-top: 36rpx;
+}
+
+.helper-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 82rpx;
+  border: 1rpx solid #c1c7d3;
+  border-radius: 18rpx;
+  background: #f2f4f7;
+  color: #414751;
+  font-size: 25rpx;
+  font-weight: 800;
+}
+
+.recognition-tip {
+  margin-top: 28rpx;
+  color: #717783;
+  font-size: 24rpx;
+  font-weight: 700;
+  text-align: center;
+}
+
+.recognition-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  padding: 30rpx 38rpx 34rpx;
+  border-top: 1rpx solid #e4e7ed;
+  border-radius: 30rpx 30rpx 0 0;
+  background: #ffffff;
+  box-shadow: 0 -8rpx 28rpx rgba(0, 0, 0, 0.05);
+}
+
+.action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22rpx;
+}
+
+.fuzzy-button,
+.known-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 104rpx;
+  border-radius: 24rpx;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.fuzzy-button {
+  border: 2rpx solid #c1c7d3;
+  color: #414751;
+}
+
+.known-button {
+  background: #005da7;
+  color: #ffffff;
+}
+
+.memory-row {
+  display: flex;
+  justify-content: center;
+  gap: 28rpx;
+  margin-top: 20rpx;
+  color: #717783;
+  font-size: 22rpx;
+  font-weight: 700;
+}

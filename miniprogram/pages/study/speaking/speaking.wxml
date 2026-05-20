@@ -1,0 +1,60 @@
+<view class="stitch-page speaking-page with-fixed-footer">
+  <app-top-bar showBack="{{true}}" title="口语测评" showMore="{{true}}" compact="{{true}}" />
+
+  <view class="speaking-progress stitch-section">
+    <progress-bar
+      label="单元练习进度"
+      value="第 {{displayIndex}}/{{displayTotal}} 句"
+      percent="{{progressPercent}}"
+      tone="green"
+    />
+  </view>
+
+  <view class="reading-card stitch-card stitch-card-pad">
+    <view class="reading-head">
+      <view class="stitch-chip">精选名言</view>
+      <view class="sample-button" bindtap="playSample">标准范读</view>
+    </view>
+    <view class="sentence-text">
+      <block wx:if="{{current.focus == 'need'}}">A friend in <text class="focus-word">need</text> is a friend indeed.</block>
+      <block wx:else>{{current.text}}</block>
+    </view>
+    <view class="cn-text">{{current.cn}}</view>
+  </view>
+
+  <view class="stitch-two-grid stitch-section">
+    <view class="feedback-card">
+      <view class="feedback-label">本次得分</view>
+      <view class="feedback-score">{{score}}<text>分</text></view>
+    </view>
+    <view class="feedback-card">
+      <view class="feedback-label">评价反馈</view>
+      <view class="feedback-word">{{feedback}}</view>
+    </view>
+  </view>
+
+  <view class="advice-card stitch-section">
+    <view class="advice-title">AI 学习建议</view>
+    <view class="advice-text">{{advice}}</view>
+  </view>
+
+  <view class="speaking-footer">
+    <view class="record-tip">{{recording ? '录音中，松开完成' : '长按话筒 · 开始录音'}}</view>
+    <view class="record-row">
+      <view class="round-action" bindtap="redo">
+        <view>↻</view>
+        <text>重录</text>
+      </view>
+      <view
+        class="mic-button {{recording ? 'recording' : ''}}"
+        bindtouchstart="startRecord"
+        bindtouchend="finishRecord"
+        bindtap="tapMic"
+      >🎙</view>
+      <view class="round-action" bindtap="nextSentence">
+        <view>›</view>
+        <text>{{currentIndex >= sentences.length - 1 ? '完成' : '下一题'}}</text>
+      </view>
+    </view>
+  </view>
+</view>

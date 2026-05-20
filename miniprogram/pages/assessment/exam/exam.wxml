@@ -1,0 +1,95 @@
+<view class="stitch-page exam-page with-fixed-footer">
+  <app-top-bar showBack="{{true}}" title="英语测评" subtitle="剩余 {{timerDisplay}}" compact="{{true}}" />
+
+  <view class="exam-progress stitch-section">
+    <view class="exam-progress-head">
+      <view class="question-index">{{indexText}} <text>/ {{displayTotal}}</text></view>
+      <view class="question-scope">词汇与语法练习</view>
+    </view>
+    <view class="exam-track">
+      <view class="exam-fill" style="width: {{progressPercent}}%;"></view>
+    </view>
+  </view>
+
+  <view class="question-stack">
+    <view
+      wx:for="{{visibleQuestions}}"
+      wx:key="id"
+      class="question-card stitch-card stitch-card-pad"
+    >
+      <view class="question-meta">
+        <view class="stitch-chip">{{item.typeLabel}}</view>
+        <text>{{item.helper}}</text>
+      </view>
+
+      <view wx:if="{{item.type == 'single'}}" class="question-text">
+        The Great Wall is one of the <text class="blank-line"> </text> wonders in the world.
+      </view>
+      <view wx:elif="{{item.type == 'fill'}}" class="question-text">
+        My mother <text class="hint-word">(cook)</text> dinner when I got home yesterday.
+      </view>
+      <view wx:else class="judge-block">
+        <view class="passage-box">"{{item.passage}}"</view>
+        <view class="question-text judge-question">句子表达的意思是：Li Hua 最喜欢的科目是体育，因为他喜欢运动。</view>
+      </view>
+
+      <view wx:if="{{item.type == 'single'}}" class="option-list">
+        <view
+          wx:for="{{item.options}}"
+          wx:for-item="option"
+          wx:key="value"
+          class="option-item {{item.userAnswer == option.value ? 'selected' : ''}}"
+          data-qid="{{item.id}}"
+          data-value="{{option.value}}"
+          bindtap="selectOption"
+        >
+          <view class="option-label">{{option.value}}</view>
+          <view class="option-text">{{option.text}}</view>
+          <view wx:if="{{item.userAnswer == option.value}}" class="option-check">✓</view>
+        </view>
+      </view>
+
+      <view wx:elif="{{item.type == 'fill'}}" class="fill-area">
+        <input
+          class="stitch-input"
+          value="{{item.userAnswer}}"
+          data-qid="{{item.id}}"
+          placeholder="{{item.placeholder}}"
+          placeholder-class="stitch-input-placeholder"
+          bindinput="handleFillInput"
+        />
+      </view>
+
+      <view wx:elif="{{item.type == 'judge'}}" class="judge-grid">
+        <view
+          class="judge-button {{item.userAnswer == 'true' ? 'selected true' : ''}}"
+          data-qid="{{item.id}}"
+          data-value="true"
+          bindtap="selectJudge"
+        >
+          <view class="judge-icon">✓</view>
+          <text>正确</text>
+        </view>
+        <view
+          class="judge-button {{item.userAnswer == 'false' ? 'selected false' : ''}}"
+          data-qid="{{item.id}}"
+          data-value="false"
+          bindtap="selectJudge"
+        >
+          <view class="judge-icon">×</view>
+          <text>错误</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="ai-monitor">
+    <view class="monitor-icon">AI</view>
+    <view>智能助教正在监测作答进度</view>
+  </view>
+
+  <view class="exam-footer">
+    <view class="footer-button secondary {{isFirst ? 'disabled' : ''}}" bindtap="goPrev">‹ 上一题</view>
+    <view class="footer-button primary" bindtap="goNext">{{isLast ? '完成测评' : '下一题 ›'}}</view>
+  </view>
+</view>

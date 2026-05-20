@@ -1,0 +1,72 @@
+<view class="stitch-page mistakes-page">
+  <app-top-bar showBack="{{true}}" title="错题集" showMore="{{true}}" compact="{{true}}" />
+
+  <view class="stats-card stitch-section stitch-card stitch-card-pad">
+    <view class="stats-grid">
+      <view>
+        <view class="stats-value blue">{{stats.total}}</view>
+        <view class="stats-label">累计错题</view>
+      </view>
+      <view>
+        <view class="stats-value gold">{{stats.todo}}</view>
+        <view class="stats-label">待复习</view>
+      </view>
+      <view>
+        <view class="stats-value green">{{stats.mastered}}</view>
+        <view class="stats-label">已掌握</view>
+      </view>
+    </view>
+    <view class="mastery-progress">
+      <progress-bar label="总体掌握进度" value="{{stats.percent}}%" percent="{{stats.percent}}" tone="green" />
+    </view>
+  </view>
+
+  <scroll-view class="category-scroll stitch-section" scroll-x="{{true}}">
+    <view
+      wx:for="{{categories}}"
+      wx:key="id"
+      class="category-chip {{activeCategory == item.id ? 'active' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="selectCategory"
+    >{{item.name}}</view>
+  </scroll-view>
+
+  <view class="list-head stitch-section">
+    <view class="stitch-section-title">错题列表</view>
+    <view class="search-box">
+      <text>⌕</text>
+      <input
+        value="{{keyword}}"
+        placeholder="搜索错题..."
+        placeholder-class="stitch-input-placeholder"
+        bindinput="handleSearchInput"
+      />
+    </view>
+  </view>
+
+  <view class="mistake-list">
+    <view wx:if="{{filtered.length == 0}}" class="empty-card stitch-card">暂无匹配错题</view>
+    <view
+      wx:for="{{filtered}}"
+      wx:key="id"
+      class="mistake-card stitch-card"
+    >
+      <view class="mistake-top">
+        <view class="stitch-chip {{item.category == 'sentences' ? 'warn' : ''}}">{{item.tag}}</view>
+        <text>{{item.date}}</text>
+      </view>
+      <view class="mistake-title">{{item.title}}</view>
+      <view class="mistake-meta">
+        <view>掌握度：<text class="stars">{{item.starText}}</text></view>
+        <view wx:if="{{item.tutors}}" class="tutor-note">{{item.tutors}} 位导师提供了解答</view>
+        <view class="analysis-link" data-id="{{item.id}}" bindtap="toggleAnalysis">
+          {{activeAnalysisId == item.id ? '收起解析' : '查看解析'}} ›
+        </view>
+      </view>
+      <view wx:if="{{activeAnalysisId == item.id}}" class="analysis-box">{{item.analysis}}</view>
+    </view>
+  </view>
+
+  <view class="review-button stitch-primary-button" bindtap="startReview">进入复习</view>
+  <bottom-nav selected="profile" variant="full" />
+</view>

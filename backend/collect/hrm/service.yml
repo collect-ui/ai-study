@@ -1,0 +1,12 @@
+# 用户、角色和授权相关服务。
+service:
+  - name: 用户管理
+    path: user/index.yml
+  - name: 角色管理
+    path: role/index.yml
+  - name: 用户流程
+    path: user_flow/index.yml
+  - name: 用户角色
+    path: user_role/index.yml
+  - name: 用户变更历史
+    path: user_change_history/index.yml

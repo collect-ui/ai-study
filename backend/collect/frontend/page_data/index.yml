@@ -1,0 +1,112 @@
+service:
+  - key: menu
+    http: true
+    must_login: false
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/menu/menu.json
+
+  - key: login
+    http: true
+    must_login: false
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/framework/login.json
+
+  - key: framework
+    http: true
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/framework/framework.json
+
+  - key: framework_full
+    http: true
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/framework/framework_full.json
+
+  - key: home
+    http: true
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/framework/home.json
+
+  - key: user
+    http: true
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/system/user.json
+
+  - key: role
+    http: true
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/system/role.json
+
+  - key: menu_manage
+    http: true
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/system/menu_manage.json
+
+  - key: sys_code
+    http: true
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/system/sys_code.json
+
+  - key: question_bank
+    http: true
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/question/question_bank.json
+
+  - key: question_taxonomy
+    http: true
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/question/question_taxonomy.json

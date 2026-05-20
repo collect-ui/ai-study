@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Study Miniprogram QA"
+  short_description: "Prototype QA for ai-study mini program"
+  default_prompt: "Use $ai-study-miniprogram-qa to validate the ai-study mini program against its prototype, run functional tests, capture evidence, and clean artifacts."

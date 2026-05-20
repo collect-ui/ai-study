@@ -1,0 +1,9 @@
+<view class="progress-box">
+  <view wx:if="{{label || value}}" class="progress-head">
+    <text>{{label}}</text>
+    <text>{{value}}</text>
+  </view>
+  <view class="track">
+    <view class="fill {{tone}}" style="width: {{percent}}%;"></view>
+  </view>
+</view>
