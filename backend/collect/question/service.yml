@@ -7,8 +7,12 @@ service:
     path: question/index.yml
   - name: 单元
     path: unit/index.yml
+  - name: 小节
+    path: section/index.yml
   - name: 知识点
     path: knowledge/index.yml
+  - name: 知识点维护
+    path: knowledge_point/index.yml
   - name: 拼音
     path: pinyin/index.yml
   - name: 导入

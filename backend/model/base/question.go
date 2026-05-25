@@ -162,6 +162,7 @@ const TableNameQuestionGrade = "question_grade"
 type QuestionGrade struct {
 	GradeID    string `gorm:"column:grade_id;primaryKey" json:"grade_id"`
 	Stage      string `gorm:"column:stage" json:"stage"`
+	Semester   string `gorm:"column:semester" json:"semester"`
 	GradeCode  string `gorm:"column:grade_code" json:"grade_code"`
 	GradeName  string `gorm:"column:grade_name" json:"grade_name"`
 	OrderIndex int    `gorm:"column:order_index" json:"order_index"`
@@ -232,16 +233,74 @@ func (*QuestionUnit) PrimaryKey() []string {
 	return []string{"unit_id"}
 }
 
+const TableNameQuestionSection = "question_section"
+
+type QuestionSection struct {
+	SectionID   string `gorm:"column:section_id;primaryKey" json:"section_id"`
+	Subject     string `gorm:"column:subject" json:"subject"`
+	Stage       string `gorm:"column:stage" json:"stage"`
+	Grade       string `gorm:"column:grade" json:"grade"`
+	UnitID      string `gorm:"column:unit_id" json:"unit_id"`
+	SectionCode string `gorm:"column:section_code" json:"section_code"`
+	SectionName string `gorm:"column:section_name" json:"section_name"`
+	OrderIndex  int    `gorm:"column:order_index" json:"order_index"`
+	Status      string `gorm:"column:status" json:"status"`
+	IsDelete    string `gorm:"column:is_delete" json:"is_delete"`
+	CreateTime  string `gorm:"column:create_time" json:"create_time"`
+	CreateUser  string `gorm:"column:create_user" json:"create_user"`
+	ModifyTime  string `gorm:"column:modify_time" json:"modify_time"`
+	ModifyUser  string `gorm:"column:modify_user" json:"modify_user"`
+}
+
+func (*QuestionSection) TableName() string {
+	return TableNameQuestionSection
+}
+
+func (*QuestionSection) PrimaryKey() []string {
+	return []string{"section_id"}
+}
+
 const TableNameQuestionKnowledge = "question_knowledge"
 
 type QuestionKnowledge struct {
-	KnowledgeID   string `gorm:"column:knowledge_id;primaryKey" json:"knowledge_id"`
+	KnowledgeID       string `gorm:"column:knowledge_id;primaryKey" json:"knowledge_id"`
+	Subject           string `gorm:"column:subject" json:"subject"`
+	Stage             string `gorm:"column:stage" json:"stage"`
+	Grade             string `gorm:"column:grade" json:"grade"`
+	ParentID          string `gorm:"column:parent_id" json:"parent_id"`
+	KnowledgeCode     string `gorm:"column:knowledge_code" json:"knowledge_code"`
+	KnowledgeName     string `gorm:"column:knowledge_name" json:"knowledge_name"`
+	KnowledgeType     string `gorm:"column:knowledge_type" json:"knowledge_type"`
+	KnowledgeCategory string `gorm:"column:knowledge_category" json:"knowledge_category"`
+	OrderIndex        int    `gorm:"column:order_index" json:"order_index"`
+	Status            string `gorm:"column:status" json:"status"`
+	IsDelete          string `gorm:"column:is_delete" json:"is_delete"`
+	CreateTime        string `gorm:"column:create_time" json:"create_time"`
+	CreateUser        string `gorm:"column:create_user" json:"create_user"`
+	ModifyTime        string `gorm:"column:modify_time" json:"modify_time"`
+	ModifyUser        string `gorm:"column:modify_user" json:"modify_user"`
+}
+
+func (*QuestionKnowledge) TableName() string {
+	return TableNameQuestionKnowledge
+}
+
+func (*QuestionKnowledge) PrimaryKey() []string {
+	return []string{"knowledge_id"}
+}
+
+const TableNameQuestionKnowledgePoint = "question_knowledge_point"
+
+type QuestionKnowledgePoint struct {
+	PointID       string `gorm:"column:point_id;primaryKey" json:"point_id"`
 	Subject       string `gorm:"column:subject" json:"subject"`
 	Stage         string `gorm:"column:stage" json:"stage"`
 	Grade         string `gorm:"column:grade" json:"grade"`
-	ParentID      string `gorm:"column:parent_id" json:"parent_id"`
-	KnowledgeCode string `gorm:"column:knowledge_code" json:"knowledge_code"`
-	KnowledgeName string `gorm:"column:knowledge_name" json:"knowledge_name"`
+	UnitID        string `gorm:"column:unit_id" json:"unit_id"`
+	SectionID     string `gorm:"column:section_id" json:"section_id"`
+	PointCode     string `gorm:"column:point_code" json:"point_code"`
+	PointName     string `gorm:"column:point_name" json:"point_name"`
+	ContentDetail string `gorm:"column:content_detail" json:"content_detail"`
 	OrderIndex    int    `gorm:"column:order_index" json:"order_index"`
 	Status        string `gorm:"column:status" json:"status"`
 	IsDelete      string `gorm:"column:is_delete" json:"is_delete"`
@@ -251,12 +310,12 @@ type QuestionKnowledge struct {
 	ModifyUser    string `gorm:"column:modify_user" json:"modify_user"`
 }
 
-func (*QuestionKnowledge) TableName() string {
-	return TableNameQuestionKnowledge
+func (*QuestionKnowledgePoint) TableName() string {
+	return TableNameQuestionKnowledgePoint
 }
 
-func (*QuestionKnowledge) PrimaryKey() []string {
-	return []string{"knowledge_id"}
+func (*QuestionKnowledgePoint) PrimaryKey() []string {
+	return []string{"point_id"}
 }
 
 const TableNameQuestionKnowledgeRel = "question_knowledge_rel"
@@ -398,4 +457,258 @@ func (*QuestionImportRow) TableName() string {
 
 func (*QuestionImportRow) PrimaryKey() []string {
 	return []string{"row_id"}
+}
+
+const TableNameQuestionSourceDocument = "question_source_document"
+
+type QuestionSourceDocument struct {
+	SourceDocID     string `gorm:"column:source_doc_id;primaryKey" json:"source_doc_id"`
+	ImportBatchID   string `gorm:"column:import_batch_id" json:"import_batch_id"`
+	FileName        string `gorm:"column:file_name" json:"file_name"`
+	FileSHA256      string `gorm:"column:file_sha256" json:"file_sha256"`
+	FileURL         string `gorm:"column:file_url" json:"file_url"`
+	PageCount       int    `gorm:"column:page_count" json:"page_count"`
+	Subject         string `gorm:"column:subject" json:"subject"`
+	Stage           string `gorm:"column:stage" json:"stage"`
+	Grade           string `gorm:"column:grade" json:"grade"`
+	TextbookVersion string `gorm:"column:textbook_version" json:"textbook_version"`
+	ParseStatus     string `gorm:"column:parse_status" json:"parse_status"`
+	ImportStatus    string `gorm:"column:import_status" json:"import_status"`
+	CreateTime      string `gorm:"column:create_time" json:"create_time"`
+}
+
+func (*QuestionSourceDocument) TableName() string {
+	return TableNameQuestionSourceDocument
+}
+
+func (*QuestionSourceDocument) PrimaryKey() []string {
+	return []string{"source_doc_id"}
+}
+
+const TableNameQuestionSourcePage = "question_source_page"
+
+type QuestionSourcePage struct {
+	SourcePageID      string `gorm:"column:source_page_id;primaryKey" json:"source_page_id"`
+	SourceDocID       string `gorm:"column:source_doc_id" json:"source_doc_id"`
+	PageNo            int    `gorm:"column:page_no" json:"page_no"`
+	PageImageURL      string `gorm:"column:page_image_url" json:"page_image_url"`
+	Width             int    `gorm:"column:width" json:"width"`
+	Height            int    `gorm:"column:height" json:"height"`
+	ExtractService    string `gorm:"column:extract_service" json:"extract_service"`
+	ExtractParamsJSON string `gorm:"column:extract_params_json" json:"extract_params_json"`
+	RawText           string `gorm:"column:raw_text" json:"raw_text"`
+	RawHTML           string `gorm:"column:raw_html" json:"raw_html"`
+	ExtractMetaJSON   string `gorm:"column:extract_meta_json" json:"extract_meta_json"`
+	PageHash          string `gorm:"column:page_hash" json:"page_hash"`
+}
+
+func (*QuestionSourcePage) TableName() string {
+	return TableNameQuestionSourcePage
+}
+
+func (*QuestionSourcePage) PrimaryKey() []string {
+	return []string{"source_page_id"}
+}
+
+const TableNameQuestionSourceBlock = "question_source_block"
+
+type QuestionSourceBlock struct {
+	SourceBlockID  string  `gorm:"column:source_block_id;primaryKey" json:"source_block_id"`
+	SourceDocID    string  `gorm:"column:source_doc_id" json:"source_doc_id"`
+	PageNo         int     `gorm:"column:page_no" json:"page_no"`
+	BlockOrder     int     `gorm:"column:block_order" json:"block_order"`
+	BBoxJSON       string  `gorm:"column:bbox_json" json:"bbox_json"`
+	BlockType      string  `gorm:"column:block_type" json:"block_type"`
+	RawText        string  `gorm:"column:raw_text" json:"raw_text"`
+	NormalizedText string  `gorm:"column:normalized_text" json:"normalized_text"`
+	BlockImageURL  string  `gorm:"column:block_image_url" json:"block_image_url"`
+	SemanticType   string  `gorm:"column:semantic_type" json:"semantic_type"`
+	Confidence     float64 `gorm:"column:confidence" json:"confidence"`
+	ContentHash    string  `gorm:"column:content_hash" json:"content_hash"`
+}
+
+func (*QuestionSourceBlock) TableName() string {
+	return TableNameQuestionSourceBlock
+}
+
+func (*QuestionSourceBlock) PrimaryKey() []string {
+	return []string{"source_block_id"}
+}
+
+const TableNameQuestionSourceFragment = "question_source_fragment"
+
+type QuestionSourceFragment struct {
+	SourceFragmentID string  `gorm:"column:source_fragment_id;primaryKey" json:"source_fragment_id"`
+	SourceDocID      string  `gorm:"column:source_doc_id" json:"source_doc_id"`
+	SourcePageID     string  `gorm:"column:source_page_id" json:"source_page_id"`
+	SourceBlockID    string  `gorm:"column:source_block_id" json:"source_block_id"`
+	PageNo           int     `gorm:"column:page_no" json:"page_no"`
+	FragmentOrder    int     `gorm:"column:fragment_order" json:"fragment_order"`
+	FragmentType     string  `gorm:"column:fragment_type" json:"fragment_type"`
+	RawText          string  `gorm:"column:raw_text" json:"raw_text"`
+	RawHTML          string  `gorm:"column:raw_html" json:"raw_html"`
+	NormalizedText   string  `gorm:"column:normalized_text" json:"normalized_text"`
+	CharStart        int     `gorm:"column:char_start" json:"char_start"`
+	CharEnd          int     `gorm:"column:char_end" json:"char_end"`
+	ContextBefore    string  `gorm:"column:context_before" json:"context_before"`
+	ContextAfter     string  `gorm:"column:context_after" json:"context_after"`
+	BBoxJSON         string  `gorm:"column:bbox_json" json:"bbox_json"`
+	FragmentHash     string  `gorm:"column:fragment_hash" json:"fragment_hash"`
+	Confidence       float64 `gorm:"column:confidence" json:"confidence"`
+	Status           string  `gorm:"column:status" json:"status"`
+	CreateTime       string  `gorm:"column:create_time" json:"create_time"`
+}
+
+func (*QuestionSourceFragment) TableName() string {
+	return TableNameQuestionSourceFragment
+}
+
+func (*QuestionSourceFragment) PrimaryKey() []string {
+	return []string{"source_fragment_id"}
+}
+
+const TableNameQuestionSourceSnapshot = "question_source_snapshot"
+
+type QuestionSourceSnapshot struct {
+	SnapshotID          string `gorm:"column:snapshot_id;primaryKey" json:"snapshot_id"`
+	SourceDocID         string `gorm:"column:source_doc_id" json:"source_doc_id"`
+	SourcePageID        string `gorm:"column:source_page_id" json:"source_page_id"`
+	SourceBlockID       string `gorm:"column:source_block_id" json:"source_block_id"`
+	SourceFragmentID    string `gorm:"column:source_fragment_id" json:"source_fragment_id"`
+	QuestionID          string `gorm:"column:question_id" json:"question_id"`
+	KnowledgeID         string `gorm:"column:knowledge_id" json:"knowledge_id"`
+	ContentID           string `gorm:"column:content_id" json:"content_id"`
+	ExtractService      string `gorm:"column:extract_service" json:"extract_service"`
+	ExtractParamsJSON   string `gorm:"column:extract_params_json" json:"extract_params_json"`
+	RawText             string `gorm:"column:raw_text" json:"raw_text"`
+	RawHTML             string `gorm:"column:raw_html" json:"raw_html"`
+	NormalizedText      string `gorm:"column:normalized_text" json:"normalized_text"`
+	AIOutputJSON        string `gorm:"column:ai_output_json" json:"ai_output_json"`
+	ValidatorResultJSON string `gorm:"column:validator_result_json" json:"validator_result_json"`
+	Status              string `gorm:"column:status" json:"status"`
+	CreateTime          string `gorm:"column:create_time" json:"create_time"`
+}
+
+func (*QuestionSourceSnapshot) TableName() string {
+	return TableNameQuestionSourceSnapshot
+}
+
+func (*QuestionSourceSnapshot) PrimaryKey() []string {
+	return []string{"snapshot_id"}
+}
+
+const TableNameQuestionKnowledgeContent = "question_knowledge_content"
+
+type QuestionKnowledgeContent struct {
+	ContentID     string `gorm:"column:content_id;primaryKey" json:"content_id"`
+	BatchID       string `gorm:"column:batch_id" json:"batch_id"`
+	SourceDocID   string `gorm:"column:source_doc_id" json:"source_doc_id"`
+	SourceBlockID string `gorm:"column:source_block_id" json:"source_block_id"`
+	UnitID        string `gorm:"column:unit_id" json:"unit_id"`
+	KnowledgeID   string `gorm:"column:knowledge_id" json:"knowledge_id"`
+	SemanticType  string `gorm:"column:semantic_type" json:"semantic_type"`
+	SectionTitle  string `gorm:"column:section_title" json:"section_title"`
+	ContentText   string `gorm:"column:content_text" json:"content_text"`
+	ContentHTML   string `gorm:"column:content_html" json:"content_html"`
+	ContentJSON   string `gorm:"column:content_json" json:"content_json"`
+	ContentHash   string `gorm:"column:content_hash" json:"content_hash"`
+	AssetCount    int    `gorm:"column:asset_count" json:"asset_count"`
+	OrderIndex    int    `gorm:"column:order_index" json:"order_index"`
+	Status        string `gorm:"column:status" json:"status"`
+	CreateTime    string `gorm:"column:create_time" json:"create_time"`
+	ModifyTime    string `gorm:"column:modify_time" json:"modify_time"`
+}
+
+func (*QuestionKnowledgeContent) TableName() string {
+	return TableNameQuestionKnowledgeContent
+}
+
+func (*QuestionKnowledgeContent) PrimaryKey() []string {
+	return []string{"content_id"}
+}
+
+const TableNameQuestionSourceRel = "question_source_rel"
+
+type QuestionSourceRel struct {
+	RelID            string  `gorm:"column:rel_id;primaryKey" json:"rel_id"`
+	QuestionID       string  `gorm:"column:question_id" json:"question_id"`
+	SourceDocID      string  `gorm:"column:source_doc_id" json:"source_doc_id"`
+	SourcePageNo     int     `gorm:"column:source_page_no" json:"source_page_no"`
+	SourceBlockID    string  `gorm:"column:source_block_id" json:"source_block_id"`
+	SourceFragmentID string  `gorm:"column:source_fragment_id" json:"source_fragment_id"`
+	SourceContentID  string  `gorm:"column:source_content_id" json:"source_content_id"`
+	KnowledgeID      string  `gorm:"column:knowledge_id" json:"knowledge_id"`
+	RelationType     string  `gorm:"column:relation_type" json:"relation_type"`
+	Confidence       float64 `gorm:"column:confidence" json:"confidence"`
+	CreateTime       string  `gorm:"column:create_time" json:"create_time"`
+}
+
+func (*QuestionSourceRel) TableName() string {
+	return TableNameQuestionSourceRel
+}
+
+func (*QuestionSourceRel) PrimaryKey() []string {
+	return []string{"rel_id"}
+}
+
+const TableNameQuestionSourceFieldRel = "question_source_field_rel"
+
+type QuestionSourceFieldRel struct {
+	FieldRelID       string  `gorm:"column:field_rel_id;primaryKey" json:"field_rel_id"`
+	SourceDocID      string  `gorm:"column:source_doc_id" json:"source_doc_id"`
+	SourcePageID     string  `gorm:"column:source_page_id" json:"source_page_id"`
+	SourceBlockID    string  `gorm:"column:source_block_id" json:"source_block_id"`
+	SourceFragmentID string  `gorm:"column:source_fragment_id" json:"source_fragment_id"`
+	EntityType       string  `gorm:"column:entity_type" json:"entity_type"`
+	EntityID         string  `gorm:"column:entity_id" json:"entity_id"`
+	FieldName        string  `gorm:"column:field_name" json:"field_name"`
+	FieldPartOrder   int     `gorm:"column:field_part_order" json:"field_part_order"`
+	ExtractedValue   string  `gorm:"column:extracted_value" json:"extracted_value"`
+	NormalizedValue  string  `gorm:"column:normalized_value" json:"normalized_value"`
+	RawQuote         string  `gorm:"column:raw_quote" json:"raw_quote"`
+	ContextBefore    string  `gorm:"column:context_before" json:"context_before"`
+	ContextAfter     string  `gorm:"column:context_after" json:"context_after"`
+	CharStart        int     `gorm:"column:char_start" json:"char_start"`
+	CharEnd          int     `gorm:"column:char_end" json:"char_end"`
+	BBoxJSON         string  `gorm:"column:bbox_json" json:"bbox_json"`
+	Confidence       float64 `gorm:"column:confidence" json:"confidence"`
+	MatchStatus      string  `gorm:"column:match_status" json:"match_status"`
+	ReviewStatus     string  `gorm:"column:review_status" json:"review_status"`
+	CreateTime       string  `gorm:"column:create_time" json:"create_time"`
+}
+
+func (*QuestionSourceFieldRel) TableName() string {
+	return TableNameQuestionSourceFieldRel
+}
+
+func (*QuestionSourceFieldRel) PrimaryKey() []string {
+	return []string{"field_rel_id"}
+}
+
+const TableNameQuestionPDFParseIssue = "question_pdf_parse_issue"
+
+type QuestionPDFParseIssue struct {
+	IssueID        string `gorm:"column:issue_id;primaryKey" json:"issue_id"`
+	SourceDocID    string `gorm:"column:source_doc_id" json:"source_doc_id"`
+	PageNo         int    `gorm:"column:page_no" json:"page_no"`
+	SourceBlockID  string `gorm:"column:source_block_id" json:"source_block_id"`
+	IssueType      string `gorm:"column:issue_type" json:"issue_type"`
+	Severity       string `gorm:"column:severity" json:"severity"`
+	RawText        string `gorm:"column:raw_text" json:"raw_text"`
+	CropImageURL   string `gorm:"column:crop_image_url" json:"crop_image_url"`
+	AIOutputJSON   string `gorm:"column:ai_output_json" json:"ai_output_json"`
+	ExpectedSchema string `gorm:"column:expected_schema" json:"expected_schema"`
+	ErrorMsg       string `gorm:"column:error_msg" json:"error_msg"`
+	Suggestion     string `gorm:"column:suggestion" json:"suggestion"`
+	Status         string `gorm:"column:status" json:"status"`
+	CreateTime     string `gorm:"column:create_time" json:"create_time"`
+	ModifyTime     string `gorm:"column:modify_time" json:"modify_time"`
+}
+
+func (*QuestionPDFParseIssue) TableName() string {
+	return TableNameQuestionPDFParseIssue
+}
+
+func (*QuestionPDFParseIssue) PrimaryKey() []string {
+	return []string{"issue_id"}
 }

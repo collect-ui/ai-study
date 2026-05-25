@@ -1,15 +1,4 @@
 service:
-  - key: menu
-    http: true
-    must_login: false
-    module: empty
-    handler_params:
-      - key: file2datajson
-        save_field: data
-      - key: param2result
-        field: data
-    data_file: data/menu/menu.json
-
   - key: login
     http: true
     must_login: false
@@ -110,3 +99,13 @@ service:
       - key: param2result
         field: data
     data_file: data/question/question_taxonomy.json
+
+  - key: question_knowledge_point
+    http: true
+    module: empty
+    handler_params:
+      - key: file2datajson
+        save_field: data
+      - key: param2result
+        field: data
+    data_file: data/question/question_knowledge_point.json

@@ -29,7 +29,8 @@ debug=true
 
 # AI question import. Keep secret values out of source control; set real keys in the runtime config or environment.
 question_ai_default_pdf_path=
-question_ai_source_max_chars=120000
+question_ai_source_max_chars=240000
+question_pdf_ocr_max_pages=200
 question_ai_chunk_chars=6000
 question_ai_max_chunks=40
 question_ai_cache_dir=./database/question_ai_cache

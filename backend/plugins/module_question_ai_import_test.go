@@ -1,7 +1,12 @@
 package plugins
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -53,6 +58,126 @@ func TestExtractedTextToHTMLEscapesContent(t *testing.T) {
 	want := "<div>A &lt; B</div><div><br></div><div>C &amp; D</div>"
 	if html != want {
 		t.Fatalf("unexpected html:\nwant %q\n got %q", want, html)
+	}
+}
+
+func TestTranscribeQuestionPDFImagePageUsesTencentProvider(t *testing.T) {
+	var payload map[string]interface{}
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+			t.Fatalf("decode request: %v", err)
+		}
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
+			"status": "ok",
+			"task":   "image",
+			"text":   "1. Hello",
+			"engine": "tencent-ocr",
+		})
+	}))
+	defer server.Close()
+
+	dir := t.TempDir()
+	imagePath := filepath.Join(dir, "page.jpg")
+	if err := os.WriteFile(imagePath, []byte{0xff, 0xd8, 0xff, 0xd9}, 0644); err != nil {
+		t.Fatalf("write temp image: %v", err)
+	}
+	text, engine, err := transcribeQuestionPDFImagePage(questionPDFRenderedPage{Page: 1, Path: imagePath}, questionPDFExtractOptions{
+		OCRServiceURL:    server.URL,
+		OCRProvider:      "tencent",
+		OCRTimeoutSecond: 5,
+	})
+	if err != nil {
+		t.Fatalf("transcribeQuestionPDFImagePage returned error: %v", err)
+	}
+	if text != "1. Hello" || engine != "tencent-ocr" {
+		t.Fatalf("unexpected OCR result: text=%q engine=%q", text, engine)
+	}
+	if payload["task"] != "image" || payload["raw"] != true || payload["image_ocr_provider"] != "tencent" {
+		t.Fatalf("unexpected OCR payload: %#v", payload)
+	}
+	url, _ := payload["url"].(string)
+	if !strings.HasPrefix(url, "data:image/jpeg;base64,") {
+		t.Fatalf("expected image data URL, got %q", url)
+	}
+}
+
+func TestParseQuestionPDFKnowledgeAIResultUsesModelStructure(t *testing.T) {
+	raw := `{"units":[{"unit_code":"unit_1","unit_name":"Unit 1","knowledge":[{"knowledge_code":"hello","knowledge_name":"问候句型","semantic_type":"sentence_pattern","contents":[{"section_title":"句型","content_text":"Hello/Hi.","source_quote":"Hello/Hi."}]}]}],"questions":[],"issues":[{"issue_type":"candidate_question","status":"pending"}],"question_draft_total":3,"acceptance_status":"warning","summary":"ok"}`
+	result, normalized, err := parseQuestionPDFKnowledgeAIResult(raw)
+	if err != nil {
+		t.Fatalf("parseQuestionPDFKnowledgeAIResult returned error: %v", err)
+	}
+	if !json.Valid([]byte(normalized)) {
+		t.Fatalf("normalized AI result should be valid JSON: %s", normalized)
+	}
+	if len(result.Units) != 1 || len(questionPDFKnowledgeItems(result.Units[0])) != 1 {
+		t.Fatalf("expected model-provided unit/knowledge structure: %#v", result)
+	}
+	if result.QuestionDraftTotal != 3 {
+		t.Fatalf("question_draft_total should come from AI JSON, got %d", result.QuestionDraftTotal)
+	}
+	if len(result.Issues) != 1 || result.Issues[0].IssueType != "candidate_question" {
+		t.Fatalf("expected model-provided issues: %#v", result.Issues)
+	}
+}
+
+func TestQuestionPDFQuoteRangeOnlyLocatesModelSourceQuote(t *testing.T) {
+	rawText := "Unit 1\nHello/Hi. I'm Sarah.\nNice to meet you."
+	start, end, ok := questionPDFQuoteRange(rawText, "Hello/Hi. I'm Sarah.")
+	if !ok {
+		t.Fatalf("expected source_quote to be locatable")
+	}
+	if got := string([]rune(rawText)[start:end]); got != "Hello/Hi. I'm Sarah." {
+		t.Fatalf("unexpected located quote %q", got)
+	}
+	if _, _, ok := questionPDFQuoteRange(rawText, "not returned by model"); ok {
+		t.Fatalf("unexpected match for absent source_quote")
+	}
+}
+
+func TestQuestionPDFStableIDsAreRepeatable(t *testing.T) {
+	sourceID := questionPDFStableSourceDocID("english", "primary", "grade_3", "pep", "filehash", "texthash")
+	if sourceID == "" || sourceID != questionPDFStableSourceDocID("english", "primary", "grade_3", "pep", "filehash", "texthash") {
+		t.Fatalf("source document id should be stable, got %q", sourceID)
+	}
+	if sourceID == questionPDFStableSourceDocID("english", "primary", "grade_3", "pep", "other-file", "texthash") {
+		t.Fatalf("source document id should change when file hash changes")
+	}
+	batchID := questionPDFStableImportBatchID(sourceID, "draft")
+	if batchID == "" || batchID != questionPDFStableImportBatchID(sourceID, "draft") {
+		t.Fatalf("import batch id should be stable, got %q", batchID)
+	}
+	contentID := questionPDFKnowledgeContentID("knowledge-1", "句型", "Hello/Hi. I'm Sarah.")
+	if contentID == "" || contentID != questionPDFKnowledgeContentID("knowledge-1", "句型", "Hello/Hi. I'm Sarah.") {
+		t.Fatalf("content id should be stable, got %q", contentID)
+	}
+	if contentID == questionPDFKnowledgeContentID("knowledge-1", "句型", "Nice to meet you.") {
+		t.Fatalf("content id should change when content changes")
+	}
+}
+
+func TestQuestionPDFKnowledgePromptsRequireFullCoverage(t *testing.T) {
+	instructions := questionPDFKnowledgeInstructions(map[string]interface{}{"subject": "english", "grade": "grade_3"})
+	userPrompt := questionPDFKnowledgeUserPrompt("Unit 1\nWords\nHello 你好")
+	for _, want := range []string{
+		"必须覆盖整份 PDF",
+		"每一个词汇、短语、句型",
+		"不要因为 source_quote",
+		"逐行识别",
+	} {
+		if !strings.Contains(instructions+"\n"+userPrompt, want) {
+			t.Fatalf("PDF knowledge prompt missing %q", want)
+		}
+	}
+}
+
+func TestQuestionPDFPageCountUsesRendererFallback(t *testing.T) {
+	pdfPath := filepath.Clean("../../test-results/question-ai-small-pdf-import/small-page-1-2.pdf")
+	if _, err := os.Stat(pdfPath); err != nil {
+		t.Skipf("test PDF not available: %v", err)
+	}
+	if got := questionPDFPageCountUnchecked(pdfPath); got != 2 {
+		t.Fatalf("expected 2 pages, got %d", got)
 	}
 }
 

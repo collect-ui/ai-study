@@ -59,7 +59,11 @@ func GetTable() (map[string]interface{}, map[string][]string) {
 
 	register(&QuestionUnit{})
 
+	register(&QuestionSection{})
+
 	register(&QuestionKnowledge{})
+
+	register(&QuestionKnowledgePoint{})
 
 	register(&QuestionKnowledgeRel{})
 
@@ -72,6 +76,24 @@ func GetTable() (map[string]interface{}, map[string][]string) {
 	register(&QuestionImportBatch{})
 
 	register(&QuestionImportRow{})
+
+	register(&QuestionSourceDocument{})
+
+	register(&QuestionSourcePage{})
+
+	register(&QuestionSourceBlock{})
+
+	register(&QuestionSourceFragment{})
+
+	register(&QuestionSourceSnapshot{})
+
+	register(&QuestionKnowledgeContent{})
+
+	register(&QuestionSourceRel{})
+
+	register(&QuestionSourceFieldRel{})
+
+	register(&QuestionPDFParseIssue{})
 
 	return modelMap, primaryKeyMap
 }

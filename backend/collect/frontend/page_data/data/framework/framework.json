@@ -74,7 +74,7 @@
                     },
                     {
                       "tag": "redirect",
-                      "url": "/collect-ui/#/collect-ui/login"
+                      "url": "/collect-ui/?login_redirect_at=logout#/collect-ui/login"
                     }
                   ],
                   "arrow": true,

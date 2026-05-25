@@ -71,6 +71,10 @@ module_handler:
     name: AI题目解析
     type: outer
     path: QuestionAIParseService
+  - key: question_pdf_knowledge_import
+    name: PDF知识点一键导入
+    type: outer
+    path: QuestionPDFKnowledgeImportService
 # 数据处理
 data_handler:
   - key: update_field

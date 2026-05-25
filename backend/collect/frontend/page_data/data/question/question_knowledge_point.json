@@ -1,0 +1,1551 @@
+{
+  "tag": "layout-fit",
+  "className": "question-knowledge-point-page h100",
+  "style": {
+    "height": "100%",
+    "overflow": "hidden",
+    "background": "#f6f8fb"
+  },
+  "initStore": {
+    "editorMode": "create",
+    "editingPointID": "",
+    "selectedPointID": "",
+    "siderCollapsed": false,
+    "subjectList": [],
+    "gradeList": [],
+    "unitList": [],
+    "sectionList": [],
+    "dataList": [],
+    "count": 0,
+    "searchForm": {
+      "page": 1,
+      "size": 20,
+      "keyword": "",
+      "subject": "english",
+      "stage": "junior",
+      "grade": "grade_7",
+      "unit_id": "",
+      "section_id": "",
+      "status": ""
+    },
+    "pointForm": {
+      "subject": "english",
+      "stage": "junior",
+      "grade": "grade_7",
+      "unit_id": "",
+      "section_id": "",
+      "point_code": "",
+      "point_name": "",
+      "content_detail": "",
+      "order_index": 1,
+      "status": "enabled"
+    }
+  },
+  "initAction": [
+    {
+      "tag": "localstore",
+      "method": "read",
+      "key": "ai-study:question-knowledge-point:search-form",
+      "storeField": "searchForm",
+      "defaultValue": "${searchForm}",
+      "adapt": {
+        "searchForm": "${(()=>{const raw=data||{};return Object.assign({}, searchForm, raw, {page:Number(raw.page||1), size:Number(raw.size||searchForm.size||20), subject: raw.subject || 'english', stage: raw.stage || searchForm.stage || 'junior', grade: raw.grade || searchForm.grade || 'grade_7'});})()}"
+      }
+    },
+    {
+      "tag": "localstore",
+      "method": "read",
+      "key": "ai-study:question-knowledge-point:sider-collapsed",
+      "storeField": "siderCollapsed",
+      "defaultValue": false,
+      "adapt": {
+        "siderCollapsed": "${data === true || data === 'true'}"
+      }
+    },
+    {
+      "tag": "update-form",
+      "formName": "knowledgePointSearchForm",
+      "value": "${searchForm}"
+    },
+    {
+      "tag": "ajax",
+      "group": "subject-list",
+      "api": "post:/template_data/data?service=question.subject_query",
+      "data": {
+        "status": "enabled"
+      },
+      "adapt": {
+        "subjectList": "${data}"
+      }
+    },
+    {
+      "tag": "ajax",
+      "group": "grade-list",
+      "api": "post:/template_data/data?service=question.grade_query",
+      "data": {
+        "status": "enabled"
+      },
+      "adapt": {
+        "gradeList": "${data}"
+      }
+    },
+    {
+      "tag": "ajax",
+      "group": "unit-list",
+      "api": "post:/template_data/data?service=question.unit_query",
+      "data": {
+        "status": "enabled"
+      },
+      "adapt": {
+        "unitList": "${data}"
+      }
+    },
+    {
+      "tag": "ajax",
+      "group": "section-list",
+      "api": "post:/template_data/data?service=question.section_query",
+      "data": {
+        "status": "enabled"
+      },
+      "adapt": {
+        "sectionList": "${data}"
+      }
+    },
+    {
+      "tag": "ajax",
+      "group": "point-list",
+      "api": "post:/template_data/data?service=question.knowledge_point_query",
+      "appendFields": "${searchForm}",
+      "adapt": {
+        "dataList": "${data}",
+        "count": "${count}"
+      }
+    },
+    {
+      "tag": "localstore",
+      "method": "write",
+      "key": "ai-study:question-knowledge-point:search-form",
+      "value": "${searchForm}"
+    }
+  ],
+  "children": [
+    {
+      "tag": "css",
+      "css": ".question-knowledge-point-page > .layout-content { overflow: hidden !important; }\n.question-knowledge-point-page > .layout-content > .layout-content-inner { overflow: hidden !important; }\n.question-knowledge-point-page > .layout-content > .layout-content-inner > div { height: 100% !important; min-height: 0 !important; overflow: hidden !important; }\n.question-knowledge-point-page .kp-search-shell.co-ui-form { height: 100% !important; min-height: 0 !important; padding: 0 !important; box-sizing: border-box !important; background: #f8f9fa; }\n.question-knowledge-point-page .kp-shell-layout.ant-layout.ant-layout-has-sider { height: 100% !important; min-height: 0 !important; align-items: stretch !important; }\n.question-knowledge-point-page .kp-shell-layout > .ant-layout-sider { align-self: stretch !important; height: auto !important; min-height: 0 !important; display: flex !important; flex-direction: column !important; padding-bottom: 0 !important; }\n.question-knowledge-point-page .kp-shell-layout > .ant-layout-sider > .ant-layout-sider-children { flex: 1 1 auto !important; height: auto !important; min-height: 0 !important; overflow: hidden !important; }\n.question-knowledge-point-page .kp-shell-layout > .ant-layout-sider > .ant-layout-sider-trigger { position: relative !important; flex: 0 0 48px !important; height: 48px !important; line-height: 48px !important; transform: none !important; }\n.question-knowledge-point-page .kp-shell-layout > .ant-layout { height: 100% !important; min-height: 0 !important; }\n.question-knowledge-point-page .kp-sider-content { height: 100% !important; min-height: 0 !important; scrollbar-gutter: stable; }\n.question-knowledge-point-page .kp-sider-content .co-ui-button.ant-btn { height: 34px !important; min-height: 34px !important; font-size: 13px; }\n.question-knowledge-point-page .kp-sider-content .co-ui-form-item.ant-form-item { margin: 0 10px 6px !important; }\n.question-knowledge-point-page .kp-sider-content .ant-select-selector { min-height: 32px !important; height: 32px !important; border-radius: 6px !important; }\n.question-knowledge-point-page .kp-sider-content .ant-select-selection-item { line-height: 30px !important; }\n.question-knowledge-point-page .ant-layout-sider:not(.ant-layout-sider-collapsed) .kp-sider-content { overflow-y: auto !important; overflow-x: hidden !important; }\n.question-knowledge-point-page .ant-layout-sider-collapsed .kp-sider-content { padding: 8px 6px !important; gap: 8px !important; align-items: center; overflow: hidden !important; }\n.question-knowledge-point-page .ant-layout-sider-collapsed .kp-sider-content > div:not(.kp-sider-bottom) { display: none !important; }\n.question-knowledge-point-page .ant-layout-sider-collapsed .kp-sider-bottom { margin-top: 0 !important; border-top: 0 !important; padding: 0 !important; width: 100%; }\n.question-knowledge-point-page .ant-layout-sider-collapsed .kp-sider-bottom .ant-btn { width: 40px !important; padding: 0 !important; }\n.question-knowledge-point-page .ant-layout-sider-collapsed .kp-sider-bottom .ant-btn span:not(.anticon) { display: none !important; }\n.question-knowledge-point-page .kp-panel-scroll-root { overflow: hidden !important; align-items: stretch !important; }\n.question-knowledge-point-page [data-panel-id=\"knowledge-point-list-panel\"],\n.question-knowledge-point-page [data-panel-id=\"knowledge-point-editor-panel\"] { height: 100% !important; min-height: 0 !important; overflow: hidden !important; }\n.question-knowledge-point-page .kp-list-scroll,\n.question-knowledge-point-page .kp-editor-scroll { height: 100% !important; min-height: 0 !important; overflow-y: auto !important; overflow-x: hidden !important; scrollbar-gutter: stable; }\n.question-knowledge-point-page .kp-main-toolbar { flex: 0 0 auto !important; }\n.question-knowledge-point-page .kp-toolbar-form.co-ui-form { padding: 0 !important; }\n.question-knowledge-point-page .kp-toolbar-form .co-ui-form-item.ant-form-item { margin: 0 !important; }\n.question-knowledge-point-page .kp-card { transition: border-color .16s ease, box-shadow .16s ease, background .16s ease; }\n.question-knowledge-point-page .kp-chip { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 4px; font-size: 12px; line-height: 22px; white-space: nowrap; font-weight: 700; }\n.question-knowledge-point-page .kp-editor-inline .co-ui-form { padding: 0; }\n.question-knowledge-point-page .kp-editor-inline .co-ui-form-item.ant-form-item { margin-bottom: 10px; margin-inline-end: 0; }\n.question-knowledge-point-page .kp-editor-inline .ant-form-item-label { padding-bottom: 2px; }\n.question-knowledge-point-page .kp-editor-inline .ant-form-item-label > label { height: 18px; font-size: 12px; color: #414754; }\n.question-knowledge-point-page .kp-editor-inline .ant-input,\n.question-knowledge-point-page .kp-editor-inline .ant-select-selector,\n.question-knowledge-point-page .kp-editor-inline .ant-input-number { border-radius: 6px !important; }\n.question-knowledge-point-page .bottom-tool-bar { flex: 0 0 auto !important; }\n@media (max-width: 900px) {\n  .question-knowledge-point-page .kp-panel-scroll-root.co-ui-panel-group { flex-direction: column !important; padding: 8px !important; }\n  .question-knowledge-point-page .kp-panel-scroll-root > [data-panel-id=\"knowledge-point-list-panel\"],\n  .question-knowledge-point-page .kp-panel-scroll-root > [data-panel-id=\"knowledge-point-editor-panel\"] { width: 100% !important; min-width: 0 !important; max-width: none !important; }\n  .question-knowledge-point-page .kp-panel-scroll-root > [data-panel-id=\"knowledge-point-list-panel\"] { flex: 0 0 220px !important; min-height: 0 !important; }\n  .question-knowledge-point-page .kp-panel-scroll-root > [data-panel-id=\"knowledge-point-editor-panel\"] { flex: 1 1 0 !important; min-height: 0 !important; }\n  .question-knowledge-point-page .kp-panel-scroll-root > .co-ui-panel-resize { width: 100% !important; min-width: 0 !important; height: 8px !important; min-height: 8px !important; margin: 8px 0 !important; cursor: row-resize !important; background: linear-gradient(0deg, transparent 0, transparent 3px, #c1c6d6 3px, #c1c6d6 5px, transparent 5px) !important; }\n}\n@media (max-width: 760px) {\n  .question-knowledge-point-page .kp-shell-layout > .ant-layout-sider { width: 52px !important; min-width: 52px !important; max-width: 52px !important; flex: 0 0 52px !important; }\n  .question-knowledge-point-page .kp-sider-content { padding: 8px 6px !important; gap: 8px !important; align-items: center; overflow: hidden !important; }\n  .question-knowledge-point-page .kp-sider-content > div:not(.kp-sider-bottom) { display: none !important; }\n  .question-knowledge-point-page .kp-sider-bottom { margin-top: 0 !important; border-top: 0 !important; padding: 0 !important; width: 100%; }\n  .question-knowledge-point-page .kp-sider-bottom .ant-btn { width: 40px !important; padding: 0 !important; }\n  .question-knowledge-point-page .kp-sider-bottom .ant-btn span:not(.anticon) { display: none !important; }\n}"
+    },
+    {
+      "tag": "css",
+      "css": ".question-knowledge-point-page .kp-main-toolbar .co-ui-form-item.ant-form-item { margin: 0 !important; height: 32px !important; min-height: 32px !important; display: flex !important; align-items: center !important; }\n.question-knowledge-point-page .kp-main-toolbar .ant-form-item-row { width: 100% !important; align-items: center !important; }\n.question-knowledge-point-page .kp-main-toolbar .ant-form-item-control-input { min-height: 32px !important; }\n.question-knowledge-point-page .kp-main-toolbar .ant-form-item-control-input-content { min-height: 32px !important; display: flex !important; align-items: center !important; }\n.question-knowledge-point-page .kp-main-toolbar .ant-input,\n.question-knowledge-point-page .kp-main-toolbar .ant-select-selector,\n.question-knowledge-point-page .kp-main-toolbar .co-ui-button.ant-btn { height: 32px !important; min-height: 32px !important; }\n.question-knowledge-point-page [data-panel-id=\"knowledge-point-editor-panel\"] .layout-content,\n.question-knowledge-point-page [data-panel-id=\"knowledge-point-editor-panel\"] .layout-content-inner,\n.question-knowledge-point-page [data-panel-id=\"knowledge-point-editor-panel\"] .layout-content-inner > div { min-height: 0 !important; overflow: hidden !important; }\n.question-knowledge-point-page [data-panel-id=\"knowledge-point-editor-panel\"] .layout-content-inner > div { height: 100% !important; }\n.question-knowledge-point-page .kp-editor-inline { min-height: 0 !important; overflow: hidden !important; }\n.question-knowledge-point-page .kp-editor-inline > .layout-content { min-height: 0 !important; overflow: hidden !important; }\n.question-knowledge-point-page .kp-editor-scroll { height: calc(100vh - 214px) !important; max-height: calc(100vh - 214px) !important; min-height: 0 !important; overflow-y: auto !important; padding: 0 8px 18px 0 !important; box-sizing: border-box !important; }\n.question-knowledge-point-page .kp-content-rich-text { width: 100% !important; }\n.question-knowledge-point-page .kp-content-rich-text .ql-container { max-height: 260px; overflow: auto; }\n@media (min-width: 901px) {\n  .question-knowledge-point-page .kp-panel-scroll-root > [data-panel-id=\"knowledge-point-list-panel\"],\n  .question-knowledge-point-page .kp-panel-scroll-root > [data-panel-id=\"knowledge-point-editor-panel\"] { min-height: calc(100vh - 120px) !important; }\n}\n@media (max-width: 900px) {\n  .question-knowledge-point-page .kp-editor-scroll { height: calc(100vh - 300px) !important; max-height: calc(100vh - 300px) !important; }\n}"
+    },
+    {
+      "tag": "css",
+      "css": ".question-knowledge-point-page .kp-shell-layout > .ant-layout-sider > .ant-layout-sider-children { display: flex !important; flex-direction: column !important; }\n.question-knowledge-point-page .kp-shell-layout > .ant-layout-sider:not(.ant-layout-sider-collapsed) .kp-sider-content { flex: 1 1 auto !important; max-height: calc(100vh - 48px) !important; overflow-y: auto !important; overflow-x: hidden !important; padding-bottom: 16px !important; }\n.question-knowledge-point-page .kp-toolbar-keyword { flex: 0 0 200px !important; width: 200px !important; max-width: min(200px, 42vw) !important; }\n@media (max-width: 520px) {\n  .question-knowledge-point-page .kp-toolbar-keyword { flex: 1 1 150px !important; width: auto !important; max-width: none !important; }\n}"
+    },
+    {
+      "tag": "css",
+      "css": ".question-knowledge-point-page > .layout-content > .layout-content-inner > div > div { height: 100% !important; min-height: 0 !important; overflow: hidden !important; }\n.question-knowledge-point-page .kp-search-shell > .kp-shell-layout { height: 100% !important; min-height: 0 !important; }\n.question-knowledge-point-page .kp-shell-layout > .ant-layout-sider { max-height: 100% !important; }\n.question-knowledge-point-page .kp-shell-layout > .ant-layout-sider > .ant-layout-sider-trigger { flex: 0 0 48px !important; }"
+    },
+    {
+      "tag": "form",
+      "name": "knowledgePointSearchForm",
+      "className": "kp-search-shell",
+      "initialValues": "${searchForm}",
+      "changeAction": [
+        {
+          "tag": "submit-form",
+          "formName": "knowledgePointSearchForm",
+          "saveField": "searchForm"
+        },
+        {
+          "tag": "localstore",
+          "method": "write",
+          "key": "ai-study:question-knowledge-point:search-form",
+          "storeField": "searchForm"
+        }
+      ],
+      "style": {
+        "height": "100%",
+        "minHeight": 0,
+        "background": "#f8f9fa",
+        "padding": 0,
+        "boxSizing": "border-box",
+        "overflow": "hidden"
+      },
+      "children": [
+        {
+          "tag": "form-item",
+          "name": "page",
+          "hidden": true,
+          "children": [
+            {
+              "tag": "input",
+              "isNumber": true
+            }
+          ]
+        },
+        {
+          "tag": "form-item",
+          "name": "size",
+          "hidden": true,
+          "children": [
+            {
+              "tag": "input",
+              "isNumber": true
+            }
+          ]
+        },
+        {
+          "tag": "layout",
+          "className": "kp-shell-layout",
+          "style": {
+            "height": "100%",
+            "minHeight": 0,
+            "background": "#f8f9fa",
+            "overflow": "hidden"
+          },
+          "children": [
+            {
+              "tag": "sider",
+              "width": 244,
+              "collapsedWidth": 52,
+              "collapsible": true,
+              "collapsed": "${siderCollapsed}",
+              "theme": "light",
+              "style": {
+                "height": "100%",
+                "background": "#f8f9fa",
+                "borderRight": "1px solid #c1c6d6",
+                "overflow": "hidden"
+              },
+              "action": [
+                {
+                  "tag": "update-store",
+                  "value": {
+                    "siderCollapsed": "${collapse}"
+                  }
+                },
+                {
+                  "tag": "localstore",
+                  "method": "write",
+                  "key": "ai-study:question-knowledge-point:sider-collapsed",
+                  "value": "${collapse}"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "div",
+                  "className": "kp-sider-content",
+                  "style": {
+                    "height": "100%",
+                    "minHeight": 0,
+                    "padding": "10px 8px 12px",
+                    "display": "flex",
+                    "flexDirection": "column",
+                    "gap": 8,
+                    "overflow": "auto",
+                    "overflowX": "hidden"
+                  },
+                  "children": [
+                    {
+                      "tag": "div",
+                      "style": {
+                        "padding": "0 8px 2px"
+                      },
+                      "children": [
+                        {
+                          "tag": "div",
+                          "style": {
+                            "fontSize": 18,
+                            "lineHeight": "24px",
+                            "fontWeight": 700,
+                            "color": "#005bbf"
+                          },
+                          "children": "知识点维护"
+                        },
+                        {
+                          "tag": "div",
+                          "style": {
+                            "fontSize": 12,
+                            "lineHeight": "18px",
+                            "color": "#414754",
+                            "marginTop": 2
+                          },
+                          "children": "按年级和科目组织知识点"
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "display": "flex",
+                        "flexDirection": "column",
+                        "gap": 8
+                      },
+                      "children": [
+                        {
+                          "tag": "div",
+                          "style": {
+                            "padding": "0 10px",
+                            "fontSize": 14,
+                            "fontWeight": 700,
+                            "color": "#414754"
+                          },
+                          "children": "科目"
+                        },
+                        {
+                          "tag": "form-item",
+                          "name": "subject",
+                          "children": [
+                            {
+                              "tag": "select",
+                              "allowClear": true,
+                              "showSearch": true,
+                              "options": "${[{label:'全部科目', value:''}].concat((Array.isArray(subjectList) ? subjectList : []).map(item => ({label: item.subject_name || item.subject_code, value: item.subject_code})))}",
+                              "action": [
+                                {
+                                  "tag": "update-form",
+                                  "formName": "knowledgePointSearchForm",
+                                  "value": {
+                                    "page": 1,
+                                    "subject": "${value || ''}",
+                                    "unit_id": "",
+                                    "section_id": ""
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "searchForm": "${Object.assign({}, searchForm, {page: 1, subject: value || '', unit_id: '', section_id: ''})}",
+                                    "selectedPointID": ""
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "enable": "${editorMode === 'create'}",
+                                  "value": {
+                                    "pointForm": "${Object.assign({}, pointForm || {}, {subject: value || 'english', unit_id: '', section_id: ''})}"
+                                  }
+                                },
+                                {
+                                  "tag": "update-form",
+                                  "enable": "${editorMode === 'create'}",
+                                  "formName": "knowledgePointForm",
+                                  "value": "${pointForm}"
+                                },
+                                {
+                                  "tag": "localstore",
+                                  "method": "write",
+                                  "key": "ai-study:question-knowledge-point:search-form",
+                                  "storeField": "searchForm"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "point-list"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "display": "flex",
+                        "flexDirection": "column",
+                        "gap": 8
+                      },
+                      "children": [
+                        {
+                          "tag": "div",
+                          "style": {
+                            "padding": "0 10px",
+                            "fontSize": 14,
+                            "fontWeight": 700,
+                            "color": "#414754"
+                          },
+                          "children": "年级"
+                        },
+                        {
+                          "tag": "div",
+                          "style": {
+                            "margin": "0 10px",
+                            "display": "grid",
+                            "gridTemplateColumns": "repeat(2, minmax(0, 1fr))",
+                            "gap": 6
+                          },
+                          "children": [
+                            {
+                              "tag": "listview",
+                              "itemData": "${gradeList}",
+                              "keyField": "grade_code",
+                              "rowClickAction": [
+                                {
+                                  "tag": "update-form",
+                                  "formName": "knowledgePointSearchForm",
+                                  "value": {
+                                    "page": 1,
+                                    "stage": "${row.stage || searchForm.stage || 'junior'}",
+                                    "grade": "${row.grade_code || ''}",
+                                    "unit_id": "",
+                                    "section_id": ""
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "searchForm": "${Object.assign({}, searchForm, {page: 1, stage: row.stage || searchForm.stage || 'junior', grade: row.grade_code || '', unit_id: '', section_id: ''})}",
+                                    "selectedPointID": ""
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "enable": "${editorMode === 'create'}",
+                                  "value": {
+                                    "pointForm": "${Object.assign({}, pointForm || {}, {stage: row.stage || pointForm.stage || searchForm.stage || 'junior', grade: row.grade_code || 'grade_7', unit_id: '', section_id: ''})}"
+                                  }
+                                },
+                                {
+                                  "tag": "update-form",
+                                  "enable": "${editorMode === 'create'}",
+                                  "formName": "knowledgePointForm",
+                                  "value": "${pointForm}"
+                                },
+                                {
+                                  "tag": "localstore",
+                                  "method": "write",
+                                  "key": "ai-study:question-knowledge-point:search-form",
+                                  "storeField": "searchForm"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "point-list"
+                                }
+                              ],
+                              "itemAttr": {
+                                "tag": "button",
+                                "children": "${row.grade_label || row.grade_name || row.grade_code}",
+                                "style": {
+                                  "width": "100%",
+                                  "height": 34,
+                                  "borderRadius": 6,
+                                  "padding": "0 8px",
+                                  "fontSize": 13,
+                                  "fontWeight": 700,
+                                  "background": "${searchForm.grade === row.grade_code ? '#005bbf' : '#fff'}",
+                                  "borderColor": "${searchForm.grade === row.grade_code ? '#005bbf' : '#d8dee8'}",
+                                  "color": "${searchForm.grade === row.grade_code ? '#fff' : '#414754'}",
+                                  "boxShadow": "${searchForm.grade === row.grade_code ? '0 2px 8px rgba(0, 91, 191, 0.18)' : 'none'}"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "display": "flex",
+                        "flexDirection": "column",
+                        "gap": 8
+                      },
+                      "children": [
+                        {
+                          "tag": "div",
+                          "style": {
+                            "padding": "0 10px",
+                            "fontSize": 14,
+                            "fontWeight": 700,
+                            "color": "#414754"
+                          },
+                          "children": "单元"
+                        },
+                        {
+                          "tag": "form-item",
+                          "name": "unit_id",
+                          "children": [
+                            {
+                              "tag": "select",
+                              "allowClear": true,
+                              "showSearch": true,
+                              "placeholder": "全部单元",
+                              "fieldNames": {
+                                "label": "unit_name",
+                                "value": "unit_id"
+                              },
+                              "options": "${(Array.isArray(unitList)?unitList:[]).filter(item=>(!searchForm.subject||item.subject===searchForm.subject)&&(!searchForm.grade||item.grade===searchForm.grade))}",
+                              "action": [
+                                {
+                                  "tag": "update-form",
+                                  "formName": "knowledgePointSearchForm",
+                                  "value": {
+                                    "page": 1,
+                                    "unit_id": "${value || ''}",
+                                    "section_id": ""
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "searchForm": "${Object.assign({}, searchForm, {page: 1, unit_id: value || '', section_id: ''})}",
+                                    "selectedPointID": ""
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "enable": "${editorMode === 'create'}",
+                                  "value": {
+                                    "pointForm": "${(()=>{const unit=(Array.isArray(unitList)?unitList:[]).find(item=>item.unit_id===value)||{};return Object.assign({}, pointForm || {}, {unit_id:value||'',section_id:'',stage:unit.stage||pointForm.stage||searchForm.stage||'junior'});})()}"
+                                  }
+                                },
+                                {
+                                  "tag": "update-form",
+                                  "enable": "${editorMode === 'create'}",
+                                  "formName": "knowledgePointForm",
+                                  "value": "${pointForm}"
+                                },
+                                {
+                                  "tag": "localstore",
+                                  "method": "write",
+                                  "key": "ai-study:question-knowledge-point:search-form",
+                                  "storeField": "searchForm"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "point-list"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "display": "flex",
+                        "flexDirection": "column",
+                        "gap": 8
+                      },
+                      "children": [
+                        {
+                          "tag": "div",
+                          "style": {
+                            "padding": "0 10px",
+                            "fontSize": 14,
+                            "fontWeight": 700,
+                            "color": "#414754"
+                          },
+                          "children": "小节"
+                        },
+                        {
+                          "tag": "form-item",
+                          "name": "section_id",
+                          "children": [
+                            {
+                              "tag": "select",
+                              "allowClear": true,
+                              "showSearch": true,
+                              "placeholder": "全部小节",
+                              "fieldNames": {
+                                "label": "section_name",
+                                "value": "section_id"
+                              },
+                              "options": "${(Array.isArray(sectionList)?sectionList:[]).filter(item=>(!searchForm.subject||item.subject===searchForm.subject)&&(!searchForm.grade||item.grade===searchForm.grade)&&(!searchForm.unit_id||item.unit_id===searchForm.unit_id))}",
+                              "action": [
+                                {
+                                  "tag": "update-form",
+                                  "formName": "knowledgePointSearchForm",
+                                  "value": {
+                                    "page": 1,
+                                    "section_id": "${value || ''}"
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "searchForm": "${Object.assign({}, searchForm, {page: 1, section_id: value || ''})}",
+                                    "selectedPointID": ""
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "enable": "${editorMode === 'create'}",
+                                  "value": {
+                                    "pointForm": "${Object.assign({}, pointForm || {}, {section_id:value||''})}"
+                                  }
+                                },
+                                {
+                                  "tag": "update-form",
+                                  "enable": "${editorMode === 'create'}",
+                                  "formName": "knowledgePointForm",
+                                  "value": "${pointForm}"
+                                },
+                                {
+                                  "tag": "localstore",
+                                  "method": "write",
+                                  "key": "ai-study:question-knowledge-point:search-form",
+                                  "storeField": "searchForm"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "point-list"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "div",
+                      "className": "kp-sider-bottom",
+                      "style": {
+                        "marginTop": "auto",
+                        "borderTop": "1px solid #c1c6d6",
+                        "padding": "10px 6px 0"
+                      },
+                      "children": [
+                        {
+                          "tag": "button",
+                          "type": "primary",
+                          "icon": "PlusOutlined",
+                          "style": {
+                            "height": 46,
+                            "width": "100%",
+                            "background": "#005bbf",
+                            "borderColor": "#005bbf",
+                            "fontWeight": 700
+                          },
+                          "children": "新增知识点",
+                          "action": [
+                            {
+                              "tag": "reset-form",
+                              "formName": "knowledgePointForm"
+                            },
+                            {
+                              "tag": "update-store",
+                              "value": {
+                                "editorMode": "create",
+                                "editingPointID": "",
+                                "selectedPointID": "",
+                                "pointForm": "${(()=>{const search=searchForm||{};const subjects=Array.isArray(subjectList)?subjectList:[];const grades=Array.isArray(gradeList)?gradeList:[];const units=Array.isArray(unitList)?unitList:[];const sections=Array.isArray(sectionList)?sectionList:[];const subject=search.subject||((subjects[0]||{}).subject_code)||'english';const grade=search.grade||((grades.find(item=>item.grade_code==='grade_7')||grades[0]||{}).grade_code)||'grade_7';const gradeRow=grades.find(item=>item.grade_code===grade)||{};const matchedUnits=units.filter(item=>(!subject||item.subject===subject)&&item.grade===grade);const unit=matchedUnits.find(item=>item.unit_id===search.unit_id)||matchedUnits[0]||{};const section=sections.find(item=>item.section_id===search.section_id&&(!unit.unit_id||item.unit_id===unit.unit_id))||{};return {subject,stage:unit.stage||gradeRow.stage||search.stage||'junior',grade,unit_id:unit.unit_id||'',section_id:section.section_id||'',point_code:'',point_name:'',content_detail:'',order_index:1,status:'enabled'};})()}"
+                              }
+                            },
+                            {
+                              "tag": "update-form",
+                              "formName": "knowledgePointForm",
+                              "value": "${pointForm}"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "layout",
+              "style": {
+                "minWidth": 0,
+                "height": "100%",
+                "background": "#f8f9fa",
+                "overflow": "hidden"
+              },
+              "children": [
+                {
+                  "tag": "content",
+                  "style": {
+                    "minHeight": 0,
+                    "display": "flex",
+                    "flexDirection": "column",
+                    "background": "#f8f9fa",
+                    "overflow": "hidden"
+                  },
+                  "children": [
+                    {
+                      "tag": "layout-fit",
+                      "style": {
+                        "height": "100%",
+                        "minHeight": 0,
+                        "background": "#f8f9fa",
+                        "overflow": "hidden"
+                      },
+                      "searchToolBar": [
+                        {
+                          "tag": "div",
+                          "className": "kp-main-toolbar",
+                          "style": {
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "space-between",
+                            "flexWrap": "wrap",
+                            "gap": 10,
+                            "padding": "8px 16px",
+                            "background": "#fff",
+                            "borderBottom": "1px solid #c1c6d6",
+                            "boxShadow": "0 1px 2px rgba(25, 28, 29, 0.06)"
+                          },
+                          "children": [
+                            {
+                              "tag": "div",
+                              "style": {
+                                "display": "flex",
+                                "alignItems": "center",
+                                "gap": 8,
+                                "flexWrap": "wrap",
+                                "minWidth": 0,
+                                "flex": "1 1 auto"
+                              },
+                              "children": [
+                                {
+                                  "tag": "form-item",
+                                  "className": "kp-toolbar-keyword",
+                                  "name": "keyword",
+                                  "style": {
+                                    "width": 200,
+                                    "maxWidth": "min(200px, 42vw)"
+                                  },
+                                  "children": [
+                                    {
+                                      "tag": "input",
+                                      "allowClear": true,
+                                      "placeholder": "搜索名称/编码/内容"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "tag": "form-item",
+                                  "name": "status",
+                                  "style": {
+                                    "width": 120
+                                  },
+                                  "children": [
+                                    {
+                                      "tag": "select",
+                                      "allowClear": true,
+                                      "options": [
+                                        {
+                                          "label": "全部状态",
+                                          "value": ""
+                                        },
+                                        {
+                                          "label": "启用",
+                                          "value": "enabled"
+                                        },
+                                        {
+                                          "label": "停用",
+                                          "value": "disabled"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "tag": "button",
+                                  "type": "primary",
+                                  "icon": "SearchOutlined",
+                                  "children": "查询",
+                                  "action": [
+                                    {
+                                      "tag": "update-form",
+                                      "formName": "knowledgePointSearchForm",
+                                      "value": {
+                                        "page": 1
+                                      }
+                                    },
+                                    {
+                                      "tag": "submit-form",
+                                      "formName": "knowledgePointSearchForm",
+                                      "saveField": "searchForm"
+                                    },
+                                    {
+                                      "tag": "localstore",
+                                      "method": "write",
+                                      "key": "ai-study:question-knowledge-point:search-form",
+                                      "storeField": "searchForm"
+                                    },
+                                    {
+                                      "tag": "update-store",
+                                      "value": {
+                                        "selectedPointID": ""
+                                      }
+                                    },
+                                    {
+                                      "tag": "reload-init-action",
+                                      "group": "point-list"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "tag": "button",
+                                  "icon": "CloseCircleOutlined",
+                                  "children": "重置",
+                                  "action": [
+                                    {
+                                      "tag": "reset-form",
+                                      "formName": "knowledgePointSearchForm"
+                                    },
+                                    {
+                                      "tag": "update-store",
+                                      "value": {
+                                        "searchForm": {
+                                          "page": 1,
+                                          "size": 20,
+                                          "keyword": "",
+                                          "subject": "english",
+                                          "stage": "junior",
+                                          "grade": "grade_7",
+                                          "unit_id": "",
+                                          "section_id": "",
+                                          "status": ""
+                                        },
+                                        "selectedPointID": ""
+                                      }
+                                    },
+                                    {
+                                      "tag": "update-form",
+                                      "formName": "knowledgePointSearchForm",
+                                      "value": "${searchForm}"
+                                    },
+                                    {
+                                      "tag": "localstore",
+                                      "method": "write",
+                                      "key": "ai-study:question-knowledge-point:search-form",
+                                      "storeField": "searchForm"
+                                    },
+                                    {
+                                      "tag": "reload-init-action",
+                                      "group": "point-list"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "tag": "div",
+                              "style": {
+                                "display": "flex",
+                                "alignItems": "center",
+                                "gap": 8,
+                                "fontSize": 13,
+                                "color": "#414754",
+                                "flex": "0 0 auto"
+                              },
+                              "children": [
+                                {
+                                  "tag": "span",
+                                  "className": "kp-chip",
+                                  "style": {
+                                    "background": "#eef5ff",
+                                    "color": "#005bbf"
+                                  },
+                                  "children": "${'共 ' + (count || 0) + ' 个知识点'}"
+                                },
+                                {
+                                  "tag": "button",
+                                  "icon": "ReloadOutlined",
+                                  "shape": "circle",
+                                  "title": "刷新",
+                                  "aria-label": "刷新",
+                                  "style": {
+                                    "width": 32,
+                                    "height": 32,
+                                    "padding": 0
+                                  },
+                                  "action": [
+                                    {
+                                      "tag": "reload-init-action",
+                                      "group": "point-list"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "children": [
+                        {
+                          "tag": "panel-group",
+                          "className": "kp-panel-scroll-root",
+                          "direction": "horizontal",
+                          "style": {
+                            "height": "100%",
+                            "minHeight": 0,
+                            "padding": "10px 14px 10px",
+                            "background": "#f8f9fa",
+                            "maxHeight": "100%",
+                            "boxSizing": "border-box",
+                            "overflow": "hidden"
+                          },
+                          "children": [
+                            {
+                              "tag": "panel",
+                              "id": "knowledge-point-list-panel",
+                              "defaultSize": 52,
+                              "minSize": 30,
+                              "style": {
+                                "height": "100%",
+                                "minHeight": 0,
+                                "overflow": "hidden"
+                              },
+                              "children": [
+                                {
+                                  "tag": "div",
+                                  "className": "kp-list-scroll",
+                                  "style": {
+                                    "height": "100%",
+                                    "minHeight": 0,
+                                    "overflow": "auto",
+                                    "paddingRight": 8,
+                                    "overflowX": "hidden"
+                                  },
+                                  "children": [
+                                    {
+                                      "tag": "listview",
+                                      "itemData": "${dataList}",
+                                      "keyField": "point_id",
+                                      "rowClickAction": [
+                                        {
+                                          "tag": "update-store",
+                                          "value": {
+                                            "editorMode": "edit",
+                                            "editingPointID": "${row.point_id}",
+                                            "selectedPointID": "${row.point_id}",
+                                            "pointForm": "${Object.assign({}, row)}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "reset-form",
+                                          "formName": "knowledgePointForm"
+                                        },
+                                        {
+                                          "tag": "update-form",
+                                          "formName": "knowledgePointForm",
+                                          "value": "${Object.assign({}, row)}"
+                                        }
+                                      ],
+                                      "itemAttr": {
+                                        "tag": "div",
+                                        "className": "kp-card",
+                                        "style": {
+                                          "background": "${selectedPointID === row.point_id ? '#eef5ff' : '#fff'}",
+                                          "border": "${selectedPointID === row.point_id ? '1px solid #005bbf' : '1px solid #d8dee8'}",
+                                          "borderRadius": 6,
+                                          "padding": 12,
+                                          "marginBottom": 8,
+                                          "boxShadow": "${selectedPointID === row.point_id ? '0 4px 12px rgba(0, 91, 191, 0.10)' : '0 1px 2px rgba(25, 28, 29, 0.04)'}",
+                                          "cursor": "pointer"
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "style": {
+                                              "display": "flex",
+                                              "justifyContent": "space-between",
+                                              "alignItems": "flex-start",
+                                              "gap": 12
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "div",
+                                                "style": {
+                                                  "minWidth": 0,
+                                                  "display": "flex",
+                                                  "flexDirection": "column",
+                                                  "gap": 7,
+                                                  "flex": 1
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "div",
+                                                    "style": {
+                                                      "display": "flex",
+                                                      "alignItems": "center",
+                                                      "gap": 8,
+                                                      "flexWrap": "wrap"
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "span",
+                                                        "className": "kp-chip",
+                                                        "style": {
+                                                          "background": "#e8f0fe",
+                                                          "color": "#005bbf"
+                                                        },
+                                                        "children": "${row.subject_name || row.subject || '科目'}"
+                                                      },
+                                                      {
+                                                        "tag": "span",
+                                                        "className": "kp-chip",
+                                                        "style": {
+                                                          "background": "#fff7e6",
+                                                          "color": "#5f4200"
+                                                        },
+                                                        "children": "${row.grade_label || row.grade_name || row.grade || '未分年级'}"
+                                                      },
+                                                      {
+                                                        "tag": "span",
+                                                        "className": "kp-chip",
+                                                        "style": {
+                                                          "background": "${row.status === 'disabled' ? '#fce8e6' : '#e6f4ea'}",
+                                                          "color": "${row.status === 'disabled' ? '#8a1c11' : '#006d2c'}"
+                                                        },
+                                                        "children": "${row.status === 'disabled' ? '停用' : '启用'}"
+                                                      },
+                                                      {
+                                                        "tag": "span",
+                                                        "className": "kp-chip",
+                                                        "style": {
+                                                          "background": "#f1f3f4",
+                                                          "color": "#414754"
+                                                        },
+                                                        "children": "${'排序 ' + (row.order_index || 0)}"
+                                                      }
+                                                    ]
+                                                  },
+                                                  {
+                                                    "tag": "div",
+                                                    "style": {
+                                                      "fontSize": 15,
+                                                      "lineHeight": "22px",
+                                                      "fontWeight": 700,
+                                                      "color": "#191c1d",
+                                                      "wordBreak": "break-word"
+                                                    },
+                                                    "children": "${row.point_name || '未命名知识点'}"
+                                                  },
+                                                  {
+                                                    "tag": "div",
+                                                    "style": {
+                                                      "fontSize": 13,
+                                                      "lineHeight": "20px",
+                                                      "color": "#414754",
+                                                      "wordBreak": "break-word",
+                                                      "display": "-webkit-box",
+                                                      "WebkitLineClamp": 3,
+                                                      "WebkitBoxOrient": "vertical",
+                                                      "overflow": "hidden"
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "rich-text-render",
+                                                        "text": true,
+                                                        "value": "${row.content_detail || ''}",
+                                                        "emptyText": "暂无详细内容"
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "tag": "tooltip",
+                                                "title": "删除知识点",
+                                                "children": [
+                                                  {
+                                                    "tag": "button",
+                                                    "type": "text",
+                                                    "icon": "DeleteOutlined",
+                                                    "danger": true,
+                                                    "stopPropagation": true,
+                                                    "style": {
+                                                      "width": 32,
+                                                      "height": 32,
+                                                      "padding": 0,
+                                                      "borderRadius": 6,
+                                                      "background": "transparent",
+                                                      "flex": "0 0 auto"
+                                                    },
+                                                    "confirm": {
+                                                      "title": "确认删除知识点？",
+                                                      "description": "${'确认删除【' + (row.point_name || row.point_code || '未命名知识点') + '】吗？'}",
+                                                      "placement": "left",
+                                                      "okText": "删除",
+                                                      "cancelText": "取消",
+                                                      "okButtonProps": {
+                                                        "danger": true
+                                                      }
+                                                    },
+                                                    "action": [
+                                                      {
+                                                        "tag": "ajax",
+                                                        "api": "post:/template_data/data?service=question.knowledge_point_delete",
+                                                        "data": {
+                                                          "point_id_list": "${[row.point_id]}"
+                                                        }
+                                                      },
+                                                      {
+                                                        "tag": "update-store",
+                                                        "value": {
+                                                          "selectedPointID": "${selectedPointID === row.point_id ? '' : selectedPointID}",
+                                                          "editingPointID": "${editingPointID === row.point_id ? '' : editingPointID}",
+                                                          "editorMode": "${editingPointID === row.point_id ? 'create' : editorMode}",
+                                                          "pointForm": "${editingPointID === row.point_id ? {subject:(searchForm.subject || 'english'),stage:(searchForm.stage || 'junior'),grade:(searchForm.grade || 'grade_7'),unit_id:(searchForm.unit_id || ''),section_id:(searchForm.section_id || ''),point_code:'',point_name:'',content_detail:'',order_index:1,status:'enabled'} : pointForm}"
+                                                        }
+                                                      },
+                                                      {
+                                                        "tag": "update-form",
+                                                        "formName": "knowledgePointForm",
+                                                        "value": "${pointForm}"
+                                                      },
+                                                      {
+                                                        "tag": "reload-init-action",
+                                                        "group": "point-list"
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "tag": "div",
+                                            "style": {
+                                              "display": "flex",
+                                              "alignItems": "center",
+                                              "gap": 8,
+                                              "flexWrap": "wrap",
+                                              "marginTop": 8,
+                                              "paddingTop": 8,
+                                              "borderTop": "1px solid #eef1f5",
+                                              "color": "#5f6368",
+                                              "fontSize": 12,
+                                              "lineHeight": "20px"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "span",
+                                                "children": "${row.point_code || '未填编码'}"
+                                              },
+                                              {
+                                                "tag": "span",
+                                                "children": "·"
+                                              },
+                                              {
+                                                "tag": "span",
+                                                "style": {
+                                                  "maxWidth": 240,
+                                                  "overflow": "hidden",
+                                                  "textOverflow": "ellipsis",
+                                                  "whiteSpace": "nowrap"
+                                                },
+                                                "children": "${row.unit_name || row.unit_code || '未分单元'}"
+                                              },
+                                              {
+                                                "tag": "span",
+                                                "children": "·"
+                                              },
+                                              {
+                                                "tag": "span",
+                                                "children": "${row.section_name || row.section_code || '全部小节'}"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "tag": "panel-resize",
+                              "style": {
+                                "width": 8,
+                                "minWidth": 8,
+                                "cursor": "col-resize",
+                                "background": "linear-gradient(90deg, transparent 0, transparent 3px, #c1c6d6 3px, #c1c6d6 5px, transparent 5px)",
+                                "margin": "0 10px"
+                              }
+                            },
+                            {
+                              "tag": "panel",
+                              "id": "knowledge-point-editor-panel",
+                              "defaultSize": 48,
+                              "minSize": 34,
+                              "style": {
+                                "height": "100%",
+                                "minHeight": 0,
+                                "overflow": "hidden"
+                              },
+                              "children": [
+                                {
+                                  "tag": "layout-fit",
+                                  "className": "kp-editor-inline",
+                                  "title": "${editorMode === 'edit' ? '编辑知识点' : '新增知识点'}",
+                                  "titleSize": 4,
+                                  "style": {
+                                    "height": "100%",
+                                    "minHeight": 0,
+                                    "background": "#f8f9fa",
+                                    "overflow": "hidden"
+                                  },
+                                  "topRight": [
+                                    {
+                                      "tag": "button",
+                                      "icon": "PlusCircleOutlined",
+                                      "shape": "circle",
+                                      "title": "新增知识点",
+                                      "aria-label": "新增知识点",
+                                      "style": {
+                                        "width": 32,
+                                        "height": 32,
+                                        "padding": 0
+                                      },
+                                      "action": [
+                                        {
+                                          "tag": "reset-form",
+                                          "formName": "knowledgePointForm"
+                                        },
+                                        {
+                                          "tag": "update-store",
+                                          "value": {
+                                            "editorMode": "create",
+                                            "editingPointID": "",
+                                            "selectedPointID": "",
+                                            "pointForm": "${(()=>{const search=searchForm||{};const subjects=Array.isArray(subjectList)?subjectList:[];const grades=Array.isArray(gradeList)?gradeList:[];const units=Array.isArray(unitList)?unitList:[];const sections=Array.isArray(sectionList)?sectionList:[];const subject=search.subject||((subjects[0]||{}).subject_code)||'english';const grade=search.grade||((grades.find(item=>item.grade_code==='grade_7')||grades[0]||{}).grade_code)||'grade_7';const gradeRow=grades.find(item=>item.grade_code===grade)||{};const matchedUnits=units.filter(item=>(!subject||item.subject===subject)&&item.grade===grade);const unit=matchedUnits.find(item=>item.unit_id===search.unit_id)||matchedUnits[0]||{};const section=sections.find(item=>item.section_id===search.section_id&&(!unit.unit_id||item.unit_id===unit.unit_id))||{};return {subject,stage:unit.stage||gradeRow.stage||search.stage||'junior',grade,unit_id:unit.unit_id||'',section_id:section.section_id||'',point_code:'',point_name:'',content_detail:'',order_index:1,status:'enabled'};})()}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "update-form",
+                                          "formName": "knowledgePointForm",
+                                          "value": "${pointForm}"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "button",
+                                      "type": "primary",
+                                      "icon": "SaveOutlined",
+                                      "children": "保存",
+                                      "action": [
+                                        {
+                                          "tag": "submit-form",
+                                          "formName": "knowledgePointForm",
+                                          "saveField": "pointForm"
+                                        },
+                                        {
+                                          "tag": "ajax",
+                                          "enable": "${editorMode === 'create'}",
+                                          "api": "post:/template_data/data?service=question.knowledge_point_save",
+                                          "appendFields": "${pointForm}",
+                                          "showResultMsg": false
+                                        },
+                                        {
+                                          "tag": "ajax",
+                                          "enable": "${editorMode === 'edit'}",
+                                          "api": "post:/template_data/data?service=question.knowledge_point_update",
+                                          "appendFields": "${pointForm}",
+                                          "data": {
+                                            "point_id": "${editingPointID || pointForm.point_id}"
+                                          },
+                                          "showResultMsg": false
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "point-list"
+                                        },
+                                        {
+                                          "tag": "message",
+                                          "type": "success",
+                                          "content": "知识点已保存"
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "children": [
+                                    {
+                                      "tag": "div",
+                                      "className": "kp-editor-scroll",
+                                      "style": {
+                                        "height": "100%",
+                                        "minHeight": 0,
+                                        "overflow": "auto",
+                                        "padding": "0 2px 0 0",
+                                        "overflowX": "hidden"
+                                      },
+                                      "children": [
+                                        {
+                                          "tag": "form",
+                                          "name": "knowledgePointForm",
+                                          "initialValues": "${pointForm}",
+                                          "layout": "vertical",
+                                          "children": [
+                                            {
+                                              "tag": "form-item",
+                                              "name": "stage",
+                                              "hidden": true,
+                                              "children": [
+                                                {
+                                                  "tag": "input"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "tag": "form-item",
+                                              "name": "subject",
+                                              "label": "科目",
+                                              "rules": [
+                                                {
+                                                  "required": true,
+                                                  "message": "请选择科目"
+                                                }
+                                              ],
+                                              "children": [
+                                                {
+                                                  "tag": "select",
+                                                  "placeholder": "选择科目",
+                                                  "fieldNames": {
+                                                    "label": "subject_name",
+                                                    "value": "subject_code"
+                                                  },
+                                                  "options": "${subjectList}",
+                                                  "action": [
+                                                    {
+                                                      "tag": "update-store",
+                                                      "value": {
+                                                        "pointForm": "${Object.assign({}, pointForm || {}, {subject:value||'',unit_id:'',section_id:''})}"
+                                                      }
+                                                    },
+                                                    {
+                                                      "tag": "update-form",
+                                                      "formName": "knowledgePointForm",
+                                                      "value": "${pointForm}"
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "tag": "form-item",
+                                              "name": "grade",
+                                              "label": "年级",
+                                              "rules": [
+                                                {
+                                                  "required": true,
+                                                  "message": "请选择年级"
+                                                }
+                                              ],
+                                              "children": [
+                                                {
+                                                  "tag": "select",
+                                                  "placeholder": "选择年级",
+                                                  "fieldNames": {
+                                                    "label": "grade_label",
+                                                    "value": "grade_code"
+                                                  },
+                                                  "options": "${gradeList}",
+                                                  "action": [
+                                                    {
+                                                      "tag": "update-store",
+                                                      "value": {
+                                                        "pointForm": "${(()=>{const prev=pointForm||{};const row=(Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===value)||{};return Object.assign({},prev,{grade:value||'',stage:row.stage||prev.stage||'',unit_id:'',section_id:''});})()}"
+                                                      }
+                                                    },
+                                                    {
+                                                      "tag": "update-form",
+                                                      "formName": "knowledgePointForm",
+                                                      "value": "${pointForm}"
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "tag": "form-item",
+                                              "name": "unit_id",
+                                              "label": "单元",
+                                              "rules": [
+                                                {
+                                                  "required": true,
+                                                  "message": "请选择单元"
+                                                }
+                                              ],
+                                              "children": [
+                                                {
+                                                  "tag": "select",
+                                                  "allowClear": true,
+                                                  "showSearch": true,
+                                                  "placeholder": "选择单元",
+                                                  "disabled": "${!((pointForm||{}).grade && (pointForm||{}).subject)}",
+                                                  "fieldNames": {
+                                                    "label": "unit_name",
+                                                    "value": "unit_id"
+                                                  },
+                                                  "options": "${(()=>{const form=pointForm||{};return (Array.isArray(unitList)?unitList:[]).filter(item=>(!form.subject||item.subject===form.subject)&&(!form.grade||item.grade===form.grade));})()}",
+                                                  "action": [
+                                                    {
+                                                      "tag": "update-store",
+                                                      "value": {
+                                                        "pointForm": "${(()=>{const unit=(Array.isArray(unitList)?unitList:[]).find(item=>item.unit_id===value)||{};return Object.assign({}, pointForm || {}, {unit_id:value||'',section_id:'',stage:unit.stage||pointForm.stage||'junior'});})()}"
+                                                      }
+                                                    },
+                                                    {
+                                                      "tag": "update-form",
+                                                      "formName": "knowledgePointForm",
+                                                      "value": "${pointForm}"
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "tag": "form-item",
+                                              "name": "section_id",
+                                              "label": "小节",
+                                              "children": [
+                                                {
+                                                  "tag": "select",
+                                                  "allowClear": true,
+                                                  "showSearch": true,
+                                                  "placeholder": "可不选择小节",
+                                                  "fieldNames": {
+                                                    "label": "section_name",
+                                                    "value": "section_id"
+                                                  },
+                                                  "options": "${(()=>{const form=pointForm||{};return (Array.isArray(sectionList)?sectionList:[]).filter(item=>(!form.subject||item.subject===form.subject)&&(!form.grade||item.grade===form.grade)&&(!form.unit_id||item.unit_id===form.unit_id));})()}",
+                                                  "action": [
+                                                    {
+                                                      "tag": "update-store",
+                                                      "value": {
+                                                        "pointForm": "${Object.assign({}, pointForm || {}, {section_id:value||''})}"
+                                                      }
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "tag": "form-item",
+                                              "name": "point_name",
+                                              "label": "名称",
+                                              "rules": [
+                                                {
+                                                  "required": true,
+                                                  "message": "请输入知识点名称"
+                                                }
+                                              ],
+                                              "children": [
+                                                {
+                                                  "tag": "input",
+                                                  "placeholder": "例如：一般现在时"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "tag": "form-item",
+                                              "name": "point_code",
+                                              "label": "编码",
+                                              "rules": [
+                                                {
+                                                  "required": true,
+                                                  "message": "请输入知识点编码"
+                                                }
+                                              ],
+                                              "children": [
+                                                {
+                                                  "tag": "input",
+                                                  "placeholder": "例如：present_simple"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "tag": "form-item",
+                                              "name": "content_detail",
+                                              "label": "详细内容",
+                                              "children": [
+                                                {
+                                                  "tag": "rich-text",
+                                                  "className": "kp-content-rich-text",
+                                                  "height": 180,
+                                                  "symbolInsertTools": true,
+                                                  "placeholder": "输入知识点说明、例句、易错点等内容"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "tag": "form-item",
+                                              "name": "order_index",
+                                              "label": "排序",
+                                              "children": [
+                                                {
+                                                  "tag": "input",
+                                                  "isNumber": true
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "tag": "form-item",
+                                              "name": "status",
+                                              "label": "状态",
+                                              "children": [
+                                                {
+                                                  "tag": "select",
+                                                  "options": [
+                                                    {
+                                                      "label": "启用",
+                                                      "value": "enabled"
+                                                    },
+                                                    {
+                                                      "label": "停用",
+                                                      "value": "disabled"
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "bottomToolBar": [
+                        {
+                          "tag": "pagination",
+                          "showSizeChanger": true,
+                          "align": "center",
+                          "pageSize": "${searchForm.size}",
+                          "current": "${searchForm.page}",
+                          "total": "${count}",
+                          "showTotal": true,
+                          "showQuickJumper": true,
+                          "action": [
+                            {
+                              "tag": "update-store",
+                              "value": {
+                                "selectedPointID": ""
+                              }
+                            },
+                            {
+                              "tag": "reload-init-action",
+                              "group": "point-list"
+                            }
+                          ],
+                          "style": {
+                            "padding": "6px 16px",
+                            "background": "#fff",
+                            "borderTop": "1px solid #c1c6d6",
+                            "boxShadow": "0 -1px 2px rgba(25, 28, 29, 0.05)"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

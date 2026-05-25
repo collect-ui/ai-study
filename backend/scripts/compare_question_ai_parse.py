@@ -60,9 +60,15 @@ def row_summary(row):
         "question_category": row.get("question_category", ""),
         "stem_text": row.get("stem_text", ""),
         "answer_key": row.get("answer_key", ""),
+        "analysis_text": row.get("analysis_text", ""),
         "choice_item_count": len(choice_items),
         "choice_item_answers": [
             item.get("answer_key", "") for item in choice_items if isinstance(item, dict)
+        ],
+        "choice_item_analyses": [
+            first_text(item, "analysis", "analysis_text", "explanation")
+            for item in choice_items
+            if isinstance(item, dict)
         ],
     }
 
@@ -73,13 +79,25 @@ def normalize_for_diff(rows):
             "question_type": row.get("question_type", ""),
             "question_category": row.get("question_category", ""),
             "answer_key": normalize_answer_for_diff(row.get("answer_key", "")),
+            "analysis_text": normalize_analysis_for_diff(row.get("analysis_text", "")),
             "choice_item_count": row.get("choice_item_count", 0),
             "choice_item_answers": [
                 normalize_answer_for_diff(item) for item in row.get("choice_item_answers", [])
             ],
+            "choice_item_analyses": [
+                normalize_analysis_for_diff(item) for item in row.get("choice_item_analyses", [])
+            ],
         }
         for row in rows
     ]
+
+
+def first_text(mapping, *keys):
+    for key in keys:
+        value = mapping.get(key)
+        if value is not None and str(value).strip():
+            return str(value)
+    return ""
 
 
 def normalize_answer_for_diff(value):
@@ -91,6 +109,20 @@ def normalize_answer_for_diff(value):
     if ";" in text or "," in text:
         parts = [part.strip() for part in re.split(r"[;,]", text) if part.strip()]
         return ";".join(parts)
+    return text
+
+
+def normalize_analysis_for_diff(value):
+    text = str(value or "").strip()
+    text = text.replace("’", "'").replace("‘", "'")
+    text = text.replace("“", '"').replace("”", '"')
+    text = text.replace("（", "(").replace("）", ")")
+    text = re.sub(r"^[\\[【]?(解析|分析)[\\]】]?[:：]?", "", text)
+    text = text.lower()
+    text = re.sub(r"[^0-9a-z\u4e00-\u9fff]+", "", text)
+    text = text.replace("solas", "soas")
+    text = text.replace("便宜得多", "")
+    text = re.sub(r"d应该改成[a-z]+", "", text)
     return text
 
 

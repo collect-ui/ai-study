@@ -3,16 +3,24 @@ package plugins
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"html"
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
+	"mime"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -26,21 +34,30 @@ import (
 	templateService "github.com/collect-ui/collect/src/collect/service_imp"
 	"github.com/demdxx/gocast"
 	"github.com/ledongthuc/pdf"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 const (
-	defaultQuestionAIDeepSeekBaseURL = "https://api.deepseek.com"
-	defaultQuestionAIDeepSeekModel   = "deepseek-chat"
-	defaultQuestionAICodexModel      = "gpt-5.4-mini"
-	defaultQuestionAIChatGPTModel    = "gpt-5.5"
-	defaultQuestionAIMaxChars        = 24000
-	defaultQuestionAISourceMaxChars  = 120000
-	defaultQuestionAIChunkChars      = 6000
-	defaultQuestionAIMaxChunks       = 40
-	defaultQuestionAIDeepSeekWorkers = 10
-	defaultQuestionAICodexWorkers    = 2
-	defaultQuestionAISystemPrompt    = "collect/question/prompts/ai_parse_system.md"
-	defaultQuestionAIUserPrompt      = "collect/question/prompts/ai_parse_user.md"
+	defaultQuestionAIDeepSeekBaseURL        = "https://api.deepseek.com"
+	defaultQuestionAIDeepSeekModel          = "deepseek-chat"
+	defaultQuestionAICodexModel             = "gpt-5.4-mini"
+	defaultQuestionAIChatGPTModel           = "gpt-5.5"
+	defaultQuestionAIMaxChars               = 24000
+	defaultQuestionAISourceMaxChars         = 120000
+	defaultQuestionAIChunkChars             = 6000
+	defaultQuestionAIMaxChunks              = 40
+	defaultQuestionAIDeepSeekWorkers        = 10
+	defaultQuestionAICodexWorkers           = 2
+	defaultQuestionAISystemPrompt           = "collect/question/prompts/ai_parse_system.md"
+	defaultQuestionAIUserPrompt             = "collect/question/prompts/ai_parse_user.md"
+	defaultQuestionPDFKnowledgeSystemPrompt = "collect/question/prompts/pdf_knowledge_system.md"
+	defaultQuestionPDFKnowledgeUserPrompt   = "collect/question/prompts/pdf_knowledge_user.md"
+	defaultQuestionPDFOCRServiceURL         = "http://collect-ui.top:8014/transcribe"
+	defaultQuestionPDFOCRProvider           = "tencent"
+	defaultQuestionPDFOCRMaxPages           = 200
+	defaultQuestionPDFOCRImageDPI           = 180
+	defaultQuestionPDFOCRTimeoutSec         = 120
 )
 
 var questionAIPaperHeadingRE = regexp.MustCompile(`^（[一二三四五六七八九十百]+）$`)
@@ -63,6 +80,10 @@ type QuestionPDFTextService struct {
 }
 
 type QuestionAIParseService struct {
+	templateService.BaseHandler
+}
+
+type QuestionPDFKnowledgeImportService struct {
 	templateService.BaseHandler
 }
 
@@ -342,6 +363,57 @@ type questionAIChunkCacheEntry struct {
 	CreatedAt string `json:"created_at"`
 }
 
+type questionPDFExtractOptions struct {
+	MaxChars         int
+	OCREnabled       bool
+	OCRServiceURL    string
+	OCRProvider      string
+	OCRMaxPages      int
+	OCRImageDPI      int
+	OCRTimeoutSecond int
+}
+
+type questionPDFRenderedPage struct {
+	Page   int    `json:"page"`
+	Path   string `json:"path"`
+	Width  int    `json:"width"`
+	Height int    `json:"height"`
+}
+
+type questionPDFRenderResult struct {
+	PageCount     int                       `json:"page_count"`
+	RenderedCount int                       `json:"rendered_count"`
+	Pages         []questionPDFRenderedPage `json:"pages"`
+}
+
+type questionPDFPageImage struct {
+	URL    string
+	Width  int
+	Height int
+}
+
+type questionPDFSourceAppendResult struct {
+	BlockID       string
+	FragmentID    string
+	SourcePageID  string
+	PageImageURL  string
+	ContextBefore string
+	ContextAfter  string
+	CharStart     int
+	CharEnd       int
+	Matched       bool
+}
+
+type questionPDFOCRResponse struct {
+	Status  string `json:"status"`
+	Success bool   `json:"success"`
+	Task    string `json:"task"`
+	Text    string `json:"text"`
+	Engine  string `json:"engine"`
+	Error   string `json:"error"`
+	Msg     string `json:"msg"`
+}
+
 func appKeyAny(keys ...string) string {
 	for _, key := range keys {
 		value := strings.TrimSpace(collectFilters.GetKey(key))
@@ -366,6 +438,74 @@ func intParam(params map[string]interface{}, key string) (int, bool) {
 	}
 	value := gocast.ToInt(params[key])
 	return value, value > 0
+}
+
+func boolFromParams(params map[string]interface{}, key string, fallback bool) bool {
+	if _, ok := params[key]; !ok {
+		return fallback
+	}
+	return gocast.ToBool(params[key])
+}
+
+func intAppKey(key string, fallback int) int {
+	value := appKeyAny(key)
+	if value == "" {
+		return fallback
+	}
+	if n, err := strconv.Atoi(value); err == nil && n > 0 {
+		return n
+	}
+	return fallback
+}
+
+func questionPDFExtractOptionsFromParams(params map[string]interface{}, maxChars int) questionPDFExtractOptions {
+	ocrEnabled := true
+	if value := appKeyAny("question_pdf_ocr_enabled"); value != "" {
+		ocrEnabled = gocast.ToBool(value)
+	}
+	serviceURL := appKeyAny("question_pdf_ocr_service_url")
+	if serviceURL == "" {
+		serviceURL = defaultQuestionPDFOCRServiceURL
+	}
+	provider := appKeyAny("question_pdf_ocr_provider")
+	if provider == "" {
+		provider = defaultQuestionPDFOCRProvider
+	}
+	options := questionPDFExtractOptions{
+		MaxChars:         maxChars,
+		OCREnabled:       ocrEnabled,
+		OCRServiceURL:    serviceURL,
+		OCRProvider:      provider,
+		OCRMaxPages:      intAppKey("question_pdf_ocr_max_pages", defaultQuestionPDFOCRMaxPages),
+		OCRImageDPI:      intAppKey("question_pdf_ocr_image_dpi", defaultQuestionPDFOCRImageDPI),
+		OCRTimeoutSecond: intAppKey("question_pdf_ocr_timeout_seconds", defaultQuestionPDFOCRTimeoutSec),
+	}
+	options.OCREnabled = boolFromParams(params, "ocr_enabled", options.OCREnabled)
+	if value := strings.TrimSpace(gocast.ToString(params["ocr_service_url"])); value != "" {
+		options.OCRServiceURL = value
+	}
+	if value := strings.TrimSpace(gocast.ToString(params["ocr_provider"])); value != "" {
+		options.OCRProvider = value
+	}
+	if n, ok := intParam(params, "ocr_max_pages"); ok {
+		options.OCRMaxPages = n
+	}
+	if n, ok := intParam(params, "ocr_image_dpi"); ok {
+		options.OCRImageDPI = n
+	}
+	if n, ok := intParam(params, "ocr_timeout_seconds"); ok {
+		options.OCRTimeoutSecond = n
+	}
+	if options.OCRMaxPages <= 0 {
+		options.OCRMaxPages = defaultQuestionPDFOCRMaxPages
+	}
+	if options.OCRImageDPI <= 0 {
+		options.OCRImageDPI = defaultQuestionPDFOCRImageDPI
+	}
+	if options.OCRTimeoutSecond <= 0 {
+		options.OCRTimeoutSecond = defaultQuestionPDFOCRTimeoutSec
+	}
+	return options
 }
 
 func limitRunes(text string, maxChars int) string {
@@ -544,7 +684,7 @@ func isAllowedQuestionImportPath(path string) bool {
 	return false
 }
 
-func extractTextFromPDFPath(path string, maxChars int) (string, error) {
+func extractTextFromPDFTextLayer(path string, maxChars int) (string, error) {
 	file, reader, err := pdf.Open(path)
 	if err != nil {
 		return "", err
@@ -565,28 +705,347 @@ func extractTextFromPDFPath(path string, maxChars int) (string, error) {
 	return text, nil
 }
 
-func extractTextFromLocalPath(path string, maxChars int) (string, error) {
+func questionPDFRenderScriptPath() (string, error) {
+	candidates := []string{
+		"scripts/pdf_pages_to_images.py",
+		"../scripts/pdf_pages_to_images.py",
+		"backend/scripts/pdf_pages_to_images.py",
+		"/data/project/ai-study/backend/scripts/pdf_pages_to_images.py",
+	}
+	if _, file, _, ok := runtime.Caller(0); ok {
+		candidates = append([]string{
+			filepath.Join(filepath.Dir(file), "..", "scripts", "pdf_pages_to_images.py"),
+		}, candidates...)
+	}
+	for _, candidate := range candidates {
+		if info, err := os.Stat(candidate); err == nil && !info.IsDir() {
+			return candidate, nil
+		}
+	}
+	return "", fmt.Errorf("未找到 PDF 转图片脚本")
+}
+
+func renderQuestionPDFPages(path string, outDir string, options questionPDFExtractOptions) (questionPDFRenderResult, error) {
+	scriptPath, err := questionPDFRenderScriptPath()
+	if err != nil {
+		return questionPDFRenderResult{}, err
+	}
+	timeout := time.Duration(options.OCRTimeoutSecond) * time.Second
+	if timeout < 60*time.Second {
+		timeout = 60 * time.Second
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+	cmd := exec.CommandContext(
+		ctx,
+		"python3",
+		scriptPath,
+		"--pdf", path,
+		"--out-dir", outDir,
+		"--dpi", strconv.Itoa(options.OCRImageDPI),
+		"--max-pages", strconv.Itoa(options.OCRMaxPages),
+		"--format", "jpg",
+	)
+	output, err := cmd.CombinedOutput()
+	if ctx.Err() == context.DeadlineExceeded {
+		return questionPDFRenderResult{}, fmt.Errorf("PDF 转图片超时")
+	}
+	if err != nil {
+		return questionPDFRenderResult{}, fmt.Errorf("PDF 转图片失败: %v: %s", err, strings.TrimSpace(string(output)))
+	}
+	var result questionPDFRenderResult
+	if err := json.Unmarshal(output, &result); err != nil {
+		return questionPDFRenderResult{}, fmt.Errorf("PDF 转图片结果解析失败: %w", err)
+	}
+	if len(result.Pages) == 0 {
+		return questionPDFRenderResult{}, fmt.Errorf("PDF 未渲染出可识别图片")
+	}
+	return result, nil
+}
+
+func questionPDFImageDataURL(path string) (string, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	mimeType := mime.TypeByExtension(strings.ToLower(filepath.Ext(path)))
+	if mimeType == "" {
+		mimeType = "image/jpeg"
+	}
+	return "data:" + mimeType + ";base64," + base64.StdEncoding.EncodeToString(data), nil
+}
+
+func transcribeQuestionPDFImagePage(page questionPDFRenderedPage, options questionPDFExtractOptions) (string, string, error) {
+	dataURL, err := questionPDFImageDataURL(page.Path)
+	if err != nil {
+		return "", "", err
+	}
+	payload := map[string]interface{}{
+		"url":                dataURL,
+		"task":               "image",
+		"raw":                true,
+		"image_ocr_provider": options.OCRProvider,
+		"download_timeout":   60,
+	}
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return "", "", err
+	}
+	req, err := http.NewRequest(http.MethodPost, options.OCRServiceURL, bytes.NewReader(body))
+	if err != nil {
+		return "", "", err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{Timeout: time.Duration(options.OCRTimeoutSecond) * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", "", err
+	}
+	defer resp.Body.Close()
+	respBody, err := io.ReadAll(io.LimitReader(resp.Body, 4*1024*1024))
+	if err != nil {
+		return "", "", err
+	}
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return "", "", fmt.Errorf("OCR 服务 HTTP %d: %s", resp.StatusCode, strings.TrimSpace(string(respBody)))
+	}
+	var parsed questionPDFOCRResponse
+	if err := json.Unmarshal(respBody, &parsed); err != nil {
+		return "", "", fmt.Errorf("OCR 服务响应解析失败: %w", err)
+	}
+	if parsed.Status != "" && parsed.Status != "ok" {
+		msg := parsed.Error
+		if msg == "" {
+			msg = parsed.Msg
+		}
+		return "", parsed.Engine, fmt.Errorf("OCR 服务返回失败: %s", msg)
+	}
+	text := normalizeExtractedText(parsed.Text, 0)
+	if text == "未知" || text == "超时" || text == "下载失败" {
+		text = ""
+	}
+	return text, parsed.Engine, nil
+}
+
+func extractTextFromPDFImages(path string, options questionPDFExtractOptions) (string, error) {
+	if !options.OCREnabled {
+		return "", fmt.Errorf("PDF 图片识别未启用")
+	}
+	if strings.TrimSpace(options.OCRServiceURL) == "" {
+		return "", fmt.Errorf("PDF 图片识别服务地址为空")
+	}
+	tmpDir, err := os.MkdirTemp("", "ai-study-question-pdf-pages-*")
+	if err != nil {
+		return "", err
+	}
+	defer os.RemoveAll(tmpDir)
+	rendered, err := renderQuestionPDFPages(path, tmpDir, options)
+	if err != nil {
+		return "", err
+	}
+	parts := []string{}
+	pageErrors := []string{}
+	engines := map[string]bool{}
+	for _, page := range rendered.Pages {
+		pageText, engine, err := transcribeQuestionPDFImagePage(page, options)
+		if engine != "" {
+			engines[engine] = true
+		}
+		if err != nil {
+			pageErrors = append(pageErrors, fmt.Sprintf("第%d页: %v", page.Page, err))
+			continue
+		}
+		if pageText != "" {
+			parts = append(parts, pageText)
+			if options.MaxChars > 0 && runeCount(strings.Join(parts, "\n\n")) >= options.MaxChars {
+				break
+			}
+		}
+	}
+	text := normalizeExtractedText(strings.Join(parts, "\n\n"), options.MaxChars)
+	if text == "" {
+		detail := ""
+		if len(pageErrors) > 0 {
+			detail = "；" + strings.Join(pageErrors, "；")
+		}
+		if len(engines) > 0 {
+			keys := make([]string, 0, len(engines))
+			for engine := range engines {
+				keys = append(keys, engine)
+			}
+			sort.Strings(keys)
+			detail += "；OCR 引擎: " + strings.Join(keys, ",")
+		}
+		return "", fmt.Errorf("PDF 图片识别未抽取到可用文本%s", detail)
+	}
+	return text, nil
+}
+
+func extractTextFromPDFPath(path string, options questionPDFExtractOptions) (string, error) {
+	text, err := extractTextFromPDFTextLayer(path, options.MaxChars)
+	if err == nil {
+		return text, nil
+	}
+	textLayerErr := err
+	ocrText, ocrErr := extractTextFromPDFImages(path, options)
+	if ocrErr != nil {
+		return "", fmt.Errorf("%v；OCR fallback 失败: %w", textLayerErr, ocrErr)
+	}
+	return ocrText, nil
+}
+
+func extractTextFromLocalPath(path string, options questionPDFExtractOptions) (string, error) {
 	if !isAllowedQuestionImportPath(path) {
 		return "", fmt.Errorf("不允许读取该文件路径")
 	}
 	ext := strings.ToLower(filepath.Ext(path))
 	if ext == ".pdf" {
-		return extractTextFromPDFPath(path, maxChars)
+		return extractTextFromPDFPath(path, options)
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return "", err
 	}
-	text := normalizeExtractedText(string(data), maxChars)
+	text := normalizeExtractedText(string(data), options.MaxChars)
 	if text == "" {
 		return "", fmt.Errorf("文件未读取到可用文本")
 	}
 	return text, nil
 }
 
-func extractTextFromUploadedFile(ts *templateService.TemplateService, maxChars int) (string, string, error) {
+func questionPDFPageCount(path string) int {
+	if strings.TrimSpace(path) == "" || !isAllowedQuestionImportPath(path) {
+		return 0
+	}
+	return questionPDFPageCountUnchecked(path)
+}
+
+func questionPDFPageCountUnchecked(path string) int {
+	if strings.ToLower(filepath.Ext(path)) != ".pdf" {
+		return 0
+	}
+	file, reader, err := pdf.Open(path)
+	if err == nil {
+		defer file.Close()
+		if count := reader.NumPage(); count > 0 {
+			return count
+		}
+	}
+	return questionPDFPageCountFromRenderer(path)
+}
+
+func questionPDFPageCountFromRenderer(path string) int {
+	scriptPath, err := questionPDFRenderScriptPath()
+	if err != nil {
+		return 0
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, "python3", scriptPath, "--pdf", path, "--out-dir", os.TempDir(), "--count-only")
+	output, err := cmd.Output()
+	if ctx.Err() == context.DeadlineExceeded || err != nil {
+		return 0
+	}
+	var result questionPDFRenderResult
+	if err := json.Unmarshal(output, &result); err != nil {
+		return 0
+	}
+	if result.PageCount > 0 {
+		return result.PageCount
+	}
+	return 0
+}
+
+func questionPDFLocalFileRoot() string {
+	root := appKeyAny("local_file_dir")
+	if root == "" {
+		root = "./file_data/files"
+	}
+	if filepath.IsAbs(root) {
+		return filepath.Clean(root)
+	}
+	cwd, err := os.Getwd()
+	if err != nil {
+		return filepath.Clean(root)
+	}
+	return filepath.Clean(filepath.Join(cwd, root))
+}
+
+func questionPDFFileURL(relPath string) string {
+	prefix := appKeyAny("file_prefix")
+	if prefix == "" {
+		prefix = "/files"
+	}
+	prefix = "/" + strings.Trim(prefix, "/")
+	return prefix + "/" + strings.Trim(filepath.ToSlash(relPath), "/")
+}
+
+func questionPDFImageSize(path string) (int, int) {
+	file, err := os.Open(path)
+	if err != nil {
+		return 0, 0
+	}
+	defer file.Close()
+	config, _, err := image.DecodeConfig(file)
+	if err != nil {
+		return 0, 0
+	}
+	return config.Width, config.Height
+}
+
+func ensureQuestionPDFPageImage(path string, sourceDocID string, pageNo int) questionPDFPageImage {
+	if strings.TrimSpace(path) == "" || strings.TrimSpace(sourceDocID) == "" || pageNo <= 0 || !isAllowedQuestionImportPath(path) {
+		return questionPDFPageImage{}
+	}
+	scriptPath, err := questionPDFRenderScriptPath()
+	if err != nil {
+		return questionPDFPageImage{}
+	}
+	relDir := filepath.Join("pdf-source", time.Now().Format("2006-01-02"), sourceDocID)
+	outDir := filepath.Join(questionPDFLocalFileRoot(), relDir)
+	if err := os.MkdirAll(outDir, 0o755); err != nil {
+		return questionPDFPageImage{}
+	}
+	fileName := fmt.Sprintf("page-%04d.jpg", pageNo)
+	relPath := filepath.Join(relDir, fileName)
+	outPath := filepath.Join(outDir, fileName)
+	url := questionPDFFileURL(relPath)
+	if info, err := os.Stat(outPath); err == nil && !info.IsDir() && info.Size() > 0 {
+		width, height := questionPDFImageSize(outPath)
+		return questionPDFPageImage{URL: url, Width: width, Height: height}
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(
+		ctx,
+		"python3",
+		scriptPath,
+		"--pdf", path,
+		"--out-dir", outDir,
+		"--dpi", "144",
+		"--max-pages", "1",
+		"--page", strconv.Itoa(pageNo),
+		"--format", "jpg",
+	)
+	output, err := cmd.Output()
+	if ctx.Err() == context.DeadlineExceeded || err != nil {
+		return questionPDFPageImage{}
+	}
+	var result questionPDFRenderResult
+	if err := json.Unmarshal(output, &result); err != nil || len(result.Pages) == 0 {
+		return questionPDFPageImage{}
+	}
+	page := result.Pages[0]
+	if strings.TrimSpace(page.Path) != "" && filepath.Clean(page.Path) != filepath.Clean(outPath) {
+		relPath = filepath.Join(relDir, filepath.Base(page.Path))
+		url = questionPDFFileURL(relPath)
+	}
+	return questionPDFPageImage{URL: url, Width: page.Width, Height: page.Height}
+}
+
+func extractTextFromUploadedFile(ts *templateService.TemplateService, options questionPDFExtractOptions) (string, string, int, error) {
 	if ts.File == nil {
-		return "", "", fmt.Errorf("上传文件不能为空")
+		return "", "", 0, fmt.Errorf("上传文件不能为空")
 	}
 	ext := ".pdf"
 	fileName := "upload.pdf"
@@ -598,22 +1057,23 @@ func extractTextFromUploadedFile(ts *templateService.TemplateService, maxChars i
 	}
 	tmpFile, err := os.CreateTemp("", "ai-study-question-import-*"+ext)
 	if err != nil {
-		return "", "", err
+		return "", "", 0, err
 	}
 	tmpPath := tmpFile.Name()
 	defer os.Remove(tmpPath)
 	if _, err := io.Copy(tmpFile, ts.File); err != nil {
 		tmpFile.Close()
-		return "", "", err
+		return "", "", 0, err
 	}
 	if err := tmpFile.Close(); err != nil {
-		return "", "", err
+		return "", "", 0, err
 	}
-	text, err := extractTextFromPDFPath(tmpPath, maxChars)
+	pageCount := questionPDFPageCountUnchecked(tmpPath)
+	text, err := extractTextFromPDFPath(tmpPath, options)
 	if err != nil {
-		return "", "", err
+		return "", "", 0, err
 	}
-	return text, fileName, nil
+	return text, fileName, pageCount, nil
 }
 
 func (s *QuestionPDFTextService) Result(template *config.Template, ts *templateService.TemplateService) *common.Result {
@@ -627,14 +1087,16 @@ func (s *QuestionPDFTextService) Result(template *config.Template, ts *templateS
 	if n, ok := intParam(params, "max_chars"); ok {
 		maxChars = n
 	}
+	extractOptions := questionPDFExtractOptionsFromParams(params, maxChars)
 
 	var (
-		text     string
-		fileName string
-		err      error
+		text      string
+		fileName  string
+		pageCount int
+		err       error
 	)
 	if ts.File != nil {
-		text, fileName, err = extractTextFromUploadedFile(ts, maxChars)
+		text, fileName, pageCount, err = extractTextFromUploadedFile(ts, extractOptions)
 	} else {
 		filePath := strings.TrimSpace(gocast.ToString(params["file_path"]))
 		if filePath == "" {
@@ -643,19 +1105,1029 @@ func (s *QuestionPDFTextService) Result(template *config.Template, ts *templateS
 		if filePath == "" {
 			return common.NotOk("file_path 不能为空")
 		}
-		text, err = extractTextFromLocalPath(filePath, maxChars)
+		text, err = extractTextFromLocalPath(filePath, extractOptions)
 		fileName = filepath.Base(filePath)
+		pageCount = questionPDFPageCount(filePath)
 	}
 	if err != nil {
 		return common.NotOk(err.Error())
 	}
+	rawHTML := extractedTextToHTML(text)
 	return common.Ok(map[string]interface{}{
-		"raw_text":     text,
-		"raw_html":     extractedTextToHTML(text),
-		"file_name":    fileName,
-		"source_chars": runeCount(text),
-		"max_chars":    maxChars,
+		"raw_text":            text,
+		"raw_html":            rawHTML,
+		"file_name":           fileName,
+		"page_count":          pageCount,
+		"source_chars":        runeCount(text),
+		"max_chars":           maxChars,
+		"extract_service":     "question.ai_pdf_text",
+		"extract_params_json": questionPDFJSON(extractOptions),
+		"raw_text_sha256":     questionPDFSHA256(text),
+		"raw_html_sha256":     questionPDFSHA256(rawHTML),
 	}, "PDF 文本抽取成功")
+}
+
+func questionPDFString(value interface{}) string {
+	return strings.TrimSpace(gocast.ToString(value))
+}
+
+func questionPDFBoolParam(params map[string]interface{}, key string, fallback bool) bool {
+	if _, ok := params[key]; !ok {
+		return fallback
+	}
+	return gocast.ToBool(params[key])
+}
+
+func questionPDFSHA256(text string) string {
+	sum := sha256.Sum256([]byte(text))
+	return hex.EncodeToString(sum[:])
+}
+
+func questionPDFID(prefix string, text string) string {
+	hash := questionPDFSHA256(text)
+	if len(hash) > 20 {
+		hash = hash[:20]
+	}
+	return prefix + "-" + hash
+}
+
+func questionPDFJSON(value interface{}) string {
+	data, err := json.Marshal(value)
+	if err != nil {
+		return "{}"
+	}
+	return string(data)
+}
+
+func questionPDFNow() string {
+	return time.Now().Format("2006-01-02 15:04:05")
+}
+
+type questionPDFKnowledgeAIResult struct {
+	Units              []questionPDFKnowledgeAIUnit  `json:"units"`
+	Questions          []map[string]interface{}      `json:"questions"`
+	Issues             []questionPDFKnowledgeAIIssue `json:"issues"`
+	QuestionDraftTotal int                           `json:"question_draft_total"`
+	AcceptanceStatus   string                        `json:"acceptance_status"`
+	Summary            string                        `json:"summary"`
+}
+
+type questionPDFKnowledgeAIUnit struct {
+	UnitID          string                       `json:"unit_id"`
+	UnitCode        string                       `json:"unit_code"`
+	UnitName        string                       `json:"unit_name"`
+	Subject         string                       `json:"subject"`
+	Stage           string                       `json:"stage"`
+	Grade           string                       `json:"grade"`
+	TextbookVersion string                       `json:"textbook_version"`
+	OrderIndex      int                          `json:"order_index"`
+	SourceQuote     string                       `json:"source_quote"`
+	Knowledge       []questionPDFKnowledgeAIItem `json:"knowledge"`
+	KnowledgeItems  []questionPDFKnowledgeAIItem `json:"knowledge_items"`
+}
+
+type questionPDFKnowledgeAIItem struct {
+	KnowledgeID   string                          `json:"knowledge_id"`
+	KnowledgeCode string                          `json:"knowledge_code"`
+	KnowledgeName string                          `json:"knowledge_name"`
+	SemanticType  string                          `json:"semantic_type"`
+	OrderIndex    int                             `json:"order_index"`
+	SourceQuote   string                          `json:"source_quote"`
+	ContentText   string                          `json:"content_text"`
+	ContentHTML   string                          `json:"content_html"`
+	Contents      []questionPDFKnowledgeAIContent `json:"contents"`
+	Content       []questionPDFKnowledgeAIContent `json:"content"`
+}
+
+type questionPDFKnowledgeAIContent struct {
+	SectionTitle string   `json:"section_title"`
+	SemanticType string   `json:"semantic_type"`
+	ContentText  string   `json:"content_text"`
+	ContentHTML  string   `json:"content_html"`
+	SourceQuote  string   `json:"source_quote"`
+	SourceQuotes []string `json:"source_quotes"`
+	PageNo       int      `json:"page_no"`
+	OrderIndex   int      `json:"order_index"`
+	Confidence   float64  `json:"confidence"`
+}
+
+type questionPDFKnowledgeAIIssue struct {
+	IssueType      string                 `json:"issue_type"`
+	Severity       string                 `json:"severity"`
+	RawText        string                 `json:"raw_text"`
+	SourceQuote    string                 `json:"source_quote"`
+	CropImageURL   string                 `json:"crop_image_url"`
+	AIOutput       map[string]interface{} `json:"ai_output"`
+	ExpectedSchema string                 `json:"expected_schema"`
+	ErrorMsg       string                 `json:"error_msg"`
+	Suggestion     string                 `json:"suggestion"`
+	Status         string                 `json:"status"`
+	PageNo         int                    `json:"page_no"`
+}
+
+func questionPDFSlug(text string) string {
+	text = strings.ToLower(strings.TrimSpace(text))
+	var out strings.Builder
+	lastUnderscore := false
+	for _, r := range text {
+		switch {
+		case r >= 'a' && r <= 'z':
+			out.WriteRune(r)
+			lastUnderscore = false
+		case r >= '0' && r <= '9':
+			out.WriteRune(r)
+			lastUnderscore = false
+		case r == '-' || r == '_' || r == ' ' || r == '/':
+			if !lastUnderscore && out.Len() > 0 {
+				out.WriteRune('_')
+				lastUnderscore = true
+			}
+		}
+	}
+	result := strings.Trim(out.String(), "_")
+	if result == "" {
+		result = questionPDFSHA256(text)[:12]
+	}
+	if len(result) > 64 {
+		result = result[:64]
+	}
+	return result
+}
+
+func parseQuestionPDFKnowledgeAIResult(raw string) (questionPDFKnowledgeAIResult, string, error) {
+	text := normalizeAIJSONString(raw)
+	var result questionPDFKnowledgeAIResult
+	if err := json.Unmarshal([]byte(text), &result); err != nil {
+		return result, text, fmt.Errorf("AI 返回不是合法 JSON: %w", err)
+	}
+	if len(result.Units) == 0 && len(result.Issues) == 0 {
+		return result, text, fmt.Errorf("JSON 中缺少 units 或 issues 数据")
+	}
+	return result, text, nil
+}
+
+func questionPDFKnowledgeItems(unit questionPDFKnowledgeAIUnit) []questionPDFKnowledgeAIItem {
+	if len(unit.Knowledge) > 0 {
+		return unit.Knowledge
+	}
+	return unit.KnowledgeItems
+}
+
+func questionPDFKnowledgeContents(item questionPDFKnowledgeAIItem) []questionPDFKnowledgeAIContent {
+	if len(item.Contents) > 0 {
+		return item.Contents
+	}
+	if len(item.Content) > 0 {
+		return item.Content
+	}
+	if strings.TrimSpace(item.ContentText) == "" && strings.TrimSpace(item.SourceQuote) == "" {
+		return nil
+	}
+	return []questionPDFKnowledgeAIContent{{
+		SectionTitle: item.KnowledgeName,
+		SemanticType: item.SemanticType,
+		ContentText:  item.ContentText,
+		ContentHTML:  item.ContentHTML,
+		SourceQuote:  item.SourceQuote,
+		OrderIndex:   item.OrderIndex,
+	}}
+}
+
+func questionPDFFirstNonEmpty(values ...string) string {
+	for _, value := range values {
+		if text := strings.TrimSpace(value); text != "" {
+			return text
+		}
+	}
+	return ""
+}
+
+func questionPDFPositiveInt(value int, fallback int) int {
+	if value > 0 {
+		return value
+	}
+	return fallback
+}
+
+func questionPDFAIUnitID(unit questionPDFKnowledgeAIUnit, subject string, grade string, textbookVersion string, order int) string {
+	if value := strings.TrimSpace(unit.UnitID); value != "" {
+		return value
+	}
+	seed := questionPDFFirstNonEmpty(unit.UnitCode, unit.UnitName, fmt.Sprintf("unit_%d", order))
+	return questionPDFID("unit", subject+"|"+grade+"|"+textbookVersion+"|"+seed)
+}
+
+func questionPDFAIKnowledgeID(item questionPDFKnowledgeAIItem, unitID string, subject string, grade string, order int) string {
+	if value := strings.TrimSpace(item.KnowledgeID); value != "" {
+		return value
+	}
+	seed := questionPDFFirstNonEmpty(item.KnowledgeCode, item.KnowledgeName, fmt.Sprintf("knowledge_%d", order))
+	return questionPDFID("knowledge", subject+"|"+grade+"|"+unitID+"|"+seed)
+}
+
+func questionPDFSourceQuote(content questionPDFKnowledgeAIContent, item questionPDFKnowledgeAIItem) string {
+	if quote := strings.TrimSpace(content.SourceQuote); quote != "" {
+		return quote
+	}
+	for _, quote := range content.SourceQuotes {
+		if strings.TrimSpace(quote) != "" {
+			return strings.TrimSpace(quote)
+		}
+	}
+	return questionPDFFirstNonEmpty(item.SourceQuote, content.ContentText)
+}
+
+func questionPDFQuoteRange(rawText string, quote string) (int, int, bool) {
+	quote = strings.TrimSpace(quote)
+	if quote == "" {
+		return 0, 0, false
+	}
+	index := strings.Index(rawText, quote)
+	if index < 0 {
+		return 0, 0, false
+	}
+	end := index + len(quote)
+	return runeCount(rawText[:index]), runeCount(rawText[:end]), true
+}
+
+func questionPDFContext(rawText string, start int, end int, size int) (string, string) {
+	runes := []rune(rawText)
+	if start < 0 {
+		start = 0
+	}
+	if end < start {
+		end = start
+	}
+	if end > len(runes) {
+		end = len(runes)
+	}
+	beforeStart := start - size
+	if beforeStart < 0 {
+		beforeStart = 0
+	}
+	afterEnd := end + size
+	if afterEnd > len(runes) {
+		afterEnd = len(runes)
+	}
+	return strings.TrimSpace(string(runes[beforeStart:start])), strings.TrimSpace(string(runes[end:afterEnd]))
+}
+
+func questionPDFSourceData(result *common.Result) (map[string]interface{}, bool) {
+	data, ok := result.GetData().(map[string]interface{})
+	if ok {
+		return data, true
+	}
+	if data, ok := result.GetData().(map[string]any); ok {
+		return data, true
+	}
+	return nil, false
+}
+
+func questionPDFUpsert(dbTable interface {
+	Table(string, ...interface{}) *gorm.DB
+}, table string, key string, row map[string]interface{}, updateColumns []string) error {
+	return dbTable.Table(table).Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: key}},
+		DoUpdates: clause.AssignmentColumns(updateColumns),
+	}).Create(row).Error
+}
+
+func questionPDFFileSHA256(path string) string {
+	if strings.TrimSpace(path) == "" || !isAllowedQuestionImportPath(path) {
+		return ""
+	}
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return ""
+	}
+	sum := sha256.Sum256(data)
+	return hex.EncodeToString(sum[:])
+}
+
+func questionPDFStableSourceDocID(subject string, stage string, grade string, textbookVersion string, fileHash string, rawTextHash string) string {
+	seed := strings.Join([]string{
+		strings.TrimSpace(subject),
+		strings.TrimSpace(stage),
+		strings.TrimSpace(grade),
+		strings.TrimSpace(textbookVersion),
+		strings.TrimSpace(fileHash),
+		strings.TrimSpace(rawTextHash),
+	}, "|")
+	return questionPDFID("srcdoc", seed)
+}
+
+func questionPDFStableImportBatchID(sourceDocID string, questionPolicy string) string {
+	return questionPDFID("pdf-batch", strings.TrimSpace(sourceDocID)+"|"+strings.TrimSpace(questionPolicy))
+}
+
+func questionPDFKnowledgeContentID(knowledgeID string, sectionTitle string, contentText string) string {
+	seed := strings.Join([]string{
+		strings.TrimSpace(knowledgeID),
+		strings.TrimSpace(sectionTitle),
+		questionPDFSHA256(strings.TrimSpace(contentText)),
+	}, "|")
+	return questionPDFID("kcontent", seed)
+}
+
+func questionPDFExistingIDSet(db *gorm.DB, table string, key string, rows []map[string]interface{}) (map[string]bool, error) {
+	existing := map[string]bool{}
+	if db == nil || len(rows) == 0 {
+		return existing, nil
+	}
+	seen := map[string]bool{}
+	ids := make([]string, 0, len(rows))
+	for _, row := range rows {
+		id := questionPDFString(row[key])
+		if id == "" || seen[id] {
+			continue
+		}
+		seen[id] = true
+		ids = append(ids, id)
+	}
+	if len(ids) == 0 {
+		return existing, nil
+	}
+	var found []string
+	if err := db.Table(table).Where(key+" IN ?", ids).Pluck(key, &found).Error; err != nil {
+		return nil, err
+	}
+	for _, id := range found {
+		if strings.TrimSpace(id) != "" {
+			existing[id] = true
+		}
+	}
+	return existing, nil
+}
+
+func questionPDFExistingRowTotal(rows []map[string]interface{}, key string, existing map[string]bool) int {
+	total := 0
+	for _, row := range rows {
+		if existing[questionPDFString(row[key])] {
+			total++
+		}
+	}
+	return total
+}
+
+func questionPDFExistingKnowledgeContentID(db *gorm.DB, knowledgeID string, contentHash string) string {
+	knowledgeID = strings.TrimSpace(knowledgeID)
+	contentHash = strings.TrimSpace(contentHash)
+	if db == nil || knowledgeID == "" || contentHash == "" {
+		return ""
+	}
+	var contentID string
+	err := db.Table("question_knowledge_content").
+		Where("knowledge_id = ? AND content_hash = ? AND ifnull(status, '') <> 'deleted'", knowledgeID, contentHash).
+		Order("modify_time DESC, create_time DESC").
+		Limit(1).
+		Pluck("content_id", &contentID).Error
+	if err != nil {
+		return ""
+	}
+	return strings.TrimSpace(contentID)
+}
+
+func questionPDFKnowledgeInstructions(defaults map[string]interface{}) string {
+	defaultsJSON, _ := json.Marshal(defaults)
+	return renderQuestionAIPromptTemplate(
+		questionAIPromptPath("question_pdf_knowledge_system_prompt_path", defaultQuestionPDFKnowledgeSystemPrompt),
+		questionAIPromptTemplateData{DefaultsJSON: string(defaultsJSON)},
+	)
+}
+
+func questionPDFKnowledgeUserPrompt(rawText string) string {
+	return renderQuestionAIPromptTemplate(
+		questionAIPromptPath("question_pdf_knowledge_user_prompt_path", defaultQuestionPDFKnowledgeUserPrompt),
+		questionAIPromptTemplateData{RawText: rawText, ChunkIndex: 1, ChunkTotal: 1},
+	)
+}
+
+func (s *QuestionPDFKnowledgeImportService) Result(template *config.Template, ts *templateService.TemplateService) *common.Result {
+	params := template.GetParams()
+	subject := questionPDFString(params["subject"])
+	if subject == "" {
+		subject = "english"
+	}
+	stage := questionPDFString(params["stage"])
+	if stage == "" {
+		stage = "primary"
+	}
+	grade := questionPDFString(params["grade"])
+	if grade == "" {
+		grade = "grade_3"
+	}
+	textbookVersion := questionPDFString(params["textbook_version"])
+	if textbookVersion == "" {
+		textbookVersion = "pep"
+	}
+	autoCommit := questionPDFBoolParam(params, "auto_commit", true)
+	questionPolicy := questionPDFString(params["question_policy"])
+	if questionPolicy == "" {
+		questionPolicy = "draft"
+	}
+	maxChars := intFromParams(params, "max_chars", defaultQuestionAISourceMaxChars)
+	filePath := questionPDFString(params["file_path"])
+
+	pdfParams := map[string]interface{}{
+		"service":             "question.ai_pdf_text",
+		"file_path":           filePath,
+		"max_chars":           maxChars,
+		"ocr_enabled":         boolFromParams(params, "ocr_enabled", true),
+		"ocr_service_url":     questionPDFString(params["ocr_service_url"]),
+		"ocr_provider":        questionPDFString(params["ocr_provider"]),
+		"ocr_max_pages":       intFromParams(params, "ocr_max_pages", defaultQuestionPDFOCRMaxPages),
+		"ocr_image_dpi":       intFromParams(params, "ocr_image_dpi", defaultQuestionPDFOCRImageDPI),
+		"ocr_timeout_seconds": intFromParams(params, "ocr_timeout_seconds", defaultQuestionPDFOCRTimeoutSec),
+	}
+	pdfResult := ts.ResultInner(pdfParams)
+	if !pdfResult.Success {
+		return pdfResult
+	}
+	pdfData, ok := questionPDFSourceData(pdfResult)
+	if !ok {
+		return common.NotOk("question.ai_pdf_text 返回数据格式错误")
+	}
+	rawText := questionPDFString(pdfData["raw_text"])
+	if rawText == "" {
+		return common.NotOk("question.ai_pdf_text 未返回 raw_text")
+	}
+	rawHTML := questionPDFString(pdfData["raw_html"])
+	if rawHTML == "" {
+		rawHTML = extractedTextToHTML(rawText)
+	}
+	fileName := questionPDFString(pdfData["file_name"])
+	if fileName == "" && filePath != "" {
+		fileName = filepath.Base(filePath)
+	}
+	if fileName == "" {
+		fileName = "upload.pdf"
+	}
+
+	defaults := map[string]interface{}{
+		"subject":          subject,
+		"stage":            stage,
+		"grade":            grade,
+		"textbook_version": textbookVersion,
+		"question_policy":  questionPolicy,
+		"file_name":        fileName,
+		"file_path":        filePath,
+	}
+	mockResponse := questionPDFString(params["mock_response"])
+	fixedText := questionPDFString(params["fixed_text"])
+	provider := questionPDFString(params["provider"])
+	if provider == "" {
+		provider = "codex"
+	}
+	model := questionPDFString(params["model"])
+	source := ""
+	if mockResponse != "" {
+		fixedText = mockResponse
+		source = "mock_response"
+	} else if fixedText == "" {
+		systemPrompt := questionPDFKnowledgeInstructions(defaults)
+		userPrompt := questionPDFKnowledgeUserPrompt(rawText)
+		var err error
+		fixedText, model, source, provider, err = callQuestionAIProvider(params, provider, systemPrompt, userPrompt)
+		if err != nil {
+			return common.NotOk(err.Error())
+		}
+	}
+	aiResult, aiOutputJSON, err := parseQuestionPDFKnowledgeAIResult(fixedText)
+	if err != nil {
+		return common.NotOk(formatQuestionAIJSONParseError("PDF知识点 JSON 解析失败", fixedText, err))
+	}
+
+	rawTextHash := questionPDFSHA256(rawText)
+	rawHTMLHash := questionPDFSHA256(rawHTML)
+	fileSHA := questionPDFFileSHA256(filePath)
+	if fileSHA == "" {
+		fileSHA = rawTextHash
+	}
+	now := questionPDFNow()
+	sourceDocID := questionPDFStableSourceDocID(subject, stage, grade, textbookVersion, fileSHA, rawTextHash)
+	importBatchID := questionPDFStableImportBatchID(sourceDocID, questionPolicy)
+	extractParamsJSON := questionPDFJSON(map[string]interface{}{
+		"service":          "question.ai_pdf_text",
+		"max_chars":        maxChars,
+		"raw_text_sha256":  rawTextHash,
+		"raw_html_sha256":  rawHTMLHash,
+		"question_policy":  questionPolicy,
+		"auto_commit":      autoCommit,
+		"source_file_path": filePath,
+		"ai_provider":      provider,
+		"ai_model":         model,
+		"ai_source":        source,
+	})
+
+	db := s.GetGormDb()
+	if db == nil {
+		return common.NotOk("数据库连接不可用")
+	}
+
+	sourcePageID := sourceDocID + "-p001"
+	pageHash := questionPDFSHA256(rawText)
+	pageCount := gocast.ToInt(pdfData["page_count"])
+	if pageCount <= 0 {
+		pageCount = questionPDFPageCount(filePath)
+	}
+	if pageCount <= 0 {
+		pageCount = 1
+	}
+	importStatus := "preview"
+	contentStatus := "preview"
+	if autoCommit {
+		importStatus = "committed"
+		contentStatus = "published"
+	}
+
+	if err := questionPDFUpsert(db, "question_import_batch", "batch_id", map[string]interface{}{
+		"batch_id":         importBatchID,
+		"file_name":        fileName,
+		"file_url":         filePath,
+		"subject":          subject,
+		"stage":            stage,
+		"grade":            grade,
+		"textbook_version": textbookVersion,
+		"status":           importStatus,
+		"total_count":      0,
+		"success_count":    0,
+		"fail_count":       0,
+		"error_summary":    "",
+		"create_time":      now,
+		"create_user":      "pdf_import",
+		"modify_time":      now,
+		"modify_user":      "pdf_import",
+	}, []string{"file_name", "file_url", "subject", "stage", "grade", "textbook_version", "status", "total_count", "modify_time", "modify_user"}); err != nil {
+		return common.NotOk("保存导入批次失败: " + err.Error())
+	}
+	if err := questionPDFUpsert(db, "question_source_document", "source_doc_id", map[string]interface{}{
+		"source_doc_id":    sourceDocID,
+		"import_batch_id":  importBatchID,
+		"file_name":        fileName,
+		"file_sha256":      fileSHA,
+		"file_url":         filePath,
+		"page_count":       pageCount,
+		"subject":          subject,
+		"stage":            stage,
+		"grade":            grade,
+		"textbook_version": textbookVersion,
+		"parse_status":     "parsed",
+		"import_status":    importStatus,
+		"create_time":      now,
+	}, []string{"import_batch_id", "file_name", "file_sha256", "file_url", "page_count", "subject", "stage", "grade", "textbook_version", "parse_status", "import_status"}); err != nil {
+		return common.NotOk("保存来源文档失败: " + err.Error())
+	}
+	if err := questionPDFUpsert(db, "question_source_page", "source_page_id", map[string]interface{}{
+		"source_page_id":      sourcePageID,
+		"source_doc_id":       sourceDocID,
+		"page_no":             1,
+		"page_image_url":      "",
+		"width":               0,
+		"height":              0,
+		"extract_service":     "question.ai_pdf_text",
+		"extract_params_json": extractParamsJSON,
+		"raw_text":            rawText,
+		"raw_html":            rawHTML,
+		"extract_meta_json":   questionPDFJSON(map[string]interface{}{"source_chars": runeCount(rawText)}),
+		"page_hash":           pageHash,
+	}, []string{"source_doc_id", "page_no", "extract_params_json", "raw_text", "raw_html", "extract_meta_json", "page_hash"}); err != nil {
+		return common.NotOk("保存来源页面失败: " + err.Error())
+	}
+
+	unitRows := []map[string]interface{}{}
+	knowledgeRows := []map[string]interface{}{}
+	contentRows := []map[string]interface{}{}
+	sourceFragments := []map[string]interface{}{}
+	issueRows := []map[string]interface{}{}
+	knowledgeResults := []map[string]interface{}{}
+	fieldRelRows := []map[string]interface{}{}
+	snapshotRows := []map[string]interface{}{}
+	seenUnits := map[string]bool{}
+	seenKnowledge := map[string]bool{}
+	seenContent := map[string]bool{}
+	skippedDuplicateTotal := 0
+	pageImageCache := map[int]questionPDFPageImage{}
+	sourceOrder := 0
+
+	appendSource := func(fragmentType string, semanticType string, quote string, pageNo int, aiData interface{}) (questionPDFSourceAppendResult, error) {
+		sourceOrder++
+		if pageNo <= 0 {
+			pageNo = 1
+		}
+		sourcePageIDForPage := fmt.Sprintf("%s-p%03d", sourceDocID, pageNo)
+		pageImage, ok := pageImageCache[pageNo]
+		if !ok {
+			pageImage = ensureQuestionPDFPageImage(filePath, sourceDocID, pageNo)
+			pageImageCache[pageNo] = pageImage
+		}
+		if pageImage.URL != "" {
+			if err := questionPDFUpsert(db, "question_source_page", "source_page_id", map[string]interface{}{
+				"source_page_id":      sourcePageIDForPage,
+				"source_doc_id":       sourceDocID,
+				"page_no":             pageNo,
+				"page_image_url":      pageImage.URL,
+				"width":               pageImage.Width,
+				"height":              pageImage.Height,
+				"extract_service":     "question.ai_pdf_text",
+				"extract_params_json": extractParamsJSON,
+				"raw_text":            "",
+				"raw_html":            "",
+				"extract_meta_json":   "{}",
+				"page_hash":           "",
+			}, []string{"source_doc_id", "page_no", "page_image_url", "width", "height", "extract_params_json"}); err != nil {
+				return questionPDFSourceAppendResult{}, err
+			}
+		}
+		quote = strings.TrimSpace(quote)
+		charStart, charEnd, matched := questionPDFQuoteRange(rawText, quote)
+		contextBefore, contextAfter := "", ""
+		if matched {
+			contextBefore, contextAfter = questionPDFContext(rawText, charStart, charEnd, 300)
+		}
+		if quote == "" {
+			quote = strings.TrimSpace(gocast.ToString(aiData))
+		}
+		blockID := fmt.Sprintf("%s-b%03d", sourceDocID, sourceOrder)
+		fragmentID := fmt.Sprintf("%s-f%03d", blockID, 1)
+		fragmentHash := questionPDFSHA256(quote)
+		if err := questionPDFUpsert(db, "question_source_block", "source_block_id", map[string]interface{}{
+			"source_block_id": blockID,
+			"source_doc_id":   sourceDocID,
+			"page_no":         pageNo,
+			"block_order":     sourceOrder,
+			"bbox_json":       "{}",
+			"block_type":      "text",
+			"raw_text":        quote,
+			"normalized_text": normalizeExtractedText(quote, 0),
+			"block_image_url": pageImage.URL,
+			"semantic_type":   semanticType,
+			"confidence":      1,
+			"content_hash":    fragmentHash,
+		}, []string{"raw_text", "normalized_text", "block_image_url", "semantic_type", "confidence", "content_hash"}); err != nil {
+			return questionPDFSourceAppendResult{}, err
+		}
+		fragmentStatus := "unmatched"
+		if matched {
+			fragmentStatus = "matched"
+		}
+		sourceFragmentRow := map[string]interface{}{
+			"source_fragment_id": fragmentID,
+			"source_doc_id":      sourceDocID,
+			"source_page_id":     sourcePageIDForPage,
+			"source_block_id":    blockID,
+			"page_no":            pageNo,
+			"fragment_order":     sourceOrder,
+			"fragment_type":      fragmentType,
+			"raw_text":           quote,
+			"raw_html":           extractedTextToHTML(quote),
+			"normalized_text":    normalizeExtractedText(quote, 0),
+			"char_start":         charStart,
+			"char_end":           charEnd,
+			"context_before":     contextBefore,
+			"context_after":      contextAfter,
+			"bbox_json":          "{}",
+			"fragment_hash":      fragmentHash,
+			"confidence":         1,
+			"status":             fragmentStatus,
+			"create_time":        now,
+		}
+		if err := questionPDFUpsert(db, "question_source_fragment", "source_fragment_id", sourceFragmentRow, []string{"source_doc_id", "source_page_id", "source_block_id", "page_no", "fragment_order", "fragment_type", "raw_text", "raw_html", "normalized_text", "char_start", "char_end", "context_before", "context_after", "bbox_json", "fragment_hash", "confidence", "status"}); err != nil {
+			return questionPDFSourceAppendResult{}, err
+		}
+		sourceFragments = append(sourceFragments, sourceFragmentRow)
+		return questionPDFSourceAppendResult{
+			BlockID:       blockID,
+			FragmentID:    fragmentID,
+			SourcePageID:  sourcePageIDForPage,
+			PageImageURL:  pageImage.URL,
+			ContextBefore: contextBefore,
+			ContextAfter:  contextAfter,
+			CharStart:     charStart,
+			CharEnd:       charEnd,
+			Matched:       matched,
+		}, nil
+	}
+
+	for unitIndex, unit := range aiResult.Units {
+		unitSubject := questionPDFFirstNonEmpty(unit.Subject, subject)
+		unitStage := questionPDFFirstNonEmpty(unit.Stage, stage)
+		unitGrade := questionPDFFirstNonEmpty(unit.Grade, grade)
+		unitTextbookVersion := questionPDFFirstNonEmpty(unit.TextbookVersion, textbookVersion)
+		unitID := questionPDFAIUnitID(unit, unitSubject, unitGrade, unitTextbookVersion, unitIndex+1)
+		unitCode := questionPDFFirstNonEmpty(unit.UnitCode, questionPDFSlug(unit.UnitName), unitID)
+		unitName := questionPDFFirstNonEmpty(unit.UnitName, unitCode, fmt.Sprintf("Unit %d", unitIndex+1))
+		unitOrder := questionPDFPositiveInt(unit.OrderIndex, unitIndex+1)
+		if !seenUnits[unitID] {
+			seenUnits[unitID] = true
+			unitRows = append(unitRows, map[string]interface{}{
+				"unit_id":          unitID,
+				"subject":          unitSubject,
+				"stage":            unitStage,
+				"grade":            unitGrade,
+				"textbook_version": unitTextbookVersion,
+				"parent_id":        "",
+				"unit_code":        unitCode,
+				"unit_name":        unitName,
+				"order_index":      unitOrder,
+				"status":           "enabled",
+				"is_delete":        "0",
+				"create_time":      now,
+				"create_user":      "pdf_import",
+				"modify_time":      now,
+				"modify_user":      "pdf_import",
+			})
+		}
+		for itemIndex, item := range questionPDFKnowledgeItems(unit) {
+			knowledgeName := questionPDFFirstNonEmpty(item.KnowledgeName, item.KnowledgeCode, fmt.Sprintf("知识点%d", itemIndex+1))
+			knowledgeCode := questionPDFFirstNonEmpty(item.KnowledgeCode, questionPDFSlug(knowledgeName))
+			semanticType := questionPDFFirstNonEmpty(item.SemanticType, "knowledge_summary")
+			knowledgeID := questionPDFAIKnowledgeID(item, unitID, unitSubject, unitGrade, itemIndex+1)
+			knowledgeOrder := questionPDFPositiveInt(item.OrderIndex, itemIndex+1)
+			if !seenKnowledge[knowledgeID] {
+				seenKnowledge[knowledgeID] = true
+				knowledgeRows = append(knowledgeRows, map[string]interface{}{
+					"knowledge_id":   knowledgeID,
+					"subject":        unitSubject,
+					"stage":          unitStage,
+					"grade":          unitGrade,
+					"parent_id":      unitID,
+					"knowledge_code": knowledgeCode,
+					"knowledge_name": knowledgeName,
+					"order_index":    knowledgeOrder,
+					"status":         "enabled",
+					"is_delete":      "0",
+					"create_time":    now,
+					"create_user":    "pdf_import",
+					"modify_time":    now,
+					"modify_user":    "pdf_import",
+				})
+			}
+			for contentIndex, content := range questionPDFKnowledgeContents(item) {
+				contentText := questionPDFFirstNonEmpty(content.ContentText, content.SourceQuote)
+				if contentText == "" {
+					continue
+				}
+				contentSemanticType := questionPDFFirstNonEmpty(content.SemanticType, semanticType)
+				sectionTitle := questionPDFFirstNonEmpty(content.SectionTitle, knowledgeName)
+				contentHash := questionPDFSHA256(contentText)
+				contentID := questionPDFKnowledgeContentID(knowledgeID, sectionTitle, contentText)
+				if existingContentID := questionPDFExistingKnowledgeContentID(db, knowledgeID, contentHash); existingContentID != "" {
+					contentID = existingContentID
+				}
+				if seenContent[contentID] {
+					skippedDuplicateTotal++
+					continue
+				}
+				seenContent[contentID] = true
+				quote := questionPDFSourceQuote(content, item)
+				pageNo := questionPDFPositiveInt(content.PageNo, 1)
+				sourceResult, err := appendSource("knowledge_content", contentSemanticType, quote, pageNo, contentText)
+				if err != nil {
+					return common.NotOk("保存来源片段失败: " + err.Error())
+				}
+				contentHTML := questionPDFFirstNonEmpty(content.ContentHTML, extractedTextToHTML(contentText))
+				contentOrder := questionPDFPositiveInt(content.OrderIndex, contentIndex+1)
+				contentRows = append(contentRows, map[string]interface{}{
+					"content_id":      contentID,
+					"batch_id":        importBatchID,
+					"source_doc_id":   sourceDocID,
+					"source_block_id": sourceResult.BlockID,
+					"unit_id":         unitID,
+					"knowledge_id":    knowledgeID,
+					"semantic_type":   contentSemanticType,
+					"section_title":   sectionTitle,
+					"content_text":    contentText,
+					"content_html":    contentHTML,
+					"content_json":    questionPDFJSON(map[string]interface{}{"ai_content": content, "source_fragment_id": sourceResult.FragmentID, "page_image_url": sourceResult.PageImageURL}),
+					"content_hash":    contentHash,
+					"asset_count":     0,
+					"order_index":     contentOrder,
+					"status":          contentStatus,
+					"create_time":     now,
+					"modify_time":     now,
+				})
+				fieldMatchStatus := "missing_source"
+				fieldReviewStatus := "pending"
+				if sourceResult.Matched {
+					fieldMatchStatus = "matched"
+					fieldReviewStatus = "accepted"
+				}
+				confidence := content.Confidence
+				if confidence <= 0 {
+					confidence = 1
+				}
+				snapshotRows = append(snapshotRows, map[string]interface{}{
+					"snapshot_id":           questionPDFID("snapshot", contentID+"|"+sourceResult.FragmentID),
+					"source_doc_id":         sourceDocID,
+					"source_page_id":        sourceResult.SourcePageID,
+					"source_block_id":       sourceResult.BlockID,
+					"source_fragment_id":    sourceResult.FragmentID,
+					"question_id":           "",
+					"knowledge_id":          knowledgeID,
+					"content_id":            contentID,
+					"extract_service":       "question.ai_pdf_text",
+					"extract_params_json":   extractParamsJSON,
+					"raw_text":              quote,
+					"raw_html":              extractedTextToHTML(quote),
+					"normalized_text":       normalizeExtractedText(quote, 0),
+					"ai_output_json":        questionPDFJSON(content),
+					"validator_result_json": questionPDFJSON(map[string]interface{}{"source_quote_matched": sourceResult.Matched, "source_fragment_id": sourceResult.FragmentID, "page_image_url": sourceResult.PageImageURL}),
+					"status":                "active",
+					"create_time":           now,
+				})
+				fieldRelRows = append(fieldRelRows, map[string]interface{}{
+					"field_rel_id":       questionPDFID("fieldrel", contentID+"|content_text|"+sourceResult.FragmentID),
+					"source_doc_id":      sourceDocID,
+					"source_page_id":     sourceResult.SourcePageID,
+					"source_block_id":    sourceResult.BlockID,
+					"source_fragment_id": sourceResult.FragmentID,
+					"entity_type":        "knowledge_content",
+					"entity_id":          contentID,
+					"field_name":         "content_text",
+					"field_part_order":   1,
+					"extracted_value":    contentText,
+					"normalized_value":   contentText,
+					"raw_quote":          quote,
+					"context_before":     sourceResult.ContextBefore,
+					"context_after":      sourceResult.ContextAfter,
+					"char_start":         sourceResult.CharStart,
+					"char_end":           sourceResult.CharEnd,
+					"bbox_json":          "{}",
+					"confidence":         confidence,
+					"match_status":       fieldMatchStatus,
+					"review_status":      fieldReviewStatus,
+					"create_time":        now,
+				})
+				knowledgeResults = append(knowledgeResults, map[string]interface{}{
+					"unit_id":              unitID,
+					"unit_name":            unitName,
+					"knowledge_id":         knowledgeID,
+					"knowledge_name":       knowledgeName,
+					"content_id":           contentID,
+					"section_title":        sectionTitle,
+					"semantic_type":        contentSemanticType,
+					"content_text":         contentText,
+					"pdf_source_excerpt":   quote,
+					"pdf_source_image_url": sourceResult.PageImageURL,
+					"source_fragment_id":   sourceResult.FragmentID,
+					"page_no":              pageNo,
+					"field_source_status":  fieldMatchStatus,
+				})
+			}
+		}
+	}
+
+	for issueIndex, item := range aiResult.Issues {
+		quote := questionPDFFirstNonEmpty(item.SourceQuote, item.RawText)
+		sourceResult, err := appendSource("parse_issue", item.IssueType, quote, questionPDFPositiveInt(item.PageNo, 1), item)
+		if err != nil {
+			return common.NotOk("保存失败复核来源失败: " + err.Error())
+		}
+		issueID := fmt.Sprintf("%s-issue-%03d", sourceDocID, issueIndex+1)
+		issue := map[string]interface{}{
+			"issue_id":        issueID,
+			"source_doc_id":   sourceDocID,
+			"page_no":         questionPDFPositiveInt(item.PageNo, 1),
+			"source_block_id": sourceResult.BlockID,
+			"issue_type":      questionPDFFirstNonEmpty(item.IssueType, "ai_review"),
+			"severity":        questionPDFFirstNonEmpty(item.Severity, "warning"),
+			"raw_text":        quote,
+			"crop_image_url":  item.CropImageURL,
+			"ai_output_json":  questionPDFJSON(item.AIOutput),
+			"expected_schema": item.ExpectedSchema,
+			"error_msg":       item.ErrorMsg,
+			"suggestion":      item.Suggestion,
+			"status":          questionPDFFirstNonEmpty(item.Status, "pending"),
+			"create_time":     now,
+			"modify_time":     now,
+		}
+		if err := questionPDFUpsert(db, "question_pdf_parse_issue", "issue_id", issue, []string{"raw_text", "error_msg", "suggestion", "status", "modify_time"}); err != nil {
+			return common.NotOk("保存解析复核项失败: " + err.Error())
+		}
+		issueRows = append(issueRows, issue)
+	}
+
+	existingUnitIDs := map[string]bool{}
+	existingKnowledgeIDs := map[string]bool{}
+	existingContentIDs := map[string]bool{}
+	if autoCommit {
+		var err error
+		existingUnitIDs, err = questionPDFExistingIDSet(db, "question_unit", "unit_id", unitRows)
+		if err != nil {
+			return common.NotOk("检查已有单元失败: " + err.Error())
+		}
+		existingKnowledgeIDs, err = questionPDFExistingIDSet(db, "question_knowledge", "knowledge_id", knowledgeRows)
+		if err != nil {
+			return common.NotOk("检查已有知识点失败: " + err.Error())
+		}
+		existingContentIDs, err = questionPDFExistingIDSet(db, "question_knowledge_content", "content_id", contentRows)
+		if err != nil {
+			return common.NotOk("检查已有知识正文失败: " + err.Error())
+		}
+	}
+	createdUnitTotal := 0
+	updatedUnitTotal := 0
+	createdKnowledgeTotal := 0
+	updatedKnowledgeTotal := 0
+	createdContentTotal := 0
+	updatedContentTotal := 0
+	if autoCommit {
+		updatedUnitTotal = questionPDFExistingRowTotal(unitRows, "unit_id", existingUnitIDs)
+		createdUnitTotal = len(unitRows) - updatedUnitTotal
+		updatedKnowledgeTotal = questionPDFExistingRowTotal(knowledgeRows, "knowledge_id", existingKnowledgeIDs)
+		createdKnowledgeTotal = len(knowledgeRows) - updatedKnowledgeTotal
+		updatedContentTotal = questionPDFExistingRowTotal(contentRows, "content_id", existingContentIDs)
+		createdContentTotal = len(contentRows) - updatedContentTotal
+	}
+
+	if autoCommit {
+		for _, row := range unitRows {
+			if err := questionPDFUpsert(db, "question_unit", "unit_id", row, []string{"subject", "stage", "grade", "textbook_version", "unit_code", "unit_name", "order_index", "status", "is_delete", "modify_time", "modify_user"}); err != nil {
+				return common.NotOk("保存单元失败: " + err.Error())
+			}
+		}
+		for _, row := range knowledgeRows {
+			if err := questionPDFUpsert(db, "question_knowledge", "knowledge_id", row, []string{"subject", "stage", "grade", "parent_id", "knowledge_code", "knowledge_name", "order_index", "status", "is_delete", "modify_time", "modify_user"}); err != nil {
+				return common.NotOk("保存知识点失败: " + err.Error())
+			}
+		}
+		for _, row := range contentRows {
+			if err := questionPDFUpsert(db, "question_knowledge_content", "content_id", row, []string{"batch_id", "source_doc_id", "source_block_id", "unit_id", "knowledge_id", "semantic_type", "section_title", "content_text", "content_html", "content_json", "content_hash", "asset_count", "order_index", "status", "modify_time"}); err != nil {
+				return common.NotOk("保存知识正文失败: " + err.Error())
+			}
+		}
+	}
+	for _, row := range snapshotRows {
+		if err := questionPDFUpsert(db, "question_source_snapshot", "snapshot_id", row, []string{"source_doc_id", "source_page_id", "source_block_id", "source_fragment_id", "question_id", "knowledge_id", "content_id", "extract_service", "extract_params_json", "raw_text", "raw_html", "normalized_text", "ai_output_json", "validator_result_json", "status"}); err != nil {
+			return common.NotOk("保存来源快照失败: " + err.Error())
+		}
+	}
+	for _, row := range fieldRelRows {
+		if err := questionPDFUpsert(db, "question_source_field_rel", "field_rel_id", row, []string{"source_doc_id", "source_page_id", "source_block_id", "source_fragment_id", "entity_type", "entity_id", "field_name", "field_part_order", "extracted_value", "normalized_value", "raw_quote", "context_before", "context_after", "char_start", "char_end", "bbox_json", "confidence", "match_status", "review_status"}); err != nil {
+			return common.NotOk("保存字段来源失败: " + err.Error())
+		}
+	}
+
+	committedTotal := 0
+	if autoCommit {
+		committedTotal = len(contentRows)
+	}
+	candidateQuestionTotal := aiResult.QuestionDraftTotal
+	pendingReviewTotal := len(issueRows)
+	acceptanceStatus := questionPDFFirstNonEmpty(aiResult.AcceptanceStatus, "pass")
+	if len(contentRows) == 0 {
+		acceptanceStatus = "pending_review"
+	} else if pendingReviewTotal > 0 && acceptanceStatus == "pass" {
+		acceptanceStatus = "warning"
+	}
+	statusSummary := "committed"
+	if !autoCommit {
+		statusSummary = "preview"
+	}
+	_ = db.Table("question_import_batch").Where("batch_id = ?", importBatchID).Updates(map[string]interface{}{
+		"total_count":   len(contentRows) + len(issueRows),
+		"success_count": committedTotal,
+		"fail_count":    pendingReviewTotal,
+		"status":        statusSummary,
+		"error_summary": fmt.Sprintf("pending_review=%d question_draft=%d", pendingReviewTotal, candidateQuestionTotal),
+		"modify_time":   now,
+		"modify_user":   "pdf_import",
+	}).Error
+
+	return common.Ok(map[string]interface{}{
+		"import_batch_id":         importBatchID,
+		"source_doc_id":           sourceDocID,
+		"file_name":               fileName,
+		"page_count":              pageCount,
+		"source_chars":            runeCount(rawText),
+		"raw_text_chars":          runeCount(rawText),
+		"unit_total":              len(unitRows),
+		"knowledge_total":         len(knowledgeRows),
+		"content_total":           len(contentRows),
+		"auto_committed_total":    committedTotal,
+		"created_unit_total":      createdUnitTotal,
+		"updated_unit_total":      updatedUnitTotal,
+		"created_knowledge_total": createdKnowledgeTotal,
+		"updated_knowledge_total": updatedKnowledgeTotal,
+		"created_content_total":   createdContentTotal,
+		"updated_content_total":   updatedContentTotal,
+		"pending_review_total":    pendingReviewTotal,
+		"question_draft_total":    candidateQuestionTotal,
+		"skipped_duplicate_total": skippedDuplicateTotal,
+		"acceptance_status":       acceptanceStatus,
+		"extract_service":         "question.ai_pdf_text",
+		"raw_text_sha256":         rawTextHash,
+		"raw_html_sha256":         rawHTMLHash,
+		"ai_provider":             provider,
+		"ai_model":                model,
+		"ai_source":               source,
+		"ai_output_json":          aiOutputJSON,
+		"knowledge_results":       knowledgeResults,
+		"question_results":        aiResult.Questions,
+		"source_fragments":        sourceFragments,
+		"issues":                  issueRows,
+		"summary":                 aiResult.Summary,
+	}, "PDF知识点导入处理完成")
 }
 
 func questionAIPromptPath(configKey string, defaultPath string) string {
@@ -2080,8 +3552,9 @@ func (s *QuestionAIParseService) Result(template *config.Template, ts *templateS
 		sourceMaxChars = n
 	}
 	rawText := strings.TrimSpace(gocast.ToString(params["raw_text"]))
+	extractOptions := questionPDFExtractOptionsFromParams(params, sourceMaxChars)
 	if rawText == "" && ts.File != nil {
-		text, _, err := extractTextFromUploadedFile(ts, sourceMaxChars)
+		text, _, _, err := extractTextFromUploadedFile(ts, extractOptions)
 		if err != nil {
 			return common.NotOk(err.Error())
 		}
@@ -2090,7 +3563,7 @@ func (s *QuestionAIParseService) Result(template *config.Template, ts *templateS
 	if rawText == "" {
 		filePath := strings.TrimSpace(gocast.ToString(params["file_path"]))
 		if filePath != "" {
-			text, err := extractTextFromLocalPath(filePath, sourceMaxChars)
+			text, err := extractTextFromLocalPath(filePath, extractOptions)
 			if err != nil {
 				return common.NotOk(err.Error())
 			}

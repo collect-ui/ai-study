@@ -1,60 +1,74 @@
 {
   "tag": "layout-fit",
   "className": "question-taxonomy-page h100",
-  "title": "年级、科目、单元、知识点维护",
+  "title": "课本目录结构",
   "style": {
     "height": "100%",
     "overflow": "hidden",
     "background": "#f6f8fb"
   },
   "initStore": {
-    "masterTab": "grade",
+    "masterTab": "subject",
     "gradeDialogVisible": false,
     "subjectDialogVisible": false,
     "unitDialogVisible": false,
     "knowledgeDialogVisible": false,
+    "knowledgeTypeManageVisible": false,
+    "knowledgeTypeEditVisible": false,
     "gradeOp": "add",
     "subjectOp": "add",
     "unitOp": "add",
     "knowledgeOp": "add",
+    "knowledgeTypeOp": "add",
+    "knowledgeTypeEditKind": "type",
+    "knowledgeTypeSubject": "english",
+    "selectedKnowledgeTypeCode": "",
     "editingGradeID": "",
     "editingSubjectID": "",
     "editingUnitID": "",
     "editingKnowledgeID": "",
+    "editingKnowledgeTypeCodeID": "",
     "gradeSelection": [],
     "subjectSelection": [],
     "unitSelection": [],
     "knowledgeSelection": [],
     "selectedTaxonomyNode": {},
+    "selectedSectionNode": {},
     "gradeList": [],
     "subjectList": [],
     "unitList": [],
     "allUnitList": [],
     "knowledgeList": [],
+    "allKnowledgeList": [],
+    "knowledgeTypeList": [],
+    "knowledgeCategoryList": [],
     "gradeSearchForm": {
       "keyword": "",
       "stage": "",
-      "status": ""
+      "semester": ""
     },
     "subjectSearchForm": {
-      "keyword": "",
-      "status": ""
+      "keyword": ""
     },
     "unitSearchForm": {
       "keyword": "",
       "subject": "",
-      "grade": "",
-      "status": ""
+      "grade": ""
+    },
+    "sectionSearchForm": {
+      "keyword": "",
+      "subject": "",
+      "grade": ""
     },
     "knowledgeSearchForm": {
       "keyword": "",
       "subject": "",
       "grade": "",
-      "unit_id": "",
-      "status": ""
+      "unit_id": ""
     },
     "gradeForm": {
       "stage": "primary",
+      "semester": "upper",
       "grade_code": "",
       "grade_name": "",
       "order_index": 1,
@@ -71,6 +85,8 @@
       "stage": "junior",
       "grade": "grade_7",
       "textbook_version": "pep",
+      "unit_no": "",
+      "unit_title": "",
       "unit_code": "",
       "unit_name": "",
       "order_index": 1,
@@ -83,9 +99,122 @@
       "parent_id": "",
       "knowledge_code": "",
       "knowledge_name": "",
+      "knowledge_type": "vocabulary",
+      "knowledge_category": "cn_to_en",
+      "content_detail": "",
       "order_index": 1,
       "status": "enabled"
     },
+    "knowledgeTypeForm": {
+      "sys_code_type": "knowledge_type_english",
+      "sys_code_type_name": "目录类型",
+      "sys_code": "",
+      "sys_code_text": "",
+      "order_index": 1,
+      "icon": ""
+    },
+    "unitNumberOptions": [
+      {
+        "value": "1",
+        "english_label": "Unit 1",
+        "cn_label": "第一单元"
+      },
+      {
+        "value": "2",
+        "english_label": "Unit 2",
+        "cn_label": "第二单元"
+      },
+      {
+        "value": "3",
+        "english_label": "Unit 3",
+        "cn_label": "第三单元"
+      },
+      {
+        "value": "4",
+        "english_label": "Unit 4",
+        "cn_label": "第四单元"
+      },
+      {
+        "value": "5",
+        "english_label": "Unit 5",
+        "cn_label": "第五单元"
+      },
+      {
+        "value": "6",
+        "english_label": "Unit 6",
+        "cn_label": "第六单元"
+      },
+      {
+        "value": "7",
+        "english_label": "Unit 7",
+        "cn_label": "第七单元"
+      },
+      {
+        "value": "8",
+        "english_label": "Unit 8",
+        "cn_label": "第八单元"
+      },
+      {
+        "value": "9",
+        "english_label": "Unit 9",
+        "cn_label": "第九单元"
+      },
+      {
+        "value": "10",
+        "english_label": "Unit 10",
+        "cn_label": "第十单元"
+      },
+      {
+        "value": "11",
+        "english_label": "Unit 11",
+        "cn_label": "第十一单元"
+      },
+      {
+        "value": "12",
+        "english_label": "Unit 12",
+        "cn_label": "第十二单元"
+      },
+      {
+        "value": "13",
+        "english_label": "Unit 13",
+        "cn_label": "第十三单元"
+      },
+      {
+        "value": "14",
+        "english_label": "Unit 14",
+        "cn_label": "第十四单元"
+      },
+      {
+        "value": "15",
+        "english_label": "Unit 15",
+        "cn_label": "第十五单元"
+      },
+      {
+        "value": "16",
+        "english_label": "Unit 16",
+        "cn_label": "第十六单元"
+      },
+      {
+        "value": "17",
+        "english_label": "Unit 17",
+        "cn_label": "第十七单元"
+      },
+      {
+        "value": "18",
+        "english_label": "Unit 18",
+        "cn_label": "第十八单元"
+      },
+      {
+        "value": "19",
+        "english_label": "Unit 19",
+        "cn_label": "第十九单元"
+      },
+      {
+        "value": "20",
+        "english_label": "Unit 20",
+        "cn_label": "第二十单元"
+      }
+    ],
     "pinyinMap": {
       "一": "yi",
       "二": "er",
@@ -163,6 +292,34 @@
       "统": "tong",
       "概": "gai",
       "率": "lv"
+    },
+    "pdfKnowledgeImportVisible": false,
+    "pdfKnowledgeImportBusy": "",
+    "pdfKnowledgeImportLastError": "",
+    "pdfKnowledgeImportResult": {},
+    "pdfKnowledgeImportSourceList": [],
+    "pdfKnowledgeImportIssueList": [],
+    "pdfKnowledgeImportForm": {
+      "file_path": "/data/project/ai-study/题目/三年级上册英语全册知识考点汇总人教版.pdf",
+      "subject": "english",
+      "stage": "primary",
+      "grade": "grade_3"
+    },
+    "selectedUnitNode": {},
+    "sectionDialogVisible": false,
+    "sectionOp": "add",
+    "editingSectionID": "",
+    "sectionSelection": [],
+    "sectionList": [],
+    "sectionForm": {
+      "subject": "english",
+      "stage": "junior",
+      "grade": "grade_7",
+      "unit_id": "",
+      "section_code": "",
+      "section_name": "",
+      "order_index": 1,
+      "status": "enabled"
     }
   },
   "initAction": [
@@ -205,15 +362,47 @@
       }
     },
     {
+      "tag": "ajax",
+      "group": "knowledge-type-list",
+      "api": "post:/template_data/data?service=system.get_sys_code",
+      "data": {
+        "sys_code_type": "${'knowledge_type_' + (knowledgeTypeSubject || 'english')}"
+      },
+      "adapt": {
+        "knowledgeTypeList": "${data}"
+      }
+    },
+    {
+      "tag": "ajax",
+      "group": "knowledge-category-list",
+      "api": "post:/template_data/data?service=system.get_sys_code",
+      "data": {
+        "sys_code_type": "${'knowledge_category_' + (knowledgeTypeSubject || 'english')}"
+      },
+      "adapt": {
+        "knowledgeCategoryList": "${data}"
+      }
+    },
+    {
       "tag": "update-store",
       "value": {
-        "knowledgeSearchForm": "${(()=>{const form=knowledgeSearchForm||{};if(form.grade&&form.subject)return form;const first=(Array.isArray(allUnitList)?allUnitList:[])[0]||{};return Object.assign({},form,{grade:form.grade||first.grade||'',subject:form.subject||first.subject||'',unit_id:''});})()}"
+        "knowledgeSearchForm": "${(()=>{const form=knowledgeSearchForm||{};if(form.grade&&form.subject)return form;const first=(Array.isArray(allUnitList)?allUnitList:[])[0]||{};return Object.assign({},form,{grade:form.grade||first.grade||'',subject:form.subject||first.subject||'',unit_id:''});})()}",
+        "knowledgeTypeSubject": "${(()=>{const form=knowledgeSearchForm||{};if(form.grade&&form.subject)return form.subject;const first=(Array.isArray(allUnitList)?allUnitList:[])[0]||{};return form.subject||first.subject||knowledgeTypeSubject||'english';})()}",
+        "selectedKnowledgeTypeCode": ""
       }
     },
     {
       "tag": "update-form",
       "formName": "knowledgeSearchForm",
       "value": "${knowledgeSearchForm}"
+    },
+    {
+      "tag": "reload-init-action",
+      "group": "knowledge-type-list"
+    },
+    {
+      "tag": "reload-init-action",
+      "group": "knowledge-category-list"
     },
     {
       "tag": "ajax",
@@ -223,12 +412,21 @@
       "adapt": {
         "knowledgeList": "${data}"
       }
+    },
+    {
+      "tag": "ajax",
+      "group": "section-list",
+      "api": "post:/template_data/data?service=question.section_query",
+      "adapt": {
+        "sectionList": "${data}"
+      },
+      "appendFields": "${sectionSearchForm}"
     }
   ],
   "children": [
     {
       "tag": "css",
-      "css": ".question-taxonomy-page .taxonomy-shell { height: calc(100vh - 118px); min-height: 0; padding: 10px 14px 14px; box-sizing: border-box; overflow: hidden; }\n.question-taxonomy-page .taxonomy-panel { height: 100%; min-height: 0; overflow: hidden; background: #fff; border: 1px solid #d8dee8; border-radius: 8px; }\n.question-taxonomy-page .taxonomy-panel .layout-content, .question-taxonomy-page .taxonomy-panel .layout-content-inner { min-height: 0; overflow: hidden !important; }\n.question-taxonomy-page .taxonomy-panel .layout-content-inner > div { min-height: 0; overflow: hidden !important; }\n.question-taxonomy-page .taxonomy-tabs, .question-taxonomy-page .taxonomy-tab-page { height: 100%; min-height: 0; }\n.question-taxonomy-page .taxonomy-toolbar-form.co-ui-form { padding: 0 !important; }\n.question-taxonomy-page .taxonomy-toolbar-form .co-ui-form-item.ant-form-item { margin: 0 8px 8px 0 !important; }\n.question-taxonomy-page .taxonomy-knowledge-tree .layout-content-inner > div { height: 100%; min-height: 0; display: flex; flex-direction: column; overflow: hidden !important; }\n.question-taxonomy-page .taxonomy-tree-summary { flex: 0 0 auto; padding: 8px 12px; color: #4b5563; font-size: 12px; border-bottom: 1px solid #eef2f7; background: #fafcff; }\n.question-taxonomy-page .taxonomy-tree-wrap { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 8px 10px 10px; }\n.question-taxonomy-page .taxonomy-tree-wrap .co-ui-tree { font-size: 13px; }\n.question-taxonomy-page .taxonomy-dialog-form .co-ui-form-item.ant-form-item { margin-bottom: 12px; }\n.question-taxonomy-page .taxonomy-status-enabled { color: #0f7b3a; font-weight: 700; }\n.question-taxonomy-page .taxonomy-status-disabled { color: #8a2d2d; font-weight: 700; }\n.question-taxonomy-page .co-ui-button.ant-btn { border-radius: 6px; }\n.question-taxonomy-page .ant-table-wrapper, .question-taxonomy-page .ag-root-wrapper { min-height: 0; }\n.question-taxonomy-page .taxonomy-knowledge-split { height: 100%; min-height: 0; overflow: hidden; }\n.question-taxonomy-page .taxonomy-knowledge-split .taxonomy-subpanel { height: 100%; min-height: 0; overflow: hidden; background: #fff; }\n.question-taxonomy-page .taxonomy-action-cell { display: flex; align-items: center; justify-content: center; }\n.question-taxonomy-page .taxonomy-action-button { min-width: 52px; }"
+      "css": ".question-taxonomy-page .taxonomy-shell { height: calc(100vh - 118px); min-height: 0; padding: 10px 14px 14px; box-sizing: border-box; overflow: hidden; }\n.question-taxonomy-page .taxonomy-panel { height: 100%; min-height: 0; overflow: hidden; background: #fff; border: 1px solid #d8dee8; border-radius: 8px; }\n.question-taxonomy-page .taxonomy-panel .layout-content, .question-taxonomy-page .taxonomy-panel .layout-content-inner { min-height: 0; overflow: hidden !important; }\n.question-taxonomy-page .taxonomy-panel .layout-content-inner > div { min-height: 0; overflow: hidden !important; }\n.question-taxonomy-page .taxonomy-tabs, .question-taxonomy-page .taxonomy-tab-page { height: 100%; min-height: 0; }\n.question-taxonomy-page .taxonomy-toolbar-form.co-ui-form { padding: 0 !important; }\n.question-taxonomy-page .taxonomy-toolbar-form .co-ui-form-item.ant-form-item { margin: 0 8px 8px 0 !important; }\n.question-taxonomy-page .taxonomy-knowledge-tree .layout-content-inner > div { height: 100%; min-height: 0; display: flex; flex-direction: column; overflow: hidden !important; }\n.question-taxonomy-page .taxonomy-tree-summary { flex: 0 0 auto; padding: 8px 12px; color: #4b5563; font-size: 12px; border-bottom: 1px solid #eef2f7; background: #fafcff; }\n.question-taxonomy-page .taxonomy-tree-wrap { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 8px 10px 10px; }\n.question-taxonomy-page .taxonomy-tree-wrap .co-ui-tree { font-size: 13px; }\n.question-taxonomy-page .taxonomy-dialog-form .co-ui-form-item.ant-form-item { margin-bottom: 12px; }\n.question-taxonomy-page .taxonomy-status-enabled { color: #0f7b3a; font-weight: 700; }\n.question-taxonomy-page .taxonomy-status-disabled { color: #8a2d2d; font-weight: 700; }\n.question-taxonomy-page .co-ui-button.ant-btn { border-radius: 6px; }\n.question-taxonomy-page .ant-table-wrapper, .question-taxonomy-page .ag-root-wrapper { min-height: 0; }\n.question-taxonomy-page .taxonomy-knowledge-split { height: 100%; min-height: 0; overflow: hidden; }\n.question-taxonomy-page .taxonomy-knowledge-split .taxonomy-subpanel { height: 100%; min-height: 0; overflow: hidden; background: #fff; }\n.question-taxonomy-page .taxonomy-action-cell { display: flex; align-items: center; justify-content: center; }\n.question-taxonomy-page .taxonomy-action-button { min-width: 52px; }\n.question-taxonomy-page .pdf-knowledge-import-form .co-ui-form-item.ant-form-item { margin-bottom: 10px; }\n.question-taxonomy-page .pdf-knowledge-import-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(138px, 1fr)); gap: 8px; }\n.question-taxonomy-page .pdf-knowledge-import-metric { border: 1px solid #d8dee8; border-radius: 6px; padding: 8px 10px; background: #fff; min-width: 0; }\n.question-taxonomy-page .pdf-knowledge-import-metric-label { color: #667085; font-size: 12px; line-height: 1.4; }\n.question-taxonomy-page .pdf-knowledge-import-metric-value { color: #182230; font-size: 18px; font-weight: 700; line-height: 1.3; }\n.question-taxonomy-page .pdf-knowledge-import-compare { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; min-height: 0; }\n.question-taxonomy-page .pdf-knowledge-import-pane { min-height: 0; border: 1px solid #d8dee8; border-radius: 6px; background: #fff; overflow: hidden; }\n.question-taxonomy-page .pdf-knowledge-import-pane-title { padding: 7px 10px; border-bottom: 1px solid #eef2f7; background: #fafcff; font-size: 13px; font-weight: 700; color: #344054; }"
     },
     {
       "tag": "panel-group",
@@ -239,12 +437,12 @@
           "tag": "panel",
           "id": "taxonomy-master-panel",
           "defaultSize": 42,
-          "minSize": 34,
+          "minSize": 0,
           "className": "taxonomy-panel",
           "children": [
             {
               "tag": "layout-fit",
-              "title": "年级 / 科目 / 单元",
+              "title": "科目 / 年级 / 单元 / 小节",
               "style": {
                 "height": "100%",
                 "overflow": "hidden"
@@ -258,310 +456,6 @@
                   "activeKey": "${masterTab}",
                   "onlyRenderActive": true,
                   "items": [
-                    {
-                      "label": "年级",
-                      "key": "grade",
-                      "children": [
-                        {
-                          "tag": "layout-fit",
-                          "className": "taxonomy-tab-page",
-                          "searchToolBar": [
-                            {
-                              "tag": "form",
-                              "name": "gradeSearchForm",
-                              "className": "taxonomy-toolbar-form",
-                              "initialValues": "${gradeSearchForm}",
-                              "changeAction": [
-                                {
-                                  "tag": "update-store",
-                                  "value": {
-                                    "gradeSearchForm": "${({keyword:keyword||'',stage:stage||'',status:status||''})}"
-                                  }
-                                },
-                                {
-                                  "tag": "reload-init-action",
-                                  "group": "grade-list"
-                                }
-                              ],
-                              "children": [
-                                {
-                                  "tag": "row",
-                                  "children": [
-                                    {
-                                      "tag": "col",
-                                      "span": 8,
-                                      "children": [
-                                        {
-                                          "tag": "form-item",
-                                          "name": "keyword",
-                                          "label": "搜索",
-                                          "children": [
-                                            {
-                                              "tag": "input",
-                                              "allowClear": true,
-                                              "placeholder": "年级名称/编码"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "tag": "col",
-                                      "span": 7,
-                                      "children": [
-                                        {
-                                          "tag": "form-item",
-                                          "name": "stage",
-                                          "label": "学段",
-                                          "children": [
-                                            {
-                                              "tag": "select",
-                                              "allowClear": true,
-                                              "options": [
-                                                {
-                                                  "label": "小学",
-                                                  "value": "primary"
-                                                },
-                                                {
-                                                  "label": "初中",
-                                                  "value": "junior"
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "tag": "col",
-                                      "span": 7,
-                                      "children": [
-                                        {
-                                          "tag": "form-item",
-                                          "name": "status",
-                                          "label": "状态",
-                                          "children": [
-                                            {
-                                              "tag": "select",
-                                              "allowClear": true,
-                                              "options": [
-                                                {
-                                                  "label": "启用",
-                                                  "value": "enabled"
-                                                },
-                                                {
-                                                  "label": "停用",
-                                                  "value": "disabled"
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ],
-                          "topRight": [
-                            {
-                              "tag": "button",
-                              "type": "primary",
-                              "icon": "PlusOutlined",
-                              "children": "新增年级",
-                              "action": [
-                                {
-                                  "tag": "update-store",
-                                  "value": {
-                                    "gradeDialogVisible": true,
-                                    "gradeOp": "add",
-                                    "editingGradeID": "",
-                                    "gradeForm": {
-                                      "stage": "primary",
-                                      "grade_code": "",
-                                      "grade_name": "",
-                                      "order_index": 1,
-                                      "status": "enabled"
-                                    }
-                                  }
-                                },
-                                {
-                                  "tag": "reset-form",
-                                  "formName": "gradeForm"
-                                },
-                                {
-                                  "tag": "update-form",
-                                  "formName": "gradeForm",
-                                  "value": "${gradeForm}"
-                                }
-                              ]
-                            },
-                            {
-                              "tag": "button",
-                              "danger": true,
-                              "icon": "DeleteOutlined",
-                              "children": "批量删除",
-                              "disabled": "${!(Array.isArray(gradeSelection) && gradeSelection.length)}",
-                              "style": {
-                                "marginLeft": 8
-                              },
-                              "confirm": {
-                                "title": "${'确认删除已选 ' + (Array.isArray(gradeSelection) ? gradeSelection.length : 0) + ' 个年级？'}",
-                                "description": "删除后关联单元和知识点列表会重新刷新，请确认已检查选中项。"
-                              },
-                              "action": [
-                                {
-                                  "tag": "ajax",
-                                  "api": "post:/template_data/data?service=question.grade_delete",
-                                  "data": {
-                                    "grade_id_list": "${(Array.isArray(gradeSelection) ? gradeSelection : []).map(item => item.grade_id).filter(Boolean)}"
-                                  }
-                                },
-                                {
-                                  "tag": "update-store",
-                                  "value": {
-                                    "gradeSelection": []
-                                  }
-                                },
-                                {
-                                  "tag": "reload-init-action",
-                                  "group": "grade-list"
-                                },
-                                {
-                                  "tag": "reload-init-action",
-                                  "group": "unit-list"
-                                },
-                                {
-                                  "tag": "reload-init-action",
-                                  "group": "unit-options"
-                                },
-                                {
-                                  "tag": "reload-init-action",
-                                  "group": "knowledge-list"
-                                }
-                              ]
-                            }
-                          ],
-                          "children": [
-                            {
-                              "tag": "table",
-                              "selection": "${gradeSelection}",
-                              "rowSelection": "multiple",
-                              "rowData": "${gradeList}",
-                              "columnDefs": [
-                                {
-                                  "headerName": "#",
-                                  "width": 60,
-                                  "valueGetter": "node.rowIndex + 1",
-                                  "sortable": false,
-                                  "pinned": "left"
-                                },
-                                {
-                                  "checkboxSelection": true,
-                                  "headerCheckboxSelection": true,
-                                  "headerName": "编码",
-                                  "field": "grade_code",
-                                  "width": 140,
-                                  "pinned": "left"
-                                },
-                                {
-                                  "headerName": "名称",
-                                  "field": "grade_name",
-                                  "width": 120
-                                },
-                                {
-                                  "headerName": "学段",
-                                  "field": "stage_name",
-                                  "width": 110,
-                                  "valueGetter": "data.stage_name || (data.stage === 'primary' ? '小学' : '初中')"
-                                },
-                                {
-                                  "headerName": "排序",
-                                  "field": "order_index",
-                                  "width": 90
-                                },
-                                {
-                                  "headerName": "状态",
-                                  "field": "status",
-                                  "width": 90,
-                                  "cellRender": {
-                                    "tag": "span",
-                                    "className": "${row.status === 'disabled' ? 'taxonomy-status-disabled' : 'taxonomy-status-enabled'}",
-                                    "children": "${row.status === 'disabled' ? '停用' : '启用'}"
-                                  }
-                                },
-                                {
-                                  "headerName": "操作",
-                                  "field": "op",
-                                  "width": 170,
-                                  "pinned": "right",
-                                  "cellRender": [
-                                    {
-                                      "tag": "button",
-                                      "type": "primary",
-                                      "size": "small",
-                                      "children": "编辑",
-                                      "action": [
-                                        {
-                                          "tag": "update-store",
-                                          "value": {
-                                            "gradeDialogVisible": true,
-                                            "gradeOp": "edit",
-                                            "editingGradeID": "${row.grade_id}",
-                                            "gradeForm": "${row}"
-                                          }
-                                        },
-                                        {
-                                          "tag": "reset-form",
-                                          "formName": "gradeForm"
-                                        },
-                                        {
-                                          "tag": "update-form",
-                                          "formName": "gradeForm",
-                                          "value": "${row}"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "tag": "button",
-                                      "danger": true,
-                                      "size": "small",
-                                      "children": "删除",
-                                      "confirm": {
-                                        "title": "确认删除年级？",
-                                        "description": "${'确认删除【' + row.grade_name + '】吗？'}"
-                                      },
-                                      "action": [
-                                        {
-                                          "tag": "ajax",
-                                          "api": "post:/template_data/data?service=question.grade_delete",
-                                          "data": {
-                                            "grade_id_list": "${[row.grade_id]}"
-                                          }
-                                        },
-                                        {
-                                          "tag": "reload-init-action",
-                                          "group": "grade-list"
-                                        },
-                                        {
-                                          "tag": "reload-init-action",
-                                          "group": "unit-list"
-                                        },
-                                        {
-                                          "tag": "reload-init-action",
-                                          "group": "knowledge-list"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
                     {
                       "label": "科目",
                       "key": "subject",
@@ -579,7 +473,7 @@
                                 {
                                   "tag": "update-store",
                                   "value": {
-                                    "subjectSearchForm": "${({keyword:keyword||'',status:status||''})}"
+                                    "subjectSearchForm": "${({keyword:keyword||''})}"
                                   }
                                 },
                                 {
@@ -593,7 +487,7 @@
                                   "children": [
                                     {
                                       "tag": "col",
-                                      "span": 10,
+                                      "span": 18,
                                       "children": [
                                         {
                                           "tag": "form-item",
@@ -604,33 +498,6 @@
                                               "tag": "input",
                                               "allowClear": true,
                                               "placeholder": "科目名称/编码"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "tag": "col",
-                                      "span": 8,
-                                      "children": [
-                                        {
-                                          "tag": "form-item",
-                                          "name": "status",
-                                          "label": "状态",
-                                          "children": [
-                                            {
-                                              "tag": "select",
-                                              "allowClear": true,
-                                              "options": [
-                                                {
-                                                  "label": "启用",
-                                                  "value": "enabled"
-                                                },
-                                                {
-                                                  "label": "停用",
-                                                  "value": "disabled"
-                                                }
-                                              ]
                                             }
                                           ]
                                         }
@@ -654,6 +521,7 @@
                                     "subjectDialogVisible": true,
                                     "subjectOp": "add",
                                     "editingSubjectID": "",
+                                    "subjectPinyinLastCode": "",
                                     "subjectForm": {
                                       "subject_code": "",
                                       "subject_name": "",
@@ -684,7 +552,7 @@
                               },
                               "confirm": {
                                 "title": "${'确认删除已选 ' + (Array.isArray(subjectSelection) ? subjectSelection.length : 0) + ' 个科目？'}",
-                                "description": "删除后关联单元和知识点列表会重新刷新，请确认已检查选中项。"
+                                "description": "删除后关联单元和目录结构列表会重新刷新，请确认已检查选中项。"
                               },
                               "action": [
                                 {
@@ -711,6 +579,10 @@
                                 {
                                   "tag": "reload-init-action",
                                   "group": "unit-options"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "section-list"
                                 },
                                 {
                                   "tag": "reload-init-action",
@@ -750,16 +622,6 @@
                                   "headerName": "排序",
                                   "field": "order_index",
                                   "width": 90
-                                },
-                                {
-                                  "headerName": "状态",
-                                  "field": "status",
-                                  "width": 90,
-                                  "cellRender": {
-                                    "tag": "span",
-                                    "className": "${row.status === 'disabled' ? 'taxonomy-status-disabled' : 'taxonomy-status-enabled'}",
-                                    "children": "${row.status === 'disabled' ? '停用' : '启用'}"
-                                  }
                                 },
                                 {
                                   "headerName": "操作",
@@ -820,6 +682,324 @@
                                         },
                                         {
                                           "tag": "reload-init-action",
+                                          "group": "section-list"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "knowledge-list"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "label": "年级",
+                      "key": "grade",
+                      "children": [
+                        {
+                          "tag": "layout-fit",
+                          "className": "taxonomy-tab-page",
+                          "searchToolBar": [
+                            {
+                              "tag": "form",
+                              "name": "gradeSearchForm",
+                              "className": "taxonomy-toolbar-form",
+                              "initialValues": "${gradeSearchForm}",
+                              "changeAction": [
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "gradeSearchForm": "${({keyword:keyword||'',stage:stage||'',semester:semester||''})}"
+                                  }
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "grade-list"
+                                }
+                              ],
+                              "children": [
+                                {
+                                  "tag": "row",
+                                  "children": [
+                                    {
+                                      "tag": "col",
+                                      "span": 8,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "keyword",
+                                          "label": "搜索",
+                                          "children": [
+                                            {
+                                              "tag": "input",
+                                              "allowClear": true,
+                                              "placeholder": "年级名称/编码"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "col",
+                                      "span": 6,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "stage",
+                                          "label": "学段",
+                                          "children": [
+                                            {
+                                              "tag": "select",
+                                              "allowClear": true,
+                                              "options": [
+                                                {
+                                                  "label": "小学",
+                                                  "value": "primary"
+                                                },
+                                                {
+                                                  "label": "初中",
+                                                  "value": "junior"
+                                                },
+                                                {
+                                                  "label": "高中",
+                                                  "value": "senior"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "col",
+                                      "span": 6,
+                                      "children": [
+                                        {
+                                          "tag": "form-item",
+                                          "name": "semester",
+                                          "label": "学期",
+                                          "children": [
+                                            {
+                                              "tag": "select",
+                                              "allowClear": true,
+                                              "options": [
+                                                {
+                                                  "label": "上学期",
+                                                  "value": "upper"
+                                                },
+                                                {
+                                                  "label": "下学期",
+                                                  "value": "lower"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "topRight": [
+                            {
+                              "tag": "button",
+                              "type": "primary",
+                              "icon": "PlusOutlined",
+                              "children": "新增年级",
+                              "action": [
+                                {
+                                  "tag": "update-store",
+                              "value": {
+                                "gradeDialogVisible": true,
+                                "gradeOp": "add",
+                                "editingGradeID": "",
+                                "gradePinyinLastCode": "",
+                                "gradeForm": {
+                                  "stage": "primary",
+                                  "semester": "upper",
+                                      "grade_code": "",
+                                      "grade_name": "",
+                                      "order_index": 1,
+                                      "status": "enabled"
+                                    }
+                                  }
+                                },
+                                {
+                                  "tag": "reset-form",
+                                  "formName": "gradeForm"
+                                },
+                                {
+                                  "tag": "update-form",
+                                  "formName": "gradeForm",
+                                  "value": "${gradeForm}"
+                                }
+                              ]
+                            },
+                            {
+                              "tag": "button",
+                              "danger": true,
+                              "icon": "DeleteOutlined",
+                              "children": "批量删除",
+                              "disabled": "${!(Array.isArray(gradeSelection) && gradeSelection.length)}",
+                              "style": {
+                                "marginLeft": 8
+                              },
+                              "confirm": {
+                                "title": "${'确认删除已选 ' + (Array.isArray(gradeSelection) ? gradeSelection.length : 0) + ' 个年级？'}",
+                                "description": "删除后关联单元和目录结构列表会重新刷新，请确认已检查选中项。"
+                              },
+                              "action": [
+                                {
+                                  "tag": "ajax",
+                                  "api": "post:/template_data/data?service=question.grade_delete",
+                                  "data": {
+                                    "grade_id_list": "${(Array.isArray(gradeSelection) ? gradeSelection : []).map(item => item.grade_id).filter(Boolean)}"
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "gradeSelection": []
+                                  }
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "grade-list"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "unit-list"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "unit-options"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "section-list"
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "knowledge-list"
+                                }
+                              ]
+                            }
+                          ],
+                          "children": [
+                            {
+                              "tag": "table",
+                              "selection": "${gradeSelection}",
+                              "rowSelection": "multiple",
+                              "rowData": "${gradeList}",
+                              "columnDefs": [
+                                {
+                                  "headerName": "#",
+                                  "width": 60,
+                                  "valueGetter": "node.rowIndex + 1",
+                                  "sortable": false,
+                                  "pinned": "left"
+                                },
+                                {
+                                  "checkboxSelection": true,
+                                  "headerCheckboxSelection": true,
+                                  "headerName": "编码",
+                                  "field": "grade_code",
+                                  "width": 140,
+                                  "pinned": "left"
+                                },
+                                {
+                                  "headerName": "名称",
+                                  "field": "grade_name",
+                                  "width": 120
+                                },
+                                {
+                                  "headerName": "学段",
+                                  "field": "stage_name",
+                                  "width": 110,
+                                  "valueGetter": "data.stage_name || (data.stage === 'primary' ? '小学' : '初中')"
+                                },
+                                {
+                                  "headerName": "学期",
+                                  "field": "semester_name",
+                                  "width": 110,
+                                  "valueGetter": "data.semester_name || (data.semester === 'lower' ? '下学期' : '上学期')"
+                                },
+                                {
+                                  "headerName": "排序",
+                                  "field": "order_index",
+                                  "width": 90
+                                },
+                                {
+                                  "headerName": "操作",
+                                  "field": "op",
+                                  "width": 170,
+                                  "pinned": "right",
+                                  "cellRender": [
+                                    {
+                                      "tag": "button",
+                                      "type": "primary",
+                                      "size": "small",
+                                      "children": "编辑",
+                                      "action": [
+                                        {
+                                          "tag": "update-store",
+                                          "value": {
+                                            "gradeDialogVisible": true,
+                                            "gradeOp": "edit",
+                                            "editingGradeID": "${row.grade_id}",
+                                            "gradeForm": "${row}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "reset-form",
+                                          "formName": "gradeForm"
+                                        },
+                                        {
+                                          "tag": "update-form",
+                                          "formName": "gradeForm",
+                                          "value": "${row}"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "button",
+                                      "danger": true,
+                                      "size": "small",
+                                      "children": "删除",
+                                      "confirm": {
+                                        "title": "确认删除年级？",
+                                        "description": "${'确认删除【' + row.grade_name + '】吗？'}"
+                                      },
+                                      "action": [
+                                        {
+                                          "tag": "ajax",
+                                          "api": "post:/template_data/data?service=question.grade_delete",
+                                          "data": {
+                                            "grade_id_list": "${[row.grade_id]}"
+                                          }
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "grade-list"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "unit-list"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "section-list"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
                                           "group": "knowledge-list"
                                         }
                                       ]
@@ -849,7 +1029,9 @@
                                 {
                                   "tag": "update-store",
                                   "value": {
-                                    "unitSearchForm": "${({keyword:keyword||'',grade:grade||'',subject:subject||'',status:status||''})}"
+                                    "unitSearchForm": "${({keyword:keyword||'',grade:grade||'',subject:subject||''})}",
+                                    "selectedUnitNode": {},
+                                    "unitSelection": []
                                   }
                                 },
                                 {
@@ -863,7 +1045,7 @@
                                   "children": [
                                     {
                                       "tag": "col",
-                                      "span": 7,
+                                      "span": 8,
                                       "children": [
                                         {
                                           "tag": "form-item",
@@ -881,7 +1063,7 @@
                                     },
                                     {
                                       "tag": "col",
-                                      "span": 6,
+                                      "span": 8,
                                       "children": [
                                         {
                                           "tag": "form-item",
@@ -893,7 +1075,7 @@
                                               "allowClear": true,
                                               "showSearch": true,
                                               "fieldNames": {
-                                                "label": "grade_name",
+                                                "label": "grade_label",
                                                 "value": "grade_code"
                                               },
                                               "options": "${gradeList}"
@@ -904,7 +1086,7 @@
                                     },
                                     {
                                       "tag": "col",
-                                      "span": 6,
+                                      "span": 8,
                                       "children": [
                                         {
                                           "tag": "form-item",
@@ -920,33 +1102,6 @@
                                                 "value": "subject_code"
                                               },
                                               "options": "${subjectList}"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "tag": "col",
-                                      "span": 5,
-                                      "children": [
-                                        {
-                                          "tag": "form-item",
-                                          "name": "status",
-                                          "label": "状态",
-                                          "children": [
-                                            {
-                                              "tag": "select",
-                                              "allowClear": true,
-                                              "options": [
-                                                {
-                                                  "label": "启用",
-                                                  "value": "enabled"
-                                                },
-                                                {
-                                                  "label": "停用",
-                                                  "value": "disabled"
-                                                }
-                                              ]
                                             }
                                           ]
                                         }
@@ -970,16 +1125,38 @@
                                     "unitDialogVisible": true,
                                     "unitOp": "add",
                                     "editingUnitID": "",
-                                    "unitForm": {
-                                      "subject": "${((Array.isArray(subjectList) ? subjectList : [])[0] || {}).subject_code || 'english'}",
-                                      "stage": "${((Array.isArray(gradeList) ? gradeList : []).find(item => item.grade_code === 'grade_7') || (Array.isArray(gradeList) ? gradeList : [])[0] || {}).stage || 'junior'}",
-                                      "grade": "${((Array.isArray(gradeList) ? gradeList : []).find(item => item.grade_code === 'grade_7') || (Array.isArray(gradeList) ? gradeList : [])[0] || {}).grade_code || 'grade_7'}",
-                                      "textbook_version": "pep",
-                                      "unit_code": "",
-                                      "unit_name": "",
-                                      "order_index": 1,
-                                      "status": "enabled"
-                                    }
+                                    "unitAutoCodeLast": "",
+                                    "unitForm": "${(()=>{const selected=selectedUnitNode||{};const form=unitSearchForm||{};const subjects=Array.isArray(subjectList)?subjectList:[];const grades=Array.isArray(gradeList)?gradeList:[];const options=Array.isArray(unitNumberOptions)?unitNumberOptions:[];const subject=selected.subject||form.subject||((subjects[0]||{}).subject_code)||'english';const grade=selected.grade||form.grade||((grades.find(item=>item.grade_code==='grade_7')||grades[0]||{}).grade_code)||'grade_7';const gradeRow=grades.find(item=>item.grade_code===grade)||{};const unitNoOf=row=>{row=row||{};const name=String(row.unit_name||'').trim();const english=name.match(/^Unit\\s*(\\d+)\\b/i);if(english)return Number(english[1])||0;const cn=options.find(item=>name.startsWith(String(item.cn_label||'')));if(cn)return Number(cn.value)||0;const code=String(row.unit_code||'');const codeMatch=code.match(/unit[_-]?(\\d+)/i);return codeMatch?(Number(codeMatch[1])||0):0;};const used=(Array.isArray(unitList)?unitList:[]).filter(item=>item&&item.subject===subject&&item.grade===grade).map(unitNoOf).filter(Boolean);const unitNo=String(Math.min(20,Math.max(0,...used)+1)||1);const unitOption=options.find(item=>String(item.value)===unitNo)||{};const unitLabel=subject==='english'?('Unit '+unitNo):(unitOption.cn_label||('第'+unitNo+'单元'));return {subject,stage:selected.stage||gradeRow.stage||'junior',grade,textbook_version:'pep',unit_no:unitNo,unit_title:'',unit_code:'unit_'+unitNo,unit_name:unitLabel,order_index:Number(unitNo)||1,status:'enabled'};})()}"
+                                  }
+                                },
+                                {
+                                  "tag": "reset-form",
+                                  "formName": "unitForm"
+                                },
+                                {
+                                  "tag": "update-form",
+                                  "formName": "unitForm",
+                                  "value": "${unitForm}"
+                                }
+                              ]
+                            },
+                            {
+                              "tag": "button",
+                              "icon": "EditOutlined",
+                              "children": "编辑单元",
+                              "disabled": "${(selectedUnitNode||{}).type !== 'unit'}",
+                              "style": {
+                                "marginLeft": 8
+                              },
+                              "action": [
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "unitDialogVisible": true,
+                                    "unitOp": "edit",
+                                    "editingUnitID": "${(selectedUnitNode||{}).unit_id || \"\"}",
+                                    "unitAutoCodeLast": "${(selectedUnitNode||{}).unit_code || \"\"}",
+                                    "unitForm": "${(()=>{const row=selectedUnitNode||{};const options=Array.isArray(unitNumberOptions)?unitNumberOptions:[];const name=String(row.unit_name||'').trim();let unit_no='';let unit_title=name;const english=name.match(/^Unit\\s*(\\d+)\\b\\s*(.*)$/i);if(english){unit_no=english[1]||'';unit_title=String(english[2]||'').trim();}else{const cn=options.find(item=>name.startsWith(String(item.cn_label||'')));if(cn){unit_no=String(cn.value||'');unit_title=name.slice(String(cn.cn_label||'').length).trim();}}if(!unit_no){const codeMatch=String(row.unit_code||'').match(/unit[_-]?(\\d+)/i);if(codeMatch)unit_no=codeMatch[1]||'';}return Object.assign({},row,{unit_no,unit_title});})()}"
                                   }
                                 },
                                 {
@@ -997,26 +1174,27 @@
                               "tag": "button",
                               "danger": true,
                               "icon": "DeleteOutlined",
-                              "children": "批量删除",
-                              "disabled": "${!(Array.isArray(unitSelection) && unitSelection.length)}",
+                              "children": "删除单元",
+                              "disabled": "${(selectedUnitNode||{}).type !== 'unit'}",
                               "style": {
                                 "marginLeft": 8
                               },
                               "confirm": {
-                                "title": "${'确认删除已选 ' + (Array.isArray(unitSelection) ? unitSelection.length : 0) + ' 个单元？'}",
-                                "description": "删除后知识点列表会重新刷新，请确认已检查选中项。"
+                                "title": "确认删除单元？",
+                                "description": "${'确认删除【' + ((selectedUnitNode||{}).unit_name || (selectedUnitNode||{}).unit_code || '未命名单元') + '】吗？'}"
                               },
                               "action": [
                                 {
                                   "tag": "ajax",
                                   "api": "post:/template_data/data?service=question.unit_delete",
                                   "data": {
-                                    "unit_id_list": "${(Array.isArray(unitSelection) ? unitSelection : []).map(item => item.unit_id).filter(Boolean)}"
+                                    "unit_id_list": "${[(selectedUnitNode||{}).unit_id].filter(Boolean)}"
                                   }
                                 },
                                 {
                                   "tag": "update-store",
                                   "value": {
+                                    "selectedUnitNode": {},
                                     "unitSelection": []
                                   }
                                 },
@@ -1030,6 +1208,10 @@
                                 },
                                 {
                                   "tag": "reload-init-action",
+                                  "group": "section-list"
+                                },
+                                {
+                                  "tag": "reload-init-action",
                                   "group": "knowledge-list"
                                 }
                               ]
@@ -1037,126 +1219,312 @@
                           ],
                           "children": [
                             {
-                              "tag": "table",
-                              "selection": "${unitSelection}",
-                              "rowSelection": "multiple",
-                              "rowData": "${unitList}",
-                              "columnDefs": [
+                              "tag": "div",
+                              "className": "taxonomy-tree-summary",
+                              "children": "${(()=>{const units=Array.isArray(unitList)?unitList:[];const subjects=new Set(units.map(item=>item&&item.subject).filter(Boolean));const grades=new Set(units.map(item=>item&&item.grade).filter(Boolean));const selected=selectedUnitNode||{};const selectedText=selected.type==='unit'?' / 已选单元：'+(selected.unit_name||selected.unit_code||'未命名单元')+(selected.grade_label?' / '+selected.grade_label:''):selected.type==='grade'?' / 已选年级：'+(selected.grade_label||selected.grade_name||selected.grade||''):selected.type==='subject'?' / 已选科目：'+(selected.subject_name||selected.subject||''):'';return '按科目、年级分组维护单元：科目 '+subjects.size+' 个 / 年级 '+grades.size+' 个 / 单元 '+units.length+' 个'+selectedText;})()}"
+                            },
+                            {
+                              "tag": "div",
+                              "className": "taxonomy-tree-wrap",
+                              "children": [
                                 {
-                                  "headerName": "#",
-                                  "width": 60,
-                                  "valueGetter": "node.rowIndex + 1",
-                                  "sortable": false,
-                                  "pinned": "left"
-                                },
+                                  "tag": "tree",
+                                  "height": "100%",
+                                  "showIcon": true,
+                                  "openLevel": 2,
+                                  "treeKey": "${item.key || item.id}",
+                                  "treeIcon": "${item.icon}",
+                                  "treeSelected": "selectedUnitNode",
+                                  "treeTitle": "${item.title || item.name}",
+                                  "treeData": "${(()=>{const form=unitSearchForm||{};const keyword=String(form.keyword||'').trim().toLowerCase();const text=row=>[row.unit_code,row.unit_name,row.subject_name,row.grade_label,row.grade_name,row.grade_semester_name,row.textbook_version_name].filter(Boolean).join(' ').toLowerCase();const subjects=Array.isArray(subjectList)?subjectList:[];const grades=Array.isArray(gradeList)?gradeList:[];const units=(Array.isArray(unitList)?unitList:[]).filter(item=>item&&(!form.subject||item.subject===form.subject)&&(!form.grade||item.grade===form.grade)&&(!keyword||text(item).includes(keyword)));return subjects.filter(subject=>!form.subject||subject.subject_code===form.subject).map(subject=>{const subjectUnits=units.filter(unit=>unit.subject===subject.subject_code);const gradeChildren=grades.filter(grade=>(!form.grade||grade.grade_code===form.grade)&&subjectUnits.some(unit=>unit.grade===grade.grade_code)).map(grade=>{const gradeLabel=grade.grade_label||((grade.grade_name||grade.grade_code||'')+(grade.semester_name?' '+grade.semester_name:''));const unitChildren=subjectUnits.filter(unit=>unit.grade===grade.grade_code).map(unit=>{const unitGradeLabel=unit.grade_label||gradeLabel;const unitTitle=unit.unit_name||unit.unit_code||'未命名单元';return Object.assign({},unit,{key:'unit_'+unit.unit_id,id:'unit_'+unit.unit_id,type:'unit',subject_name:unit.subject_name||subject.subject_name,grade_name:unit.grade_name||grade.grade_name,grade_label:unitGradeLabel,title:unitTitle,name:unitTitle,icon:'FileTextOutlined',children:[]});});return {key:'grade_'+subject.subject_code+'_'+grade.grade_code,id:'grade_'+subject.subject_code+'_'+grade.grade_code,type:'grade',subject:subject.subject_code,subject_name:subject.subject_name,grade:grade.grade_code,stage:grade.stage,grade_name:grade.grade_name,grade_label:gradeLabel,title:gradeLabel||grade.grade_code,name:gradeLabel||grade.grade_code,icon:'ApartmentOutlined',children:unitChildren};}).filter(grade=>grade.children.length>0);return {key:'subject_'+subject.subject_code,id:'subject_'+subject.subject_code,type:'subject',subject:subject.subject_code,subject_name:subject.subject_name,title:subject.subject_name||subject.subject_code,name:subject.subject_name||subject.subject_code,icon:'BookOutlined',children:gradeChildren};}).filter(subject=>subject.children.length>0||(!keyword&&!form.grade));})()}",
+                                  "selectAction": [
+                                    {
+                                      "tag": "update-store",
+                                      "value": {
+                                        "selectedUnitNode": "${selected ? node : {}}",
+                                        "unitSelection": "${selected && node.type === 'unit' ? [node] : []}"
+                                      }
+                                    }
+                                  ],
+                                  "dblAction": [
+                                    {
+                                      "tag": "update-store",
+                                      "enable": "${node.type === 'unit'}",
+                                      "value": {
+                                        "unitDialogVisible": true,
+                                        "unitOp": "edit",
+                                        "editingUnitID": "${node.unit_id || \"\"}",
+                                        "unitAutoCodeLast": "${(node||{}).unit_code || \"\"}",
+                                        "unitForm": "${(()=>{const row=node||{};const options=Array.isArray(unitNumberOptions)?unitNumberOptions:[];const name=String(row.unit_name||'').trim();let unit_no='';let unit_title=name;const english=name.match(/^Unit\\s*(\\d+)\\b\\s*(.*)$/i);if(english){unit_no=english[1]||'';unit_title=String(english[2]||'').trim();}else{const cn=options.find(item=>name.startsWith(String(item.cn_label||'')));if(cn){unit_no=String(cn.value||'');unit_title=name.slice(String(cn.cn_label||'').length).trim();}}if(!unit_no){const codeMatch=String(row.unit_code||'').match(/unit[_-]?(\\d+)/i);if(codeMatch)unit_no=codeMatch[1]||'';}return Object.assign({},row,{unit_no,unit_title});})()}"
+                                      }
+                                    },
+                                    {
+                                      "tag": "reset-form",
+                                      "enable": "${node.type === 'unit'}",
+                                      "formName": "unitForm"
+                                    },
+                                    {
+                                      "tag": "update-form",
+                                      "enable": "${node.type === 'unit'}",
+                                      "formName": "unitForm",
+                                      "value": "${unitForm}"
+                                    }
+                                  ],
+                                  "selectable": true
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "label": "小节",
+                      "key": "section",
+                      "children": [
+                        {
+                          "tag": "layout-fit",
+                          "className": "taxonomy-tab-page",
+                          "searchToolBar": [
+                            {
+                              "tag": "form",
+                              "name": "sectionSearchForm",
+                              "className": "taxonomy-toolbar-form",
+                              "initialValues": "${sectionSearchForm}",
+                              "changeAction": [
                                 {
-                                  "checkboxSelection": true,
-                                  "headerCheckboxSelection": true,
-                                  "headerName": "编码",
-                                  "field": "unit_code",
-                                  "width": 130,
-                                  "pinned": "left"
-                                },
-                                {
-                                  "headerName": "单元名称",
-                                  "field": "unit_name",
-                                  "width": 190,
-                                  "tooltipField": "unit_name"
-                                },
-                                {
-                                  "headerName": "年级",
-                                  "field": "grade_name",
-                                  "width": 110
-                                },
-                                {
-                                  "headerName": "科目",
-                                  "field": "subject_name",
-                                  "width": 100
-                                },
-                                {
-                                  "headerName": "教材",
-                                  "field": "textbook_version_name",
-                                  "width": 110
-                                },
-                                {
-                                  "headerName": "排序",
-                                  "field": "order_index",
-                                  "width": 80
-                                },
-                                {
-                                  "headerName": "状态",
-                                  "field": "status",
-                                  "width": 80,
-                                  "cellRender": {
-                                    "tag": "span",
-                                    "className": "${row.status === 'disabled' ? 'taxonomy-status-disabled' : 'taxonomy-status-enabled'}",
-                                    "children": "${row.status === 'disabled' ? '停用' : '启用'}"
+                                  "tag": "update-store",
+                                  "value": {
+                                    "sectionSearchForm": "${({keyword:keyword||'',grade:grade||'',subject:subject||''})}",
+                                    "selectedSectionNode": {},
+                                    "sectionSelection": []
                                   }
                                 },
                                 {
-                                  "headerName": "操作",
-                                  "field": "op",
-                                  "width": 170,
-                                  "pinned": "right",
-                                  "cellRender": [
+                                  "tag": "reload-init-action",
+                                  "group": "section-list"
+                                }
+                              ],
+                              "children": [
+                                {
+                                  "tag": "row",
+                                  "children": [
                                     {
-                                      "tag": "button",
-                                      "type": "primary",
-                                      "size": "small",
-                                      "children": "编辑",
-                                      "action": [
+                                      "tag": "col",
+                                      "span": 8,
+                                      "children": [
                                         {
-                                          "tag": "update-store",
-                                          "value": {
-                                            "unitDialogVisible": true,
-                                            "unitOp": "edit",
-                                            "editingUnitID": "${row.unit_id}",
-                                            "unitForm": "${row}"
-                                          }
-                                        },
-                                        {
-                                          "tag": "reset-form",
-                                          "formName": "unitForm"
-                                        },
-                                        {
-                                          "tag": "update-form",
-                                          "formName": "unitForm",
-                                          "value": "${row}"
+                                          "tag": "form-item",
+                                          "name": "keyword",
+                                          "label": "搜索",
+                                          "children": [
+                                            {
+                                              "tag": "input",
+                                              "allowClear": true,
+                                              "placeholder": "小节/单元/编码"
+                                            }
+                                          ]
                                         }
                                       ]
                                     },
                                     {
-                                      "tag": "button",
-                                      "danger": true,
-                                      "size": "small",
-                                      "children": "删除",
-                                      "confirm": {
-                                        "title": "确认删除单元？",
-                                        "description": "${'确认删除【' + row.unit_name + '】吗？'}"
-                                      },
-                                      "action": [
+                                      "tag": "col",
+                                      "span": 8,
+                                      "children": [
                                         {
-                                          "tag": "ajax",
-                                          "api": "post:/template_data/data?service=question.unit_delete",
-                                          "data": {
-                                            "unit_id_list": "${[row.unit_id]}"
-                                          }
-                                        },
+                                          "tag": "form-item",
+                                          "name": "grade",
+                                          "label": "年级",
+                                          "children": [
+                                            {
+                                              "tag": "select",
+                                              "allowClear": true,
+                                              "showSearch": true,
+                                              "fieldNames": {
+                                                "label": "grade_label",
+                                                "value": "grade_code"
+                                              },
+                                              "options": "${gradeList}"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "tag": "col",
+                                      "span": 8,
+                                      "children": [
                                         {
-                                          "tag": "reload-init-action",
-                                          "group": "unit-list"
-                                        },
-                                        {
-                                          "tag": "reload-init-action",
-                                          "group": "unit-options"
-                                        },
-                                        {
-                                          "tag": "reload-init-action",
-                                          "group": "knowledge-list"
+                                          "tag": "form-item",
+                                          "name": "subject",
+                                          "label": "科目",
+                                          "children": [
+                                            {
+                                              "tag": "select",
+                                              "allowClear": true,
+                                              "showSearch": true,
+                                              "fieldNames": {
+                                                "label": "subject_name",
+                                                "value": "subject_code"
+                                              },
+                                              "options": "${subjectList}"
+                                            }
+                                          ]
                                         }
                                       ]
                                     }
                                   ]
+                                }
+                              ]
+                            }
+                          ],
+                          "topRight": [
+                            {
+                              "tag": "button",
+                              "type": "primary",
+                              "icon": "PlusOutlined",
+                              "children": "新增小节",
+                              "action": [
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "sectionDialogVisible": true,
+                                    "sectionOp": "add",
+                                    "editingSectionID": "",
+                                    "sectionPinyinLastCode": "",
+                                    "sectionForm": "${(()=>{const selected=selectedSectionNode||{};const form=sectionSearchForm||{};const units=Array.isArray(allUnitList)?allUnitList:[];const grades=Array.isArray(gradeList)?gradeList:[];const subjects=Array.isArray(subjectList)?subjectList:[];const unit=selected.type==='section'?(units.find(item=>item.unit_id===selected.unit_id)||{}):(selected.type==='unit'?selected:{});const subject=unit.subject||selected.subject||form.subject||((subjects[0]||{}).subject_code)||'english';const grade=unit.grade||selected.grade||form.grade||((grades.find(item=>item.grade_code==='grade_7')||grades[0]||{}).grade_code)||'grade_7';const gradeRow=grades.find(item=>item.grade_code===grade)||{};const fallbackUnit=units.find(item=>item.subject===subject&&item.grade===grade)||{};return {subject,stage:unit.stage||selected.stage||gradeRow.stage||'junior',grade,unit_id:unit.unit_id||fallbackUnit.unit_id||'',section_code:'',section_name:'',order_index:1,status:'enabled'};})()}"
+                                  }
+                                },
+                                {
+                                  "tag": "reset-form",
+                                  "formName": "sectionForm"
+                                },
+                                {
+                                  "tag": "update-form",
+                                  "formName": "sectionForm",
+                                  "value": "${sectionForm}"
+                                }
+                              ]
+                            },
+                            {
+                              "tag": "button",
+                              "icon": "EditOutlined",
+                              "children": "编辑小节",
+                              "disabled": "${(selectedSectionNode||{}).type !== 'section'}",
+                              "style": {
+                                "marginLeft": 8
+                              },
+                              "action": [
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "sectionDialogVisible": true,
+                                    "sectionOp": "edit",
+                                    "editingSectionID": "${(selectedSectionNode||{}).section_id || \"\"}",
+                                    "sectionPinyinLastCode": "${(selectedSectionNode||{}).section_code || \"\"}",
+                                    "sectionForm": "${selectedSectionNode || {}}"
+                                  }
+                                },
+                                {
+                                  "tag": "reset-form",
+                                  "formName": "sectionForm"
+                                },
+                                {
+                                  "tag": "update-form",
+                                  "formName": "sectionForm",
+                                  "value": "${selectedSectionNode || {}}"
+                                }
+                              ]
+                            },
+                            {
+                              "tag": "button",
+                              "danger": true,
+                              "icon": "DeleteOutlined",
+                              "children": "删除小节",
+                              "disabled": "${(selectedSectionNode||{}).type !== 'section'}",
+                              "style": {
+                                "marginLeft": 8
+                              },
+                              "confirm": {
+                                "title": "确认删除小节？",
+                                "description": "${'确认删除【' + ((selectedSectionNode||{}).section_name || (selectedSectionNode||{}).section_code || '未命名小节') + '】吗？'}"
+                              },
+                              "action": [
+                                {
+                                  "tag": "ajax",
+                                  "api": "post:/template_data/data?service=question.section_delete",
+                                  "data": {
+                                    "section_id_list": "${[(selectedSectionNode||{}).section_id].filter(Boolean)}"
+                                  }
+                                },
+                                {
+                                  "tag": "update-store",
+                                  "value": {
+                                    "selectedSectionNode": {},
+                                    "sectionSelection": []
+                                  }
+                                },
+                                {
+                                  "tag": "reload-init-action",
+                                  "group": "section-list"
+                                }
+                              ]
+                            }
+                          ],
+                          "children": [
+                            {
+                              "tag": "div",
+                              "className": "taxonomy-tree-summary",
+                              "children": "${(()=>{const sections=Array.isArray(sectionList)?sectionList:[];const units=Array.isArray(allUnitList)?allUnitList:[];const selected=selectedSectionNode||{};const selectedText=selected.type==='section'?' / 已选小节：'+(selected.section_name||selected.section_code||'未命名小节'):selected.type==='unit'?' / 已选单元：'+(selected.unit_name||selected.unit_code||'未命名单元'):selected.type==='grade'?' / 已选年级：'+(selected.grade_label||selected.grade_name||selected.grade||''):selected.type==='subject'?' / 已选科目：'+(selected.subject_name||selected.subject||''):'';return '按科目、年级、单元维护小节：单元 '+units.length+' 个 / 小节 '+sections.length+' 个'+selectedText;})()}"
+                            },
+                            {
+                              "tag": "div",
+                              "className": "taxonomy-tree-wrap",
+                              "children": [
+                                {
+                                  "tag": "tree",
+                                  "height": "100%",
+                                  "showIcon": true,
+                                  "openLevel": 3,
+                                  "treeKey": "${item.key || item.id}",
+                                  "treeIcon": "${item.icon}",
+                                  "treeSelected": "selectedSectionNode",
+                                  "treeTitle": "${item.title || item.name}",
+                                  "treeData": "${(()=>{const form=sectionSearchForm||{};const keyword=String(form.keyword||'').trim().toLowerCase();const subjects=Array.isArray(subjectList)?subjectList:[];const grades=Array.isArray(gradeList)?gradeList:[];const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>item&&(!form.subject||item.subject===form.subject)&&(!form.grade||item.grade===form.grade));const sections=Array.isArray(sectionList)?sectionList:[];const text=row=>[row.subject_name,row.grade_label,row.grade_name,row.grade_semester_name,row.unit_code,row.unit_name,row.section_code,row.section_name].filter(Boolean).join(' ').toLowerCase();return subjects.filter(subject=>!form.subject||subject.subject_code===form.subject).map(subject=>{const subjectUnits=units.filter(unit=>unit.subject===subject.subject_code);const gradeChildren=grades.filter(grade=>(!form.grade||grade.grade_code===form.grade)&&subjectUnits.some(unit=>unit.grade===grade.grade_code)).map(grade=>{const gradeLabel=grade.grade_label||((grade.grade_name||grade.grade_code||'')+(grade.semester_name?' '+grade.semester_name:''));const unitChildren=subjectUnits.filter(unit=>unit.grade===grade.grade_code).map(unit=>{const unitTitle=unit.unit_name||unit.unit_code||'未命名单元';const sectionChildren=sections.filter(section=>section.unit_id===unit.unit_id).map(section=>Object.assign({},section,{key:'section_'+section.section_id,id:'section_'+section.section_id,type:'section',subject:section.subject||unit.subject,stage:section.stage||unit.stage||grade.stage,grade:section.grade||unit.grade,subject_name:section.subject_name||unit.subject_name||subject.subject_name,grade_label:section.grade_label||unit.grade_label||gradeLabel,unit_id:unit.unit_id,unit_name:unit.unit_name,unit_code:unit.unit_code,title:section.section_name||section.section_code||'未命名小节',name:section.section_name||section.section_code||'未命名小节',icon:'ProfileOutlined',children:[]})).filter(section=>!keyword||text(section).includes(keyword));return Object.assign({},unit,{key:'unit_'+unit.unit_id,id:'unit_'+unit.unit_id,type:'unit',subject_name:unit.subject_name||subject.subject_name,grade_label:unit.grade_label||gradeLabel,title:unitTitle,name:unitTitle,icon:'FolderOpenOutlined',children:sectionChildren,__match:!keyword||text(unit).includes(keyword)});}).filter(unit=>unit.children.length>0||unit.__match);return {key:'grade_'+subject.subject_code+'_'+grade.grade_code,id:'grade_'+subject.subject_code+'_'+grade.grade_code,type:'grade',subject:subject.subject_code,subject_name:subject.subject_name,grade:grade.grade_code,stage:grade.stage,grade_name:grade.grade_name,grade_label:gradeLabel,title:gradeLabel||grade.grade_code,name:gradeLabel||grade.grade_code,icon:'ApartmentOutlined',children:unitChildren};}).filter(grade=>grade.children.length>0||!keyword);return {key:'subject_'+subject.subject_code,id:'subject_'+subject.subject_code,type:'subject',subject:subject.subject_code,subject_name:subject.subject_name,title:subject.subject_name||subject.subject_code,name:subject.subject_name||subject.subject_code,icon:'BookOutlined',children:gradeChildren};}).filter(subject=>subject.children.length>0||(!keyword&&!form.grade));})()}",
+                                  "selectAction": [
+                                    {
+                                      "tag": "update-store",
+                                      "value": {
+                                        "selectedSectionNode": "${selected ? node : {}}",
+                                        "sectionSelection": "${selected && node.type === 'section' ? [node] : []}"
+                                      }
+                                    }
+                                  ],
+                                  "dblAction": [
+                                    {
+                                      "tag": "update-store",
+                                      "enable": "${node.type === 'section'}",
+                                      "value": {
+                                        "sectionDialogVisible": true,
+                                        "sectionOp": "edit",
+                                        "editingSectionID": "${node.section_id || \"\"}",
+                                        "sectionPinyinLastCode": "${(node||{}).section_code || \"\"}",
+                                        "sectionForm": "${node || {}}"
+                                      }
+                                    },
+                                    {
+                                      "tag": "reset-form",
+                                      "enable": "${node.type === 'section'}",
+                                      "formName": "sectionForm"
+                                    },
+                                    {
+                                      "tag": "update-form",
+                                      "enable": "${node.type === 'section'}",
+                                      "formName": "sectionForm",
+                                      "value": "${node || {}}"
+                                    }
+                                  ],
+                                  "selectable": true
                                 }
                               ]
                             }
@@ -1184,12 +1552,12 @@
           "tag": "panel",
           "id": "taxonomy-knowledge-panel",
           "defaultSize": 58,
-          "minSize": 42,
+          "minSize": 0,
           "className": "taxonomy-panel",
           "children": [
             {
               "tag": "layout-fit",
-              "title": "知识点维护",
+              "title": "课本目录结构",
               "style": {
                 "height": "100%",
                 "overflow": "hidden"
@@ -1197,9 +1565,56 @@
               "topRight": [
                 {
                   "tag": "button",
+                  "icon": "FilePdfOutlined",
+                  "children": "PDF导入目录",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "pdfKnowledgeImportVisible": true,
+                        "pdfKnowledgeImportBusy": "",
+                        "pdfKnowledgeImportLastError": "",
+                        "pdfKnowledgeImportResult": {},
+                        "pdfKnowledgeImportSourceList": [],
+                        "pdfKnowledgeImportIssueList": [],
+                        "pdfKnowledgeImportForm": "${(()=>{const form=knowledgeSearchForm||{};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>(!form.grade||item.grade===form.grade)&&(!form.subject||item.subject===form.subject));const current=units[0]||{};const gradeCode=current.grade||form.grade||'grade_3';const gradeRow=(Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===gradeCode)||{};return {file_path:(pdfKnowledgeImportForm||{}).file_path||'/data/project/ai-study/题目/三年级上册英语全册知识考点汇总人教版.pdf',subject:current.subject||form.subject||'english',stage:current.stage||gradeRow.stage||'primary',grade:gradeCode};})()}"
+                      }
+                    },
+                    {
+                      "tag": "update-form",
+                      "formName": "pdfKnowledgeImportForm",
+                      "value": "${pdfKnowledgeImportForm}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "button",
+                  "icon": "SettingOutlined",
+                  "children": "类型维护",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "knowledgeTypeManageVisible": true,
+                        "knowledgeTypeSubject": "${(knowledgeSearchForm||{}).subject || (selectedTaxonomyNode||{}).subject || knowledgeTypeSubject || 'english'}",
+                        "selectedKnowledgeTypeCode": ""
+                      }
+                    },
+                    {
+                      "tag": "reload-init-action",
+                      "group": "knowledge-type-list"
+                    },
+                    {
+                      "tag": "reload-init-action",
+                      "group": "knowledge-category-list"
+                    }
+                  ]
+                },
+                {
+                  "tag": "button",
                   "type": "primary",
                   "icon": "PlusOutlined",
-                  "children": "新增知识点",
+                  "children": "新增目录项",
                   "action": [
                     {
                       "tag": "update-store",
@@ -1207,6 +1622,9 @@
                         "knowledgeDialogVisible": true,
                         "knowledgeOp": "add",
                         "editingKnowledgeID": "",
+                        "knowledgePinyinLastCode": "",
+                        "knowledgeTypeSubject": "${(()=>{const form=knowledgeSearchForm||{};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>(!form.grade||item.grade===form.grade)&&(!form.subject||item.subject===form.subject));const current=units.find(item=>item.unit_id===form.unit_id)||units[0]||{};return current.subject||form.subject||knowledgeTypeSubject||'english';})()}",
+                        "selectedKnowledgeTypeCode": "",
                         "knowledgeForm": {
                           "subject": "${(()=>{const form=knowledgeSearchForm||{};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>(!form.grade||item.grade===form.grade)&&(!form.subject||item.subject===form.subject));const current=units.find(item=>item.unit_id===form.unit_id)||units[0]||{};return current.subject||form.subject||'english';})()}",
                           "stage": "${(()=>{const form=knowledgeSearchForm||{};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>(!form.grade||item.grade===form.grade)&&(!form.subject||item.subject===form.subject));const current=units.find(item=>item.unit_id===form.unit_id)||units[0]||{};const gradeCode=current.grade||form.grade||'grade_7';const gradeRow=(Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===gradeCode)||{};return current.stage||gradeRow.stage||'junior';})()}",
@@ -1214,6 +1632,9 @@
                           "parent_id": "${(()=>{const form=knowledgeSearchForm||{};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>(!form.grade||item.grade===form.grade)&&(!form.subject||item.subject===form.subject));const current=units.find(item=>item.unit_id===form.unit_id)||units[0]||{};return current.unit_id||'';})()}",
                           "knowledge_code": "",
                           "knowledge_name": "",
+                          "knowledge_type": "${((Array.isArray(knowledgeTypeList)?knowledgeTypeList:[])[0]||{}).sys_code||''}",
+                          "knowledge_category": "${(()=>{const type=((Array.isArray(knowledgeTypeList)?knowledgeTypeList:[])[0]||{}).sys_code||'';const row=(Array.isArray(knowledgeCategoryList)?knowledgeCategoryList:[]).find(item=>item.icon===type)||{};return row.sys_code||'';})()}",
+                          "content_detail": "",
                           "order_index": 1,
                           "status": "enabled"
                         }
@@ -1240,8 +1661,8 @@
                     "marginLeft": 8
                   },
                   "confirm": {
-                    "title": "${'确认删除已选 ' + (Array.isArray(knowledgeSelection) ? knowledgeSelection.length : 0) + ' 个知识点？'}",
-                    "description": "删除后知识点列表会重新刷新，请确认已检查选中项。"
+                    "title": "${'确认删除已选 ' + (Array.isArray(knowledgeSelection) ? knowledgeSelection.length : 0) + ' 个目录项？'}",
+                    "description": "删除后目录结构列表会重新刷新，请确认已检查选中项。"
                   },
                   "action": [
                     {
@@ -1274,7 +1695,7 @@
                       "tag": "panel",
                       "id": "taxonomy-knowledge-unit-tree-panel",
                       "defaultSize": 24,
-                      "minSize": 18,
+                      "minSize": 0,
                       "className": "taxonomy-subpanel",
                       "children": [
                         {
@@ -1299,19 +1720,29 @@
                                   "treeKey": "${item.key || item.id}",
                                   "treeTitle": "${item.title || item.name}",
                                   "treeIcon": "${item.icon}",
-                                  "treeData": "${(()=>{const form=knowledgeSearchForm||{};const subject=form.subject||'';if(!subject)return [];const keyword=String(form.keyword||'').trim().toLowerCase();const text=row=>[row.unit_code,row.unit_name,row.knowledge_code,row.knowledge_name,row.grade_name,row.subject_name].filter(Boolean).join(' ').toLowerCase();const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>item&&item.subject===subject);const rows=(Array.isArray(knowledgeList)?knowledgeList:[]);const gradeRows=(Array.isArray(gradeList)?gradeList:[]);return gradeRows.filter(grade=>units.some(unit=>unit.grade===grade.grade_code)).map(grade=>{const children=units.filter(unit=>unit.grade===grade.grade_code).map(unit=>{const hasRow=rows.some(row=>(row.unit_id||row.parent_id)===unit.unit_id);return Object.assign({},unit,{key:'unit_'+unit.unit_id,id:'unit_'+unit.unit_id,type:'unit',title:unit.unit_name||unit.unit_code||'未命名单元',name:unit.unit_name||unit.unit_code||'未命名单元',icon:'FolderOpenOutlined',children:[],__hasKnowledgeMatch:hasRow});}).filter(unit=>!keyword||text(unit).includes(keyword)||unit.__hasKnowledgeMatch);return {key:'grade_'+grade.grade_code,id:'grade_'+grade.grade_code,type:'grade',grade:grade.grade_code,subject,name:grade.grade_name||grade.grade_code,title:grade.grade_name||grade.grade_code,icon:'ApartmentOutlined',children};}).filter(grade=>grade.children.length>0||!keyword);})()}",
+                                  "treeData": "${(()=>{const form=knowledgeSearchForm||{};const subject=form.subject||'';if(!subject)return [];const keyword=String(form.keyword||'').trim().toLowerCase();const text=row=>[row.unit_code,row.unit_name,row.knowledge_code,row.knowledge_name,row.grade_label,row.grade_name,row.grade_semester_name,row.subject_name].filter(Boolean).join(' ').toLowerCase();const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>item&&item.subject===subject);const rows=(Array.isArray(knowledgeList)?knowledgeList:[]);const gradeRows=(Array.isArray(gradeList)?gradeList:[]);return gradeRows.filter(grade=>units.some(unit=>unit.grade===grade.grade_code)).map(grade=>{const gradeLabel=grade.grade_label||((grade.grade_name||grade.grade_code||'')+(grade.semester_name?' '+grade.semester_name:''));const children=units.filter(unit=>unit.grade===grade.grade_code).map(unit=>{const hasRow=rows.some(row=>(row.unit_id||row.parent_id)===unit.unit_id);const unitTitle=unit.unit_name||unit.unit_code||'未命名单元';return Object.assign({},unit,{key:'unit_'+unit.unit_id,id:'unit_'+unit.unit_id,type:'unit',grade_label:unit.grade_label||gradeLabel,title:unitTitle,name:unitTitle,icon:'FolderOpenOutlined',children:[],__hasKnowledgeMatch:hasRow});}).filter(unit=>!keyword||text(unit).includes(keyword)||unit.__hasKnowledgeMatch);return {key:'grade_'+grade.grade_code,id:'grade_'+grade.grade_code,type:'grade',grade:grade.grade_code,subject,name:gradeLabel||grade.grade_code,title:gradeLabel||grade.grade_code,icon:'ApartmentOutlined',children};}).filter(grade=>grade.children.length>0||!keyword);})()}",
                                   "selectAction": [
                                     {
                                       "tag": "update-store",
                                       "value": {
                                         "selectedTaxonomyNode": "${selected?{key:node.key||node.id||'',type:node.type||'',grade:node.grade||'',subject:node.subject||'',unit_id:node.unit_id||'',name:node.name||node.title||''}:{}}",
-                                        "knowledgeSearchForm": "${(()=>{const form=knowledgeSearchForm||{};if(!selected)return Object.assign({},form,{unit_id:''});return Object.assign({},form,{grade:node.grade||form.grade||'',subject:node.subject||form.subject||'',unit_id:node.type==='unit'?(node.unit_id||''):''});})()}"
+                                        "knowledgeSearchForm": "${(()=>{const form=knowledgeSearchForm||{};if(!selected)return Object.assign({},form,{unit_id:''});return Object.assign({},form,{grade:node.grade||form.grade||'',subject:node.subject||form.subject||'',unit_id:node.type==='unit'?(node.unit_id||''):''});})()}",
+                                        "knowledgeTypeSubject": "${selected?(node.subject||knowledgeTypeSubject||'english'):(knowledgeTypeSubject||'english')}",
+                                        "selectedKnowledgeTypeCode": ""
                                       }
                                     },
                                     {
                                       "tag": "update-form",
                                       "formName": "knowledgeSearchForm",
                                       "value": "${knowledgeSearchForm}"
+                                    },
+                                    {
+                                      "tag": "reload-init-action",
+                                      "group": "knowledge-type-list"
+                                    },
+                                    {
+                                      "tag": "reload-init-action",
+                                      "group": "knowledge-category-list"
                                     },
                                     {
                                       "tag": "reload-init-action",
@@ -1340,12 +1771,12 @@
                       "tag": "panel",
                       "id": "taxonomy-knowledge-list-panel",
                       "defaultSize": 76,
-                      "minSize": 58,
+                      "minSize": 0,
                       "className": "taxonomy-subpanel",
                       "children": [
                         {
                           "tag": "layout-fit",
-                          "title": "知识点列表",
+                          "title": "目录结构列表",
                           "style": {
                             "height": "100%",
                             "overflow": "hidden"
@@ -1356,6 +1787,12 @@
                               "selection": "${knowledgeSelection}",
                               "rowSelection": "multiple",
                               "rowData": "${knowledgeList}",
+                              "defaultColDef": {
+                                "resizable": true,
+                                "sortable": true,
+                                "wrapText": true,
+                                "autoHeight": true
+                              },
                               "columnDefs": [
                                 {
                                   "headerName": "#",
@@ -1373,10 +1810,46 @@
                                   "pinned": "left"
                                 },
                                 {
-                                  "headerName": "知识点",
+                                  "headerName": "名称",
                                   "field": "knowledge_name",
                                   "width": 150,
                                   "tooltipField": "knowledge_name"
+                                },
+                                {
+                                  "headerName": "类型",
+                                  "field": "knowledge_type_name",
+                                  "width": 110,
+                                  "cellRender": {
+                                    "tag": "span",
+                                    "children": "${row.knowledge_type_name || row.knowledge_type || '-'}"
+                                  }
+                                },
+                                {
+                                  "headerName": "具体分类",
+                                  "field": "knowledge_category_name",
+                                  "width": 130,
+                                  "cellRender": {
+                                    "tag": "span",
+                                    "children": "${row.knowledge_category_name || row.knowledge_category || '-'}"
+                                  }
+                                },
+                                {
+                                  "headerName": "明细",
+                                  "field": "content_detail",
+                                  "width": 360,
+                                  "tooltipField": "content_detail",
+                                  "cellRender": {
+                                    "tag": "div",
+                                    "style": {
+                                      "whiteSpace": "pre-wrap",
+                                      "lineHeight": "1.45",
+                                      "fontSize": 12,
+                                      "maxHeight": 110,
+                                      "overflow": "auto",
+                                      "color": "#1f2937"
+                                    },
+                                    "children": "${row.content_detail || (row.content_count ? ('共 ' + row.content_count + ' 条正文') : '-')}"
+                                  }
                                 },
                                 {
                                   "headerName": "单元",
@@ -1400,25 +1873,14 @@
                                   "width": 70
                                 },
                                 {
-                                  "headerName": "状态",
-                                  "field": "status",
-                                  "width": 70,
-                                  "cellRender": {
-                                    "tag": "span",
-                                    "className": "${row.status === 'disabled' ? 'taxonomy-status-disabled' : 'taxonomy-status-enabled'}",
-                                    "children": "${row.status === 'disabled' ? '停用' : '启用'}"
-                                  }
-                                },
-                                {
                                   "headerName": "操作",
                                   "field": "op",
                                   "width": 160,
                                   "minWidth": 150,
-                                  "maxWidth": 180,
                                   "pinned": "right",
                                   "sortable": false,
                                   "filter": false,
-                                  "resizable": false,
+                                  "resizable": true,
                                   "suppressSizeToFit": true,
                                   "cellClass": "taxonomy-action-cell",
                                   "cellRender": [
@@ -1435,8 +1897,19 @@
                                             "knowledgeDialogVisible": true,
                                             "knowledgeOp": "edit",
                                             "editingKnowledgeID": "${row.knowledge_id}",
+                                            "knowledgePinyinLastCode": "${row.knowledge_code || \"\"}",
+                                            "knowledgeTypeSubject": "${row.subject || (knowledgeSearchForm||{}).subject || knowledgeTypeSubject || 'english'}",
+                                            "selectedKnowledgeTypeCode": "",
                                             "knowledgeForm": "${Object.assign({}, row, {parent_id: row.parent_id || row.unit_id || ''})}"
                                           }
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "knowledge-type-list"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
+                                          "group": "knowledge-category-list"
                                         },
                                         {
                                           "tag": "reset-form",
@@ -1459,7 +1932,7 @@
                                       },
                                       "children": "删除",
                                       "confirm": {
-                                        "title": "确认删除知识点？",
+                                        "title": "确认删除目录项？",
                                         "description": "${'确认删除【' + row.knowledge_name + '】吗？'}"
                                       },
                                       "action": [
@@ -1499,13 +1972,23 @@
                       "tag": "update-store",
                       "value": {
                         "selectedTaxonomyNode": {},
-                        "knowledgeSearchForm": "${(()=>{const prev=knowledgeSearchForm||{};const next={keyword:keyword||'',subject:subject||'',status:status||'',grade:grade||prev.grade||'',unit_id:unit_id||prev.unit_id||''};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>!next.subject||item.subject===next.subject);const validGrade=!!(next.grade&&units.some(item=>item.grade===next.grade));const validUnit=!!(next.unit_id&&units.some(item=>item.unit_id===next.unit_id&&(!next.grade||item.grade===next.grade)));const first=units[0]||{};return Object.assign({},next,{grade:validGrade?next.grade:(first.grade||''),unit_id:validUnit?next.unit_id:''});})()}"
+                        "knowledgeSearchForm": "${(()=>{const prev=knowledgeSearchForm||{};const next={keyword:keyword||'',subject:subject||'',grade:grade||prev.grade||'',unit_id:unit_id||prev.unit_id||''};const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>!next.subject||item.subject===next.subject);const validGrade=!!(next.grade&&units.some(item=>item.grade===next.grade));const validUnit=!!(next.unit_id&&units.some(item=>item.unit_id===next.unit_id&&(!next.grade||item.grade===next.grade)));const first=units[0]||{};return Object.assign({},next,{grade:validGrade?next.grade:(first.grade||''),unit_id:validUnit?next.unit_id:''});})()}",
+                        "knowledgeTypeSubject": "${(()=>{const nextSubject=subject||'';const units=(Array.isArray(allUnitList)?allUnitList:[]).filter(item=>!nextSubject||item.subject===nextSubject);const first=units[0]||{};return nextSubject||first.subject||knowledgeTypeSubject||'english';})()}",
+                        "selectedKnowledgeTypeCode": ""
                       }
                     },
                     {
                       "tag": "update-form",
                       "formName": "knowledgeSearchForm",
                       "value": "${knowledgeSearchForm}"
+                    },
+                    {
+                      "tag": "reload-init-action",
+                      "group": "knowledge-type-list"
+                    },
+                    {
+                      "tag": "reload-init-action",
+                      "group": "knowledge-category-list"
                     },
                     {
                       "tag": "reload-init-action",
@@ -1567,7 +2050,7 @@
                         },
                         {
                           "tag": "col",
-                          "span": 10,
+                          "span": 16,
                           "children": [
                             {
                               "tag": "form-item",
@@ -1577,34 +2060,7 @@
                                 {
                                   "tag": "input",
                                   "allowClear": true,
-                                  "placeholder": "知识点/单元快捷过滤"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "tag": "col",
-                          "span": 6,
-                          "children": [
-                            {
-                              "tag": "form-item",
-                              "name": "status",
-                              "label": "状态",
-                              "children": [
-                                {
-                                  "tag": "select",
-                                  "allowClear": true,
-                                  "options": [
-                                    {
-                                      "label": "启用",
-                                      "value": "enabled"
-                                    },
-                                    {
-                                      "label": "停用",
-                                      "value": "disabled"
-                                    }
-                                  ]
+                                  "placeholder": "目录项/单元快捷过滤"
                                 }
                               ]
                             }
@@ -1666,6 +2122,10 @@
         },
         {
           "tag": "reload-init-action",
+          "group": "section-list"
+        },
+        {
+          "tag": "reload-init-action",
           "group": "knowledge-list"
         }
       ],
@@ -1688,7 +2148,7 @@
             },
             {
               "tag": "update-form",
-              "enable": "${gradeOp === 'add' && !String(grade_name || '').trim()}",
+              "enable": "${gradeOp === 'add' && !String(grade_name || '').trim() && (!String(grade_code || '').trim() || String(grade_code || '').trim() === (gradePinyinLastCode || ''))}",
               "formName": "gradeForm",
               "value": {
                 "grade_code": ""
@@ -1713,10 +2173,17 @@
             },
             {
               "tag": "update-form",
-              "enable": "${gradeOp === 'add' && gradePinyinTypingName === String(grade_name || '').trim() && (gradePinyinResult || {}).success}",
+              "enable": "${gradeOp === 'add' && gradePinyinTypingName === String(grade_name || '').trim() && (gradePinyinResult || {}).success && (!String(grade_code || '').trim() || String(grade_code || '').trim() === (gradePinyinLastCode || ''))}",
               "formName": "gradeForm",
               "value": {
                 "grade_code": "${((gradePinyinResult || {}).data || {}).code || ''}"
+              }
+            },
+            {
+              "tag": "update-store",
+              "enable": "${gradeOp === 'add' && gradePinyinTypingName === String(grade_name || '').trim() && (gradePinyinResult || {}).success && (!String(grade_code || '').trim() || String(grade_code || '').trim() === (gradePinyinLastCode || ''))}",
+              "value": {
+                "gradePinyinLastCode": "${((gradePinyinResult || {}).data || {}).code || ''}"
               }
             }
           ],
@@ -1742,6 +2209,30 @@
                     {
                       "label": "初中",
                       "value": "junior"
+                    },
+                    {
+                      "label": "高中",
+                      "value": "senior"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "semester",
+              "label": "学期",
+              "children": [
+                {
+                  "tag": "select",
+                  "options": [
+                    {
+                      "label": "上学期",
+                      "value": "upper"
+                    },
+                    {
+                      "label": "下学期",
+                      "value": "lower"
                     }
                   ]
                 }
@@ -1789,26 +2280,6 @@
                 {
                   "tag": "input",
                   "isNumber": true
-                }
-              ]
-            },
-            {
-              "tag": "form-item",
-              "name": "status",
-              "label": "状态",
-              "children": [
-                {
-                  "tag": "select",
-                  "options": [
-                    {
-                      "label": "启用",
-                      "value": "enabled"
-                    },
-                    {
-                      "label": "停用",
-                      "value": "disabled"
-                    }
-                  ]
                 }
               ]
             }
@@ -1862,6 +2333,10 @@
         },
         {
           "tag": "reload-init-action",
+          "group": "section-list"
+        },
+        {
+          "tag": "reload-init-action",
           "group": "knowledge-list"
         }
       ],
@@ -1884,7 +2359,7 @@
             },
             {
               "tag": "update-form",
-              "enable": "${subjectOp === 'add' && !String(subject_name || '').trim()}",
+              "enable": "${subjectOp === 'add' && !String(subject_name || '').trim() && (!String(subject_code || '').trim() || String(subject_code || '').trim() === (subjectPinyinLastCode || ''))}",
               "formName": "subjectForm",
               "value": {
                 "subject_code": ""
@@ -1909,10 +2384,17 @@
             },
             {
               "tag": "update-form",
-              "enable": "${subjectOp === 'add' && subjectPinyinTypingName === String(subject_name || '').trim() && (subjectPinyinResult || {}).success}",
+              "enable": "${subjectOp === 'add' && subjectPinyinTypingName === String(subject_name || '').trim() && (subjectPinyinResult || {}).success && (!String(subject_code || '').trim() || String(subject_code || '').trim() === (subjectPinyinLastCode || ''))}",
               "formName": "subjectForm",
               "value": {
                 "subject_code": "${((subjectPinyinResult || {}).data || {}).code || ''}"
+              }
+            },
+            {
+              "tag": "update-store",
+              "enable": "${subjectOp === 'add' && subjectPinyinTypingName === String(subject_name || '').trim() && (subjectPinyinResult || {}).success && (!String(subject_code || '').trim() || String(subject_code || '').trim() === (subjectPinyinLastCode || ''))}",
+              "value": {
+                "subjectPinyinLastCode": "${((subjectPinyinResult || {}).data || {}).code || ''}"
               }
             }
           ],
@@ -1961,26 +2443,6 @@
                   "isNumber": true
                 }
               ]
-            },
-            {
-              "tag": "form-item",
-              "name": "status",
-              "label": "状态",
-              "children": [
-                {
-                  "tag": "select",
-                  "options": [
-                    {
-                      "label": "启用",
-                      "value": "enabled"
-                    },
-                    {
-                      "label": "停用",
-                      "value": "disabled"
-                    }
-                  ]
-                }
-              ]
             }
           ]
         }
@@ -1996,6 +2458,12 @@
           "tag": "submit-form",
           "formName": "unitForm",
           "saveField": "unitForm"
+        },
+        {
+          "tag": "update-store",
+          "value": {
+            "unitForm": "${(()=>{const form=unitForm||{};const no=String(form.unit_no||'').trim();const option=(Array.isArray(unitNumberOptions)?unitNumberOptions:[]).find(item=>String(item.value)===no)||{};const unitLabel=no?(form.subject==='english'?('Unit '+no):(option.cn_label||('第'+no+'单元'))):'';const title=String(form.unit_title||'').trim();return Object.assign({},form,{unit_name:[unitLabel,title].filter(Boolean).join(' '),order_index:Number(form.order_index||no||1)||1});})()}"
+          }
         },
         {
           "tag": "ajax",
@@ -2028,6 +2496,10 @@
         },
         {
           "tag": "reload-init-action",
+          "group": "section-list"
+        },
+        {
+          "tag": "reload-init-action",
           "group": "knowledge-list"
         }
       ],
@@ -2046,46 +2518,6 @@
               "formName": "unitForm",
               "value": {
                 "stage": "${grade ? (((Array.isArray(gradeList) ? gradeList : []).find(item => item.grade_code === grade) || {}).stage || stage || 'junior') : (stage || 'junior')}"
-              }
-            },
-            {
-              "tag": "update-store",
-              "value": {
-                "unitPinyinTypingName": "${unitOp === 'add' ? String(unit_name || '').trim() : ''}",
-                "unitPinyinLastName": "${unitOp === 'add' && !String(unit_name || '').trim() ? '' : (unitPinyinLastName || '')}"
-              }
-            },
-            {
-              "tag": "update-form",
-              "enable": "${unitOp === 'add' && !String(unit_name || '').trim()}",
-              "formName": "unitForm",
-              "value": {
-                "unit_code": ""
-              }
-            },
-            {
-              "tag": "ajax",
-              "enable": "${unitOp === 'add' && !!String(unit_name || '').trim() && String(unit_name || '').trim() !== (unitPinyinLastName || '')}",
-              "api": "post:/template_data/data?service=question.name_to_pinyin",
-              "silent": true,
-              "data": {
-                "text": "${unit_name}"
-              },
-              "saveField": "unitPinyinResult"
-            },
-            {
-              "tag": "update-store",
-              "enable": "${unitOp === 'add' && unitPinyinTypingName === String(unit_name || '').trim() && (unitPinyinResult || {}).success}",
-              "value": {
-                "unitPinyinLastName": "${String(unit_name || '').trim()}"
-              }
-            },
-            {
-              "tag": "update-form",
-              "enable": "${unitOp === 'add' && unitPinyinTypingName === String(unit_name || '').trim() && (unitPinyinResult || {}).success}",
-              "formName": "unitForm",
-              "value": {
-                "unit_code": "${((unitPinyinResult || {}).data || {}).code || ''}"
               }
             }
           ],
@@ -2114,7 +2546,7 @@
                 {
                   "tag": "select",
                   "fieldNames": {
-                    "label": "grade_name",
+                    "label": "grade_label",
                     "value": "grade_code"
                   },
                   "options": "${gradeList}"
@@ -2138,7 +2570,15 @@
                     "label": "subject_name",
                     "value": "subject_code"
                   },
-                  "options": "${subjectList}"
+                  "options": "${subjectList}",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "unitForm": "${Object.assign({}, unitForm || {}, {subject:value||''})}"
+                      }
+                    }
+                  ]
                 }
               ]
             },
@@ -2165,6 +2605,53 @@
             {
               "tag": "form-item",
               "name": "unit_name",
+              "hidden": true,
+              "children": [
+                {
+                  "tag": "input"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "unit_no",
+              "label": "单元",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择单元"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "select",
+                  "showSearch": true,
+                  "placeholder": "请选择单元",
+                  "options": "${(()=>{const subjectCode=(unitForm||{}).subject||'english';return (Array.isArray(unitNumberOptions)?unitNumberOptions:[]).map(item=>({label:subjectCode==='english'?item.english_label:item.cn_label,value:item.value}));})()}",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "unitForm": "${Object.assign({}, unitForm || {}, {unit_no:value||'',order_index:Number(value||1)||1})}",
+                        "unitAutoCodeLast": "${'unit_' + String(value || '').trim()}"
+                      }
+                    },
+                    {
+                      "tag": "update-form",
+                      "enable": "${unitOp === 'add' && !!String(value || '').trim()}",
+                      "formName": "unitForm",
+                      "value": {
+                        "unit_code": "${'unit_' + String(value || '').trim()}",
+                        "order_index": "${Number(value||1)||1}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "unit_title",
               "label": "名称",
               "rules": [
                 {
@@ -2175,7 +2662,7 @@
               "children": [
                 {
                   "tag": "input",
-                  "placeholder": "例如：第一单元"
+                  "placeholder": "例如：Friendship、位置与方向"
                 }
               ]
             },
@@ -2206,22 +2693,698 @@
                   "isNumber": true
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "dialog",
+      "title": "${sectionOp === 'add' ? '新增小节' : '编辑小节'}",
+      "open": "${sectionDialogVisible}",
+      "width": 620,
+      "action": [
+        {
+          "tag": "submit-form",
+          "formName": "sectionForm",
+          "saveField": "sectionForm"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${sectionOp === 'add'}",
+          "api": "post:/template_data/data?service=question.section_save",
+          "appendFields": "${sectionForm}"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${sectionOp === 'edit'}",
+          "api": "post:/template_data/data?service=question.section_update",
+          "appendFields": "${sectionForm}",
+          "data": {
+            "section_id": "${editingSectionID}"
+          }
+        },
+        {
+          "tag": "update-store",
+          "value": {
+            "sectionDialogVisible": false
+          }
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "section-list"
+        }
+      ],
+      "children": [
+        {
+          "tag": "form",
+          "name": "sectionForm",
+          "className": "taxonomy-dialog-form",
+          "initialValues": "${sectionForm}",
+          "labelCol": {
+            "span": 5
+          },
+          "changeAction": [
+            {
+              "tag": "update-store",
+              "value": {
+                "sectionPinyinTypingName": "${sectionOp === 'add' ? String(section_name || '').trim() : ''}",
+                "sectionPinyinLastName": "${sectionOp === 'add' && !String(section_name || '').trim() ? '' : (sectionPinyinLastName || '')}"
+              }
+            },
+            {
+              "tag": "update-form",
+              "enable": "${sectionOp === 'add' && !String(section_name || '').trim() && (!String(section_code || '').trim() || String(section_code || '').trim() === (sectionPinyinLastCode || ''))}",
+              "formName": "sectionForm",
+              "value": {
+                "section_code": ""
+              }
+            },
+            {
+              "tag": "ajax",
+              "enable": "${sectionOp === 'add' && !!String(section_name || '').trim() && String(section_name || '').trim() !== (sectionPinyinLastName || '')}",
+              "api": "post:/template_data/data?service=question.name_to_pinyin",
+              "silent": true,
+              "data": {
+                "text": "${section_name}"
+              },
+              "saveField": "sectionPinyinResult"
+            },
+            {
+              "tag": "update-store",
+              "enable": "${sectionOp === 'add' && sectionPinyinTypingName === String(section_name || '').trim() && (sectionPinyinResult || {}).success}",
+              "value": {
+                "sectionPinyinLastName": "${String(section_name || '').trim()}"
+              }
+            },
+            {
+              "tag": "update-form",
+              "enable": "${sectionOp === 'add' && sectionPinyinTypingName === String(section_name || '').trim() && (sectionPinyinResult || {}).success && (!String(section_code || '').trim() || String(section_code || '').trim() === (sectionPinyinLastCode || ''))}",
+              "formName": "sectionForm",
+              "value": {
+                "section_code": "${((sectionPinyinResult || {}).data || {}).code || ''}"
+              }
+            },
+            {
+              "tag": "update-store",
+              "enable": "${sectionOp === 'add' && sectionPinyinTypingName === String(section_name || '').trim() && (sectionPinyinResult || {}).success && (!String(section_code || '').trim() || String(section_code || '').trim() === (sectionPinyinLastCode || ''))}",
+              "value": {
+                "sectionPinyinLastCode": "${((sectionPinyinResult || {}).data || {}).code || ''}"
+              }
+            }
+          ],
+          "children": [
+            {
+              "tag": "form-item",
+              "name": "stage",
+              "hidden": true,
+              "children": [
+                {
+                  "tag": "input"
+                }
+              ]
             },
             {
               "tag": "form-item",
-              "name": "status",
-              "label": "状态",
+              "name": "grade",
+              "label": "年级",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择年级"
+                }
+              ],
               "children": [
                 {
                   "tag": "select",
-                  "options": [
+                  "placeholder": "选择年级",
+                  "fieldNames": {
+                    "label": "grade_label",
+                    "value": "grade_code"
+                  },
+                  "options": "${gradeList}",
+                  "action": [
                     {
-                      "label": "启用",
-                      "value": "enabled"
+                      "tag": "update-store",
+                      "value": {
+                        "sectionForm": "${(()=>{const prev=sectionForm||{};const row=(Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===value)||{};return Object.assign({},prev,{grade:value||'',stage:row.stage||'',unit_id:''});})()}"
+                      }
                     },
                     {
-                      "label": "停用",
-                      "value": "disabled"
+                      "tag": "update-form",
+                      "formName": "sectionForm",
+                      "value": "${sectionForm}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "subject",
+              "label": "科目",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择科目"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "select",
+                  "placeholder": "选择科目",
+                  "fieldNames": {
+                    "label": "subject_name",
+                    "value": "subject_code"
+                  },
+                  "options": "${subjectList}",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "sectionForm": "${(()=>{const prev=sectionForm||{};return Object.assign({},prev,{subject:value||'',unit_id:''});})()}"
+                      }
+                    },
+                    {
+                      "tag": "update-form",
+                      "formName": "sectionForm",
+                      "value": "${sectionForm}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "unit_id",
+              "label": "单元",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择单元"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "tree-select",
+                  "allowClear": true,
+                  "showSearch": true,
+                  "placeholder": "先选年级和科目，再选择单元",
+                  "disabled": "${!((sectionForm||{}).grade && (sectionForm||{}).subject)}",
+                  "valueKey": "${item.unit_id}",
+                  "treeTitle": "${(item.unit_name || item.unit_code || '未命名单元') + (item.textbook_version_name ? ' / ' + item.textbook_version_name : '')}",
+                  "treeIcon": "FolderOutlined",
+                  "showIcon": true,
+                  "treeLine": true,
+                  "openLevel": 1,
+                  "treeData": "${(()=>{const form=sectionForm||{};const gradeCode=form.grade||'';const subjectCode=form.subject||'';if(!gradeCode||!subjectCode)return [];return (Array.isArray(allUnitList)?allUnitList:[]).filter(item=>item&&item.grade===gradeCode&&item.subject===subjectCode).map(item=>Object.assign({},item,{key:item.unit_id,title:item.unit_name||item.unit_code||'未命名单元',icon:'FolderOutlined'}));})()}",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "sectionForm": "${(()=>{const prev=sectionForm||{};return Object.assign({},prev,{unit_id:value||''});})()}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "section_name",
+              "label": "名称",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入小节名称"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "例如：Part 1"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "section_code",
+              "label": "编码",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入小节编码"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "自动按名称生成，可手动修改"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "order_index",
+              "label": "排序",
+              "children": [
+                {
+                  "tag": "input",
+                  "isNumber": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "dialog",
+      "title": "类型/具体分类维护",
+      "open": "${knowledgeTypeManageVisible}",
+      "width": 920,
+      "footer": null,
+      "forceRender": true,
+      "children": [
+        {
+          "tag": "div",
+          "style": {
+            "display": "flex",
+            "alignItems": "center",
+            "gap": 8,
+            "marginBottom": 12
+          },
+          "children": [
+            {
+              "tag": "span",
+              "style": {
+                "fontWeight": 700
+              },
+              "children": "科目"
+            },
+            {
+              "tag": "select",
+              "value": "${knowledgeTypeSubject || (knowledgeSearchForm||{}).subject || 'english'}",
+              "style": {
+                "width": 180
+              },
+              "fieldNames": {
+                "label": "subject_name",
+                "value": "subject_code"
+              },
+              "options": "${subjectList}",
+              "action": [
+                {
+                  "tag": "update-store",
+                  "value": {
+                    "knowledgeTypeSubject": "${value || 'english'}",
+                    "selectedKnowledgeTypeCode": ""
+                  }
+                },
+                {
+                  "tag": "reload-init-action",
+                  "group": "knowledge-type-list"
+                },
+                {
+                  "tag": "reload-init-action",
+                  "group": "knowledge-category-list"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "row",
+          "gutter": 12,
+          "children": [
+            {
+              "tag": "col",
+              "span": 10,
+              "children": [
+                {
+                  "tag": "div",
+                  "style": {
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "space-between",
+                    "marginBottom": 8
+                  },
+                  "children": [
+                    {
+                      "tag": "span",
+                      "style": {
+                        "fontWeight": 700
+                      },
+                      "children": "类型"
+                    },
+                    {
+                      "tag": "button",
+                      "type": "primary",
+                      "size": "small",
+                      "icon": "PlusOutlined",
+                      "children": "新增类型",
+                      "action": [
+                        {
+                          "tag": "update-store",
+                          "value": {
+                            "knowledgeTypeEditVisible": true,
+                            "knowledgeTypeOp": "add",
+                            "knowledgeTypeEditKind": "type",
+                            "editingKnowledgeTypeCodeID": "",
+                            "knowledgeTypeForm": {
+                              "sys_code_type": "${'knowledge_type_' + (knowledgeTypeSubject || 'english')}",
+                              "sys_code_type_name": "目录类型",
+                              "sys_code": "",
+                              "sys_code_text": "",
+                              "order_index": 1,
+                              "icon": ""
+                            }
+                          }
+                        },
+                        {
+                          "tag": "reset-form",
+                          "formName": "knowledgeTypeForm"
+                        },
+                        {
+                          "tag": "update-form",
+                          "formName": "knowledgeTypeForm",
+                          "value": "${knowledgeTypeForm}"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "table",
+                  "rowData": "${knowledgeTypeList}",
+                  "rowClickAction": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "selectedKnowledgeTypeCode": "${row.sys_code || ''}"
+                      }
+                    }
+                  ],
+                  "style": {
+                    "height": 320,
+                    "width": "100%"
+                  },
+                  "defaultColDef": {
+                    "resizable": true,
+                    "sortable": true
+                  },
+                  "columnDefs": [
+                    {
+                      "headerName": "#",
+                      "width": 52,
+                      "valueGetter": "node.rowIndex + 1",
+                      "sortable": false
+                    },
+                    {
+                      "headerName": "编码",
+                      "field": "sys_code",
+                      "width": 120
+                    },
+                    {
+                      "headerName": "名称",
+                      "field": "sys_code_text",
+                      "width": 110
+                    },
+                    {
+                      "headerName": "排序",
+                      "field": "order_index",
+                      "width": 72
+                    },
+                    {
+                      "headerName": "操作",
+                      "field": "op",
+                      "width": 126,
+                      "sortable": false,
+                      "cellClass": "taxonomy-action-cell",
+                      "cellRender": [
+                        {
+                          "tag": "button",
+                          "type": "primary",
+                          "size": "small",
+                          "className": "taxonomy-action-button",
+                          "children": "编辑",
+                          "action": [
+                            {
+                              "tag": "update-store",
+                              "value": {
+                                "knowledgeTypeEditVisible": true,
+                                "knowledgeTypeOp": "edit",
+                                "knowledgeTypeEditKind": "type",
+                                "editingKnowledgeTypeCodeID": "${row.sys_code_id}",
+                                "knowledgeTypeForm": "${Object.assign({}, row, {icon: row.icon || ''})}"
+                              }
+                            },
+                            {
+                              "tag": "reset-form",
+                              "formName": "knowledgeTypeForm"
+                            },
+                            {
+                              "tag": "update-form",
+                              "formName": "knowledgeTypeForm",
+                              "value": "${Object.assign({}, row, {icon: row.icon || ''})}"
+                            }
+                          ]
+                        },
+                        {
+                          "tag": "button",
+                          "danger": true,
+                          "size": "small",
+                          "style": {
+                            "marginLeft": 8
+                          },
+                          "children": "删除",
+                          "confirm": {
+                            "title": "确认删除类型？",
+                            "description": "${'确认删除【' + row.sys_code_text + '】吗？'}"
+                          },
+                          "action": [
+                            {
+                              "tag": "ajax",
+                              "api": "post:/template_data/data?service=system.sys_code_delete",
+                              "data": {
+                                "sys_code_id_list": "${[row.sys_code_id]}"
+                              }
+                            },
+                            {
+                              "tag": "update-store",
+                              "value": {
+                                "selectedKnowledgeTypeCode": "${selectedKnowledgeTypeCode === row.sys_code ? '' : selectedKnowledgeTypeCode}"
+                              }
+                            },
+                            {
+                              "tag": "reload-init-action",
+                              "group": "knowledge-type-list"
+                            },
+                            {
+                              "tag": "reload-init-action",
+                              "group": "knowledge-category-list"
+                            },
+                            {
+                              "tag": "reload-init-action",
+                              "group": "knowledge-list"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "col",
+              "span": 14,
+              "children": [
+                {
+                  "tag": "div",
+                  "style": {
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "space-between",
+                    "marginBottom": 8
+                  },
+                  "children": [
+                    {
+                      "tag": "span",
+                      "style": {
+                        "fontWeight": 700
+                      },
+                      "children": "${selectedKnowledgeTypeCode ? ('具体分类：' + (((Array.isArray(knowledgeTypeList)?knowledgeTypeList:[]).find(item=>item.sys_code===selectedKnowledgeTypeCode)||{}).sys_code_text || selectedKnowledgeTypeCode)) : '具体分类'}"
+                    },
+                    {
+                      "tag": "div",
+                      "style": {
+                        "display": "flex",
+                        "alignItems": "center",
+                        "gap": 8
+                      },
+                      "children": [
+                        {
+                          "tag": "button",
+                          "size": "small",
+                          "children": "全部",
+                          "disabled": "${!selectedKnowledgeTypeCode}",
+                          "action": [
+                            {
+                              "tag": "update-store",
+                              "value": {
+                                "selectedKnowledgeTypeCode": ""
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "tag": "button",
+                          "type": "primary",
+                          "size": "small",
+                          "icon": "PlusOutlined",
+                          "children": "新增分类",
+                          "action": [
+                            {
+                              "tag": "update-store",
+                              "value": {
+                                "knowledgeTypeEditVisible": true,
+                                "knowledgeTypeOp": "add",
+                                "knowledgeTypeEditKind": "category",
+                                "editingKnowledgeTypeCodeID": "",
+                                "knowledgeTypeForm": {
+                                  "sys_code_type": "${'knowledge_category_' + (knowledgeTypeSubject || 'english')}",
+                                  "sys_code_type_name": "目录具体分类",
+                                  "sys_code": "",
+                                  "sys_code_text": "",
+                                  "order_index": 1,
+                                  "icon": "${selectedKnowledgeTypeCode || ((Array.isArray(knowledgeTypeList)?knowledgeTypeList:[])[0]||{}).sys_code || ''}"
+                                }
+                              }
+                            },
+                            {
+                              "tag": "reset-form",
+                              "formName": "knowledgeTypeForm"
+                            },
+                            {
+                              "tag": "update-form",
+                              "formName": "knowledgeTypeForm",
+                              "value": "${knowledgeTypeForm}"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "table",
+                  "rowData": "${(()=>{const types=Array.isArray(knowledgeTypeList)?knowledgeTypeList:[];const order={};types.forEach((item,idx)=>{order[item.sys_code]=Number(item.order_index)||idx+1;});const selected=selectedKnowledgeTypeCode||'';return (Array.isArray(knowledgeCategoryList)?knowledgeCategoryList:[]).filter(item=>!selected||item.icon===selected).slice().sort((a,b)=>{const ao=Object.prototype.hasOwnProperty.call(order,a.icon)?order[a.icon]:9999;const bo=Object.prototype.hasOwnProperty.call(order,b.icon)?order[b.icon]:9999;if(ao!==bo)return ao-bo;const ai=Number(a.order_index)||0;const bi=Number(b.order_index)||0;if(ai!==bi)return ai-bi;return String(a.sys_code||'').localeCompare(String(b.sys_code||''));});})()}",
+                  "style": {
+                    "height": 320,
+                    "width": "100%"
+                  },
+                  "defaultColDef": {
+                    "resizable": true,
+                    "sortable": true
+                  },
+                  "columnDefs": [
+                    {
+                      "headerName": "#",
+                      "width": 52,
+                      "valueGetter": "node.rowIndex + 1",
+                      "sortable": false
+                    },
+                    {
+                      "headerName": "编码",
+                      "field": "sys_code",
+                      "width": 128
+                    },
+                    {
+                      "headerName": "名称",
+                      "field": "sys_code_text",
+                      "width": 116
+                    },
+                    {
+                      "headerName": "所属类型",
+                      "field": "icon",
+                      "width": 112,
+                      "cellRender": {
+                        "tag": "span",
+                        "children": "${((Array.isArray(knowledgeTypeList)?knowledgeTypeList:[]).find(item=>item.sys_code===row.icon)||{}).sys_code_text || row.icon || '-'}"
+                      }
+                    },
+                    {
+                      "headerName": "排序",
+                      "field": "order_index",
+                      "width": 72
+                    },
+                    {
+                      "headerName": "操作",
+                      "field": "op",
+                      "width": 126,
+                      "sortable": false,
+                      "cellClass": "taxonomy-action-cell",
+                      "cellRender": [
+                        {
+                          "tag": "button",
+                          "type": "primary",
+                          "size": "small",
+                          "className": "taxonomy-action-button",
+                          "children": "编辑",
+                          "action": [
+                            {
+                              "tag": "update-store",
+                              "value": {
+                                "knowledgeTypeEditVisible": true,
+                                "knowledgeTypeOp": "edit",
+                                "knowledgeTypeEditKind": "category",
+                                "editingKnowledgeTypeCodeID": "${row.sys_code_id}",
+                                "knowledgeTypeForm": "${Object.assign({}, row, {icon: row.icon || ''})}"
+                              }
+                            },
+                            {
+                              "tag": "reset-form",
+                              "formName": "knowledgeTypeForm"
+                            },
+                            {
+                              "tag": "update-form",
+                              "formName": "knowledgeTypeForm",
+                              "value": "${Object.assign({}, row, {icon: row.icon || ''})}"
+                            }
+                          ]
+                        },
+                        {
+                          "tag": "button",
+                          "danger": true,
+                          "size": "small",
+                          "style": {
+                            "marginLeft": 8
+                          },
+                          "children": "删除",
+                          "confirm": {
+                            "title": "确认删除具体分类？",
+                            "description": "${'确认删除【' + row.sys_code_text + '】吗？'}"
+                          },
+                          "action": [
+                            {
+                              "tag": "ajax",
+                              "api": "post:/template_data/data?service=system.sys_code_delete",
+                              "data": {
+                                "sys_code_id_list": "${[row.sys_code_id]}"
+                              }
+                            },
+                            {
+                              "tag": "reload-init-action",
+                              "group": "knowledge-category-list"
+                            },
+                            {
+                              "tag": "reload-init-action",
+                              "group": "knowledge-list"
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }
@@ -2233,7 +3396,154 @@
     },
     {
       "tag": "dialog",
-      "title": "${knowledgeOp === 'add' ? '新增知识点' : '编辑知识点'}",
+      "title": "${knowledgeTypeEditKind === 'category' ? (knowledgeTypeOp === 'add' ? '新增具体分类' : '编辑具体分类') : (knowledgeTypeOp === 'add' ? '新增类型' : '编辑类型')}",
+      "open": "${knowledgeTypeEditVisible}",
+      "width": 520,
+      "action": [
+        {
+          "tag": "submit-form",
+          "formName": "knowledgeTypeForm",
+          "saveField": "knowledgeTypeForm"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${knowledgeTypeOp === 'add'}",
+          "api": "post:/template_data/data?service=system.sys_code_save",
+          "appendFields": "${knowledgeTypeForm}"
+        },
+        {
+          "tag": "ajax",
+          "enable": "${knowledgeTypeOp === 'edit'}",
+          "api": "post:/template_data/data?service=system.sys_code_update",
+          "appendFields": "${knowledgeTypeForm}",
+          "data": {
+            "sys_code_id": "${editingKnowledgeTypeCodeID}"
+          }
+        },
+        {
+          "tag": "update-store",
+          "value": {
+            "knowledgeTypeEditVisible": false
+          }
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "knowledge-type-list"
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "knowledge-category-list"
+        },
+        {
+          "tag": "reload-init-action",
+          "group": "knowledge-list"
+        }
+      ],
+      "children": [
+        {
+          "tag": "form",
+          "name": "knowledgeTypeForm",
+          "className": "taxonomy-dialog-form",
+          "initialValues": "${knowledgeTypeForm}",
+          "labelCol": {
+            "span": 5
+          },
+          "children": [
+            {
+              "tag": "form-item",
+              "name": "sys_code_type",
+              "hidden": true,
+              "children": [
+                {
+                  "tag": "input"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "sys_code_type_name",
+              "hidden": true,
+              "children": [
+                {
+                  "tag": "input"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "icon",
+              "label": "所属类型",
+              "hidden": "${knowledgeTypeEditKind !== 'category'}",
+              "rules": [
+                {
+                  "required": "${knowledgeTypeEditKind === 'category'}",
+                  "message": "请选择所属类型"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "select",
+                  "placeholder": "选择所属类型",
+                  "fieldNames": {
+                    "label": "sys_code_text",
+                    "value": "sys_code"
+                  },
+                  "options": "${knowledgeTypeList}"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "sys_code_text",
+              "label": "名称",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入名称"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "例如：中译英"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "sys_code",
+              "label": "编码",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请输入编码"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "input",
+                  "placeholder": "例如：cn_to_en"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "order_index",
+              "label": "排序",
+              "children": [
+                {
+                  "tag": "input",
+                  "isNumber": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "dialog",
+      "title": "${knowledgeOp === 'add' ? '新增目录项' : '编辑目录项'}",
       "open": "${knowledgeDialogVisible}",
       "width": 620,
       "action": [
@@ -2287,7 +3597,7 @@
             },
             {
               "tag": "update-form",
-              "enable": "${knowledgeOp === 'add' && !String(knowledge_name || '').trim()}",
+              "enable": "${knowledgeOp === 'add' && !String(knowledge_name || '').trim() && (!String(knowledge_code || '').trim() || String(knowledge_code || '').trim() === (knowledgePinyinLastCode || ''))}",
               "formName": "knowledgeForm",
               "value": {
                 "knowledge_code": ""
@@ -2312,10 +3622,17 @@
             },
             {
               "tag": "update-form",
-              "enable": "${knowledgeOp === 'add' && knowledgePinyinTypingName === String(knowledge_name || '').trim() && (knowledgePinyinResult || {}).success}",
+              "enable": "${knowledgeOp === 'add' && knowledgePinyinTypingName === String(knowledge_name || '').trim() && (knowledgePinyinResult || {}).success && (!String(knowledge_code || '').trim() || String(knowledge_code || '').trim() === (knowledgePinyinLastCode || ''))}",
               "formName": "knowledgeForm",
               "value": {
                 "knowledge_code": "${((knowledgePinyinResult || {}).data || {}).code || ''}"
+              }
+            },
+            {
+              "tag": "update-store",
+              "enable": "${knowledgeOp === 'add' && knowledgePinyinTypingName === String(knowledge_name || '').trim() && (knowledgePinyinResult || {}).success && (!String(knowledge_code || '').trim() || String(knowledge_code || '').trim() === (knowledgePinyinLastCode || ''))}",
+              "value": {
+                "knowledgePinyinLastCode": "${((knowledgePinyinResult || {}).data || {}).code || ''}"
               }
             }
           ],
@@ -2345,7 +3662,7 @@
                   "tag": "select",
                   "placeholder": "选择年级",
                   "fieldNames": {
-                    "label": "grade_name",
+                    "label": "grade_label",
                     "value": "grade_code"
                   },
                   "options": "${gradeList}",
@@ -2388,8 +3705,18 @@
                     {
                       "tag": "update-store",
                       "value": {
-                        "knowledgeForm": "${(()=>{const prev=knowledgeForm||{};return Object.assign({},prev,{subject:value||'',parent_id:''});})()}"
+                        "knowledgeTypeSubject": "${value || 'english'}",
+                        "selectedKnowledgeTypeCode": "",
+                        "knowledgeForm": "${(()=>{const prev=knowledgeForm||{};return Object.assign({},prev,{subject:value||'',parent_id:'',knowledge_type:'',knowledge_category:''});})()}"
                       }
+                    },
+                    {
+                      "tag": "reload-init-action",
+                      "group": "knowledge-type-list"
+                    },
+                    {
+                      "tag": "reload-init-action",
+                      "group": "knowledge-category-list"
                     },
                     {
                       "tag": "update-form",
@@ -2437,12 +3764,78 @@
             },
             {
               "tag": "form-item",
+              "name": "knowledge_type",
+              "label": "类型",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择类型"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "select",
+                  "placeholder": "选择类型",
+                  "fieldNames": {
+                    "label": "sys_code_text",
+                    "value": "sys_code"
+                  },
+                  "options": "${knowledgeTypeList}",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "knowledgeForm": "${(()=>{const prev=knowledgeForm||{};const nextType=value||'';const nextCategory=((Array.isArray(knowledgeCategoryList)?knowledgeCategoryList:[]).find(item=>item.icon===nextType)||{}).sys_code||'';return Object.assign({},prev,{knowledge_type:nextType,knowledge_category:nextCategory});})()}"
+                      }
+                    },
+                    {
+                      "tag": "update-form",
+                      "formName": "knowledgeForm",
+                      "value": "${knowledgeForm}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "knowledge_category",
+              "label": "具体分类",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "请选择具体分类"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "select",
+                  "placeholder": "先选类型，再选择具体分类",
+                  "disabled": "${!(knowledgeForm||{}).knowledge_type}",
+                  "fieldNames": {
+                    "label": "sys_code_text",
+                    "value": "sys_code"
+                  },
+                  "options": "${(()=>{const type=(knowledgeForm||{}).knowledge_type||'';return (Array.isArray(knowledgeCategoryList)?knowledgeCategoryList:[]).filter(item=>!type||item.icon===type);})()}",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "knowledgeForm": "${Object.assign({}, knowledgeForm || {}, {knowledge_category:value||''})}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
               "name": "knowledge_name",
               "label": "名称",
               "rules": [
                 {
                   "required": true,
-                  "message": "请输入知识点名称"
+                  "message": "请输入目录项名称"
                 }
               ],
               "children": [
@@ -2459,13 +3852,27 @@
               "rules": [
                 {
                   "required": true,
-                  "message": "请输入知识点编码"
+                  "message": "请输入目录项编码"
                 }
               ],
               "children": [
                 {
                   "tag": "input",
                   "placeholder": "自动按名称生成，可手动修改"
+                }
+              ]
+            },
+            {
+              "tag": "form-item",
+              "name": "content_detail",
+              "label": "明细",
+              "children": [
+                {
+                  "tag": "input",
+                  "isTextarea": true,
+                  "rows": 4,
+                  "disabled": true,
+                  "placeholder": "暂无明细"
                 }
               ]
             },
@@ -2495,6 +3902,603 @@
                     {
                       "label": "停用",
                       "value": "disabled"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "dialog",
+      "title": "PDF目录导入",
+      "open": "${pdfKnowledgeImportVisible}",
+      "width": "min(1280px, 96vw)",
+      "footer": null,
+      "forceRender": true,
+      "className": "pdf-knowledge-import-dialog",
+      "action": [
+        {
+          "tag": "update-store",
+          "value": {
+            "pdfKnowledgeImportVisible": false
+          }
+        }
+      ],
+      "children": [
+        {
+          "tag": "div",
+          "style": {
+            "display": "grid",
+            "gridTemplateColumns": "300px minmax(0, 1fr) minmax(0, 1fr)",
+            "gridTemplateRows": "auto auto auto minmax(0, 1fr)",
+            "gap": 10,
+            "height": "min(82vh, 860px)",
+            "minHeight": 0,
+            "overflow": "hidden"
+          },
+          "children": [
+            {
+              "tag": "form",
+              "name": "pdfKnowledgeImportForm",
+              "className": "pdf-knowledge-import-form",
+              "initialValues": "${pdfKnowledgeImportForm}",
+              "changeAction": [
+                {
+                  "tag": "submit-form",
+                  "formName": "pdfKnowledgeImportForm",
+                  "saveField": "pdfKnowledgeImportForm"
+                }
+              ],
+              "style": {
+                "gridColumn": 1,
+                "gridRow": 1,
+                "minWidth": 0
+              },
+              "children": [
+                {
+                  "tag": "div",
+                  "style": {
+                    "display": "grid",
+                    "gridTemplateColumns": "1fr",
+                    "gap": 8,
+                    "alignItems": "end"
+                  },
+                  "children": [
+                    {
+                      "tag": "form-item",
+                      "name": "file_path",
+                      "label": "PDF路径",
+                      "style": {
+                        "marginBottom": 0
+                      },
+                      "children": [
+                        {
+                          "tag": "input",
+                          "placeholder": "临时填写服务器 PDF 路径"
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "form-item",
+                      "name": "subject",
+                      "label": "学科",
+                      "style": {
+                        "marginBottom": 0
+                      },
+                      "children": [
+                        {
+                          "tag": "select",
+                          "fieldNames": {
+                            "label": "subject_name",
+                            "value": "subject_code"
+                          },
+                          "options": "${subjectList}",
+                          "placeholder": "学科"
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "form-item",
+                      "name": "grade",
+                      "label": "年级",
+                      "style": {
+                        "marginBottom": 0
+                      },
+                      "children": [
+                        {
+                          "tag": "select",
+                          "fieldNames": {
+                            "label": "grade_label",
+                            "value": "grade_code"
+                          },
+                          "options": "${gradeList}",
+                          "placeholder": "年级",
+                          "action": [
+                            {
+                              "tag": "update-store",
+                              "value": {
+                                "pdfKnowledgeImportForm": "${(()=>{const prev=pdfKnowledgeImportForm||{};const row=(Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===value)||{};return Object.assign({},prev,{grade:value||\"\",stage:row.stage||prev.stage||\"primary\"});})()}"
+                              }
+                            },
+                            {
+                              "tag": "update-form",
+                              "formName": "pdfKnowledgeImportForm",
+                              "value": "${pdfKnowledgeImportForm}"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "div",
+              "style": {
+                "display": "flex",
+                "alignItems": "center",
+                "gap": 8,
+                "flexWrap": "wrap",
+                "gridColumn": 1,
+                "gridRow": 2,
+                "minWidth": 0
+              },
+              "children": [
+                {
+                  "tag": "button",
+                  "type": "primary",
+                  "icon": "FilePdfOutlined",
+                  "loading": "${pdfKnowledgeImportBusy === \"import\"}",
+                  "children": "一键导入全部",
+                  "action": [
+                    {
+                      "tag": "submit-form",
+                      "formName": "pdfKnowledgeImportForm",
+                      "saveField": "pdfKnowledgeImportForm"
+                    },
+                    {
+                      "tag": "ajax",
+                      "api": "post:/template_data/data?service=question.pdf_knowledge_import_one_click",
+                      "data": {
+                        "file_path": "${pdfKnowledgeImportForm.file_path || \"\"}",
+                        "subject": "${pdfKnowledgeImportForm.subject || \"english\"}",
+                        "stage": "${pdfKnowledgeImportForm.stage || \"primary\"}",
+                        "grade": "${pdfKnowledgeImportForm.grade || \"grade_3\"}",
+                        "textbook_version": "pep",
+                        "auto_commit": true,
+                        "question_policy": "draft",
+                        "max_chars": 240000,
+                        "ocr_max_pages": 200
+                      },
+                      "start": {
+                        "pdfKnowledgeImportBusy": "import",
+                        "pdfKnowledgeImportLastError": "",
+                        "pdfKnowledgeImportResult": {},
+                        "pdfKnowledgeImportSourceList": [],
+                        "pdfKnowledgeImportIssueList": []
+                      },
+                      "end": {
+                        "pdfKnowledgeImportBusy": ""
+                      },
+                      "adapt": {
+                        "pdfKnowledgeImportResult": "${Object.assign({}, data || {})}",
+                        "pdfKnowledgeImportSourceList": "${Array.isArray((data||{}).source_fragments) ? data.source_fragments : []}",
+                        "pdfKnowledgeImportIssueList": "${Array.isArray((data||{}).issues) ? data.issues : []}"
+                      },
+                      "onSuccess": [
+                        {
+                          "tag": "reload-init-action",
+                          "group": "knowledge-list"
+                        },
+                        {
+                          "tag": "reload-init-action",
+                          "group": "unit-list"
+                        },
+                        {
+                          "tag": "reload-init-action",
+                          "group": "unit-options"
+                        }
+                      ],
+                      "onError": [
+                        {
+                          "tag": "update-store",
+                          "value": {
+                            "pdfKnowledgeImportLastError": "${msg || \"PDF目录导入失败\"}"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "button",
+                  "icon": "CloseOutlined",
+                  "children": "关闭",
+                  "action": [
+                    {
+                      "tag": "update-store",
+                      "value": {
+                        "pdfKnowledgeImportVisible": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "div",
+              "visible": "${!!pdfKnowledgeImportLastError}",
+              "style": {
+                "gridColumn": 1,
+                "gridRow": 3,
+                "border": "1px solid #ffccc7",
+                "background": "#fff2f0",
+                "color": "#a8071a",
+                "borderRadius": 6,
+                "padding": "8px 10px",
+                "fontSize": 13,
+                "whiteSpace": "pre-wrap",
+                "wordBreak": "break-word",
+                "maxHeight": 160,
+                "overflow": "auto"
+              },
+              "children": "${pdfKnowledgeImportLastError}"
+            },
+            {
+              "tag": "div",
+              "className": "pdf-knowledge-import-summary",
+              "visible": "${!!(pdfKnowledgeImportResult||{}).source_doc_id}",
+              "style": {
+                "gridColumn": 1,
+                "gridRow": 4,
+                "alignSelf": "start",
+                "overflow": "auto",
+                "minHeight": 0
+              },
+              "children": [
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "文件"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).file_name || \"-\"}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "新增正文"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).created_content_total || 0}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "更新正文"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).updated_content_total || 0}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "页数"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).page_count || 0}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "抽取字符"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).source_chars || 0}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "单元"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).unit_total || 0}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "目录项"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).knowledge_total || 0}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "目录内容"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).content_total || 0}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "已入库"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).auto_committed_total || 0}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "待复核"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).pending_review_total || 0}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "题目草稿"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).question_draft_total || 0}"
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-metric",
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-label",
+                      "children": "验收"
+                    },
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-metric-value",
+                      "children": "${(pdfKnowledgeImportResult||{}).acceptance_status || \"-\"}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "div",
+              "className": "pdf-knowledge-import-compare",
+              "style": {
+                "gridColumn": "2 / 4",
+                "gridRow": "1 / 5",
+                "height": "100%",
+                "minHeight": 0,
+                "overflow": "hidden"
+              },
+              "children": [
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-pane",
+                  "style": {
+                    "height": "100%",
+                    "minHeight": 0,
+                    "display": "flex",
+                    "flexDirection": "column"
+                  },
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-pane-title",
+                      "children": "生成目录项"
+                    },
+                    {
+                      "tag": "table",
+                      "rowData": "${Array.isArray((pdfKnowledgeImportResult||{}).knowledge_results) ? pdfKnowledgeImportResult.knowledge_results : []}",
+                      "theme": "balham",
+                      "style": {
+                        "flex": "1 1 auto",
+                        "height": "100%",
+                        "minHeight": 0,
+                        "width": "100%"
+                      },
+                      "defaultColDef": {
+                        "resizable": true,
+                        "sortable": true,
+                        "wrapText": true,
+                        "autoHeight": true
+                      },
+                      "columnDefs": [
+                        {
+                          "headerName": "单元",
+                          "field": "unit_name",
+                          "width": 180
+                        },
+                        {
+                          "headerName": "名称",
+                          "field": "knowledge_name",
+                          "width": 240,
+                          "tooltipField": "knowledge_name"
+                        },
+                        {
+                          "headerName": "正文",
+                          "field": "content_text",
+                          "width": 340,
+                          "tooltipField": "content_text"
+                        },
+                        {
+                          "headerName": "语义",
+                          "field": "semantic_type",
+                          "width": 150
+                        },
+                        {
+                          "headerName": "页码",
+                          "field": "page_no",
+                          "width": 80
+                        },
+                        {
+                          "headerName": "字段来源",
+                          "field": "field_source_status",
+                          "width": 110
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "div",
+                  "className": "pdf-knowledge-import-pane",
+                  "style": {
+                    "height": "100%",
+                    "minHeight": 0,
+                    "display": "flex",
+                    "flexDirection": "column"
+                  },
+                  "children": [
+                    {
+                      "tag": "div",
+                      "className": "pdf-knowledge-import-pane-title",
+                      "children": "来源片段"
+                    },
+                    {
+                      "tag": "table",
+                      "rowData": "${pdfKnowledgeImportSourceList}",
+                      "theme": "balham",
+                      "style": {
+                        "flex": "1 1 auto",
+                        "height": "100%",
+                        "minHeight": 0,
+                        "width": "100%"
+                      },
+                      "defaultColDef": {
+                        "resizable": true,
+                        "sortable": true,
+                        "wrapText": true,
+                        "autoHeight": true
+                      },
+                      "columnDefs": [
+                        {
+                          "headerName": "页",
+                          "field": "page_no",
+                          "width": 70
+                        },
+                        {
+                          "headerName": "片段",
+                          "field": "source_fragment_id",
+                          "width": 190
+                        },
+                        {
+                          "headerName": "类型",
+                          "field": "fragment_type",
+                          "width": 140
+                        },
+                        {
+                          "headerName": "原文",
+                          "field": "raw_text",
+                          "width": 430,
+                          "tooltipField": "raw_text"
+                        },
+                        {
+                          "headerName": "前文",
+                          "field": "context_before",
+                          "width": 260,
+                          "tooltipField": "context_before"
+                        },
+                        {
+                          "headerName": "后文",
+                          "field": "context_after",
+                          "width": 260,
+                          "tooltipField": "context_after"
+                        }
+                      ]
                     }
                   ]
                 }

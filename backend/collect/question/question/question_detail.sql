@@ -2,6 +2,11 @@ SELECT
   a.*,
   COALESCE(subject.subject_name, subject_code.sys_code_text) AS subject_name,
   COALESCE(grade.grade_name, grade_code.sys_code_text) AS grade_name,
+  semester_code.sys_code_text AS grade_semester_name,
+  CASE
+    WHEN ifnull(grade.grade_name, '') <> '' AND ifnull(semester_code.sys_code_text, '') <> '' THEN CONCAT(grade.grade_name, semester_code.sys_code_text)
+    ELSE COALESCE(grade.grade_name, grade_code.sys_code_text)
+  END AS grade_label,
   COALESCE((
     SELECT JSON_ARRAYAGG(rel.knowledge_id)
     FROM (
@@ -153,6 +158,7 @@ LEFT JOIN question_subject subject ON subject.subject_code = a.subject AND ifnul
 LEFT JOIN question_grade grade ON grade.grade_code = a.grade AND ifnull(grade.is_delete, '0') = '0'
 LEFT JOIN sys_code subject_code ON subject_code.sys_code_type = 'subject' AND subject_code.sys_code = a.subject
 LEFT JOIN sys_code grade_code ON grade_code.sys_code_type = 'grade' AND grade_code.sys_code = a.grade
+LEFT JOIN sys_code semester_code ON semester_code.sys_code_type = 'grade_semester' AND semester_code.sys_code = COALESCE(NULLIF(grade.semester, ''), 'upper')
 LEFT JOIN sys_code type_code ON type_code.sys_code_type = 'question_type' AND type_code.sys_code = a.question_type
 LEFT JOIN sys_code category_code ON category_code.sys_code_type = 'question_category' AND category_code.sys_code = a.question_category
 LEFT JOIN sys_code difficulty_code ON difficulty_code.sys_code_type = 'question_difficulty' AND difficulty_code.sys_code = a.difficulty

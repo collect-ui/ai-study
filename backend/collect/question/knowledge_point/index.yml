@@ -1,0 +1,119 @@
+service:
+  - key: knowledge_point_query
+    http: true
+    module: sql
+    params:
+      keyword:
+        template: "{{ if .keyword }}%{{.keyword}}%{{end}}"
+      page:
+        type: int
+        default: 1
+      size:
+        type: int
+        default: 20
+      start:
+        template: "({{.page}}-1) * {{.size}}"
+        exec: true
+        type: int
+      pagination:
+        default: true
+      count:
+        default: true
+    data_file: knowledge_point_query.sql
+    count_file: knowledge_point_query_count.sql
+    pagination: pagination
+    count: "[count]"
+
+  - key: knowledge_point_save
+    http: true
+    module: model_save
+    table: question_knowledge_point
+    params:
+      point_id:
+        template: "{{uuid}}"
+      subject:
+        check:
+          template: "{{must .subject}}"
+          err_msg: 科目不能为空
+      stage:
+        check:
+          template: "{{must .stage}}"
+          err_msg: 学段不能为空
+      grade:
+        check:
+          template: "{{must .grade}}"
+          err_msg: 年级不能为空
+      unit_id:
+        check:
+          template: "{{must .unit_id}}"
+          err_msg: 单元不能为空
+      section_id:
+        default: ""
+      point_code:
+        check:
+          template: "{{must .point_code}}"
+          err_msg: 知识点编码不能为空
+      point_name:
+        check:
+          template: "{{must .point_name}}"
+          err_msg: 知识点名称不能为空
+      content_detail:
+        default: ""
+      order_index:
+        type: int
+        default: 1
+      status:
+        default: enabled
+      is_delete:
+        default: "0"
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+
+  - key: knowledge_point_update
+    http: true
+    module: model_update
+    table: question_knowledge_point
+    params:
+      point_id:
+        check:
+          template: "{{must .point_id}}"
+          err_msg: point_id不能为空
+      section_id:
+        default: ""
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+    update_fields:
+      - subject
+      - stage
+      - grade
+      - unit_id
+      - section_id
+      - point_code
+      - point_name
+      - content_detail
+      - order_index
+      - status
+      - modify_time
+      - modify_user
+    filter:
+      point_id: "[point_id]"
+
+  - key: knowledge_point_delete
+    http: true
+    module: model_delete
+    table: question_knowledge_point
+    params:
+      point_id_list:
+        check:
+          template: "{{must .point_id_list}}"
+          err_msg: 知识点不能为空
+    filter:
+      point_id__in: "[point_id_list]"

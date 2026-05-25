@@ -9,5 +9,6 @@ func GetRegisterList() []templateService.ModuleResult {
 		&Pinyin{},
 		&QuestionPDFTextService{},
 		&QuestionAIParseService{},
+		&QuestionPDFKnowledgeImportService{},
 	}
 }

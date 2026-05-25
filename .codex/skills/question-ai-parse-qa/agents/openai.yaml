@@ -1,0 +1,4 @@
+interface:
+  display_name: "Question AI Parse QA"
+  short_description: "Compare Codex and DeepSeek parsing."
+  default_prompt: "Use this skill to split question fixtures, compare Codex and DeepSeek parse results, adjust AI parse prompts, and rerun verification."

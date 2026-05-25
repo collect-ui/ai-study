@@ -48,6 +48,10 @@ service:
         check:
           template: "{{must .knowledge_name}}"
           err_msg: 知识点名称不能为空
+      knowledge_type:
+        default: ""
+      knowledge_category:
+        default: ""
       order_index:
         type: int
         default: 1
@@ -84,6 +88,8 @@ service:
       - parent_id
       - knowledge_code
       - knowledge_name
+      - knowledge_type
+      - knowledge_category
       - order_index
       - status
       - modify_time

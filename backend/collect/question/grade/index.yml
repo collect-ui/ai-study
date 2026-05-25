@@ -18,6 +18,8 @@ service:
         check:
           template: "{{must .stage}}"
           err_msg: 学段不能为空
+      semester:
+        default: upper
       grade_code:
         check:
           template: "{{must .grade_code}}"
@@ -57,6 +59,7 @@ service:
         template: "{{.session_user_id}}"
     update_fields:
       - stage
+      - semester
       - grade_code
       - grade_name
       - order_index

@@ -7,7 +7,23 @@ service:
         default: ""
       max_chars:
         type: int
-        default: 120000
+        default: 240000
+      ocr_enabled:
+        type: bool
+        default: true
+      ocr_service_url:
+        default: http://collect-ui.top:8014/transcribe
+      ocr_provider:
+        default: tencent
+      ocr_max_pages:
+        type: int
+        default: 200
+      ocr_image_dpi:
+        type: int
+        default: 180
+      ocr_timeout_seconds:
+        type: int
+        default: 120
 
   - key: ai_parse
     http: true
@@ -63,6 +79,22 @@ service:
       source_max_chars:
         type: int
         default: 120000
+      ocr_enabled:
+        type: bool
+        default: true
+      ocr_service_url:
+        default: http://collect-ui.top:8014/transcribe
+      ocr_provider:
+        default: tencent
+      ocr_max_pages:
+        type: int
+        default: 80
+      ocr_image_dpi:
+        type: int
+        default: 180
+      ocr_timeout_seconds:
+        type: int
+        default: 120
       chunk_chars:
         type: int
         default: 12000
@@ -72,6 +104,264 @@ service:
       concurrency:
         type: int
         default: 0
+
+  - key: pdf_knowledge_import_one_click
+    http: true
+    module: question_pdf_knowledge_import
+    params:
+      file_path:
+        default: ""
+      subject:
+        default: english
+      stage:
+        default: primary
+      grade:
+        default: grade_3
+      textbook_version:
+        default: pep
+      auto_commit:
+        type: bool
+        default: true
+      question_policy:
+        default: draft
+      max_chars:
+        type: int
+        default: 240000
+      ocr_enabled:
+        type: bool
+        default: true
+      ocr_service_url:
+        default: http://collect-ui.top:8014/transcribe
+      ocr_provider:
+        default: tencent
+      ocr_max_pages:
+        type: int
+        default: 200
+      ocr_image_dpi:
+        type: int
+        default: 180
+      ocr_timeout_seconds:
+        type: int
+        default: 120
+      provider:
+        default: codex
+      model:
+        default: ""
+
+  - key: pdf_import_preview
+    http: true
+    module: question_pdf_knowledge_import
+    params:
+      file_path:
+        default: ""
+      subject:
+        default: english
+      stage:
+        default: primary
+      grade:
+        default: grade_3
+      textbook_version:
+        default: pep
+      auto_commit:
+        type: bool
+        default: false
+      question_policy:
+        default: knowledge_only
+      max_chars:
+        type: int
+        default: 240000
+      ocr_enabled:
+        type: bool
+        default: true
+      ocr_service_url:
+        default: http://collect-ui.top:8014/transcribe
+      ocr_provider:
+        default: tencent
+      ocr_max_pages:
+        type: int
+        default: 200
+      ocr_image_dpi:
+        type: int
+        default: 180
+      ocr_timeout_seconds:
+        type: int
+        default: 120
+      provider:
+        default: codex
+      model:
+        default: ""
+
+  - key: pdf_source_query
+    http: true
+    module: sql
+    params:
+      source_doc_id:
+        default: ""
+      import_batch_id:
+        default: ""
+      file_name:
+        template: "{{ if .file_name }}%{{.file_name}}%{{end}}"
+      subject:
+        default: ""
+      grade:
+        default: ""
+      textbook_version:
+        default: ""
+      fragment_type:
+        default: ""
+      page:
+        type: int
+        default: 1
+      size:
+        type: int
+        default: 100
+      start:
+        template: "({{.page}}-1) * {{.size}}"
+        exec: true
+        type: int
+    data_file: pdf_source_query.sql
+
+  - key: pdf_snapshot_query
+    http: true
+    module: sql
+    params:
+      source_doc_id:
+        default: ""
+      file_name:
+        template: "{{ if .file_name }}%{{.file_name}}%{{end}}"
+      knowledge_id:
+        default: ""
+      question_id:
+        default: ""
+      content_id:
+        default: ""
+      page:
+        type: int
+        default: 1
+      size:
+        type: int
+        default: 100
+      start:
+        template: "({{.page}}-1) * {{.size}}"
+        exec: true
+        type: int
+    data_file: pdf_snapshot_query.sql
+
+  - key: pdf_source_trace_query
+    http: true
+    module: sql
+    params:
+      source_doc_id:
+        default: ""
+      file_name:
+        template: "{{ if .file_name }}%{{.file_name}}%{{end}}"
+      entity_type:
+        default: ""
+      entity_id:
+        default: ""
+      field_name:
+        default: ""
+      match_status:
+        default: ""
+      page:
+        type: int
+        default: 1
+      size:
+        type: int
+        default: 100
+      start:
+        template: "({{.page}}-1) * {{.size}}"
+        exec: true
+        type: int
+    data_file: pdf_source_trace_query.sql
+
+  - key: pdf_parse_issue_query
+    http: true
+    module: sql
+    params:
+      source_doc_id:
+        default: ""
+      file_name:
+        template: "{{ if .file_name }}%{{.file_name}}%{{end}}"
+      issue_type:
+        default: ""
+      severity:
+        default: ""
+      status:
+        default: ""
+      page:
+        type: int
+        default: 1
+      size:
+        type: int
+        default: 100
+      start:
+        template: "({{.page}}-1) * {{.size}}"
+        exec: true
+        type: int
+    data_file: pdf_parse_issue_query.sql
+
+  - key: pdf_field_source_save
+    http: true
+    module: model_save
+    table: question_source_field_rel
+    params:
+      field_rel_id:
+        template: "{{uuid}}"
+      source_doc_id:
+        check:
+          template: "{{must .source_doc_id}}"
+          err_msg: source_doc_id不能为空
+      source_page_id:
+        default: ""
+      source_block_id:
+        default: ""
+      source_fragment_id:
+        default: ""
+      entity_type:
+        check:
+          template: "{{must .entity_type}}"
+          err_msg: entity_type不能为空
+      entity_id:
+        check:
+          template: "{{must .entity_id}}"
+          err_msg: entity_id不能为空
+      field_name:
+        check:
+          template: "{{must .field_name}}"
+          err_msg: field_name不能为空
+      field_part_order:
+        type: int
+        default: 1
+      extracted_value:
+        default: ""
+      normalized_value:
+        default: ""
+      raw_quote:
+        check:
+          template: "{{must .raw_quote}}"
+          err_msg: raw_quote不能为空
+      context_before:
+        default: ""
+      context_after:
+        default: ""
+      char_start:
+        type: int
+        default: 0
+      char_end:
+        type: int
+        default: 0
+      bbox_json:
+        default: "{}"
+      confidence:
+        type: float
+        default: 1
+      match_status:
+        default: matched
+      review_status:
+        default: pending
+      create_time:
+        template: "{{current_date_time}}"
 
   - key: ai_import_save
     http: true

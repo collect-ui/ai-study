@@ -1,0 +1,15 @@
+{
+  "source_pdf": "/data/project/ai-study/题目/9英语易错题-秒懂比较级句型.pdf",
+  "cases": [
+    {
+      "id": "compare_degree_full_ocr",
+      "name": "9英语易错题：秒懂比较级句型 OCR 全文",
+      "file": "compare_degree_full_ocr.txt",
+      "expected_count": 6,
+      "params": {
+        "question_type": "single_choice",
+        "question_category": "grammar_choice"
+      }
+    }
+  ]
+}

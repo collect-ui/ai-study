@@ -18,11 +18,11 @@
       "keyword": "",
       "subject": "",
       "stage": "junior",
-    "grade": "grade_7",
-    "textbook_version": "pep",
-    "unit_id": "",
-    "knowledge_id": "",
-    "question_type": "",
+      "grade": "grade_7",
+      "textbook_version": "pep",
+      "unit_id": "",
+      "knowledge_id": "",
+      "question_type": "",
       "question_category": "",
       "difficulty": "",
       "status": ""
@@ -59,11 +59,11 @@
       "keyword": "",
       "subject": "",
       "stage": "junior",
-    "grade": "grade_7",
-    "textbook_version": "pep",
-    "unit_id": "",
-    "knowledge_id": "",
-    "question_type": "",
+      "grade": "grade_7",
+      "textbook_version": "pep",
+      "unit_id": "",
+      "knowledge_id": "",
+      "question_type": "",
       "question_category": "",
       "difficulty": "",
       "status": ""
@@ -74,12 +74,12 @@
       "stage": "junior",
       "grade": "grade_7",
       "textbook_version": "pep",
-    "unit_id": "",
-    "unit_code": "",
-    "unit_name": "",
-    "knowledge_id": [],
-    "knowledge_name": "",
-    "question_type": "single_choice",
+      "unit_id": "",
+      "unit_code": "",
+      "unit_name": "",
+      "knowledge_id": [],
+      "knowledge_name": "",
+      "question_type": "single_choice",
       "difficulty": "basic",
       "score": 5,
       "sequence_no": 1,
@@ -106,13 +106,13 @@
       "analysis_media_name": "",
       "analysis_media_type": ""
     },
-  "questionFormOriginal": {},
-  "unitList": [],
-  "allUnitList": [],
-  "knowledgeList": [],
-  "questionUnitList": [],
-  "questionKnowledgeList": [],
-  "subjectList": [],
+    "questionFormOriginal": {},
+    "unitList": [],
+    "allUnitList": [],
+    "knowledgeList": [],
+    "questionUnitList": [],
+    "questionKnowledgeList": [],
+    "subjectList": [],
     "gradeList": [],
     "dataList": [],
     "count": 0,
@@ -229,16 +229,18 @@
     {
       "tag": "ajax",
       "group": "knowledge-list",
-      "api": "post:/template_data/data?service=question.knowledge_query",
+      "api": "post:/template_data/data?service=question.knowledge_point_query",
       "data": {
         "subject": "${searchForm.subject || ''}",
         "stage": "${searchForm.stage || ''}",
         "grade": "${searchForm.grade || ''}",
         "unit_id": "${searchForm.unit_id || ''}",
-        "status": "enabled"
+        "status": "enabled",
+        "pagination": false,
+        "count": false
       },
       "adapt": {
-        "knowledgeList": "${data}"
+        "knowledgeList": "${(Array.isArray(data)?data:[]).map(item=>Object.assign({}, item, {knowledge_id:item.point_id,knowledge_name:item.point_name,knowledge_code:item.point_code,parent_id:item.unit_id}))}"
       }
     },
     {
@@ -299,16 +301,18 @@
     {
       "tag": "ajax",
       "group": "question-knowledge-list",
-      "api": "post:/template_data/data?service=question.knowledge_query",
+      "api": "post:/template_data/data?service=question.knowledge_point_query",
       "data": {
         "subject": "${questionForm.subject || ''}",
         "stage": "${questionForm.stage || ''}",
         "grade": "${questionForm.grade || ''}",
         "unit_id": "${questionForm.unit_id || ''}",
-        "status": "enabled"
+        "status": "enabled",
+        "pagination": false,
+        "count": false
       },
       "adapt": {
-        "questionKnowledgeList": "${data}"
+        "questionKnowledgeList": "${(Array.isArray(data)?data:[]).map(item=>Object.assign({}, item, {knowledge_id:item.point_id,knowledge_name:item.point_name,knowledge_code:item.point_code,parent_id:item.unit_id}))}"
       }
     }
   ],
@@ -772,7 +776,7 @@
                               ],
                               "itemAttr": {
                                 "tag": "button",
-                                "children": "${row.grade_name || row.grade_code}",
+                                "children": "${row.grade_label || row.grade_name || row.grade_code}",
                                 "style": {
                                   "width": "100%",
                                   "height": 34,
@@ -1286,7 +1290,7 @@
                                 {
                                   "tag": "form-item",
                                   "name": "question_category",
-                                  "label": "分类",
+                                  "label": "属性",
                                   "style": {
                                     "width": 180,
                                     "margin": 0
@@ -1295,137 +1299,23 @@
                                     {
                                       "tag": "select",
                                       "allowClear": true,
-                                      "placeholder": "题型分类",
+                                      "placeholder": "题目属性",
                                       "options": [
                                         {
-                                          "label": "全部分类",
+                                          "label": "全部属性",
                                           "value": ""
                                         },
                                         {
-                                          "label": "语法/单选",
-                                          "value": "grammar_choice"
-                                        },
-                                        {
-                                          "label": "完形填空",
-                                          "value": "cloze_choice"
-                                        },
-                                        {
-                                          "label": "阅读理解",
-                                          "value": "reading_choice"
-                                        },
-                                        {
-                                          "label": "词形/填空",
-                                          "value": "fill_word"
-                                        },
-                                        {
-                                          "label": "句型转换",
-                                          "value": "sentence_transform"
-                                        },
-                                        {
-                                          "label": "补全对话",
-                                          "value": "dialogue_completion"
-                                        },
-                                        {
-                                          "label": "阅读回答",
-                                          "value": "reading_short_answer"
-                                        },
-                                        {
-                                          "label": "判断正误",
-                                          "value": "judge_tf"
-                                        },
-                                        {
-                                          "label": "词汇辨析",
-                                          "value": "vocabulary_choice"
-                                        },
-                                        {
-                                          "label": "智力练习",
-                                          "value": "iq"
+                                          "label": "经典题型",
+                                          "value": "classic"
                                         },
                                         {
                                           "label": "普通题型",
                                           "value": "normal"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "tag": "form-item",
-                                  "name": "question_type",
-                                  "visible": false,
-                                  "label": "类型",
-                                  "style": {
-                                    "width": 160,
-                                    "margin": 0
-                                  },
-                                  "children": [
-                                    {
-                                      "tag": "select",
-                                      "allowClear": true,
-                                      "placeholder": "题目类型",
-                                      "options": [
-                                        {
-                                          "label": "全部类型",
-                                          "value": ""
                                         },
                                         {
-                                          "label": "单选题",
-                                          "value": "single_choice"
-                                        },
-                                        {
-                                          "label": "多选题",
-                                          "value": "multiple_choice"
-                                        },
-                                        {
-                                          "label": "填空题",
-                                          "value": "blank"
-                                        },
-                                        {
-                                          "label": "判断题",
-                                          "value": "judge"
-                                        },
-                                        {
-                                          "label": "简答题",
-                                          "value": "short_answer"
-                                        },
-                                        {
-                                          "label": "计算题",
-                                          "value": "calculation"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "tag": "form-item",
-                                  "name": "difficulty",
-                                  "visible": false,
-                                  "label": "难度",
-                                  "style": {
-                                    "width": 130,
-                                    "margin": 0
-                                  },
-                                  "children": [
-                                    {
-                                      "tag": "select",
-                                      "allowClear": true,
-                                      "placeholder": "难度",
-                                      "options": [
-                                        {
-                                          "label": "全部难度",
-                                          "value": ""
-                                        },
-                                        {
-                                          "label": "基础",
-                                          "value": "basic"
-                                        },
-                                        {
-                                          "label": "进阶",
-                                          "value": "medium"
-                                        },
-                                        {
-                                          "label": "困难",
-                                          "value": "hard"
+                                          "label": "考试真题",
+                                          "value": "exam"
                                         }
                                       ]
                                     }
@@ -1470,89 +1360,6 @@
                                           "value": "rejected"
                                         }
                                       ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "tag": "form-item",
-                                  "name": "unit_id",
-                                  "visible": false,
-                                  "label": "单元",
-                                  "style": {
-                                    "width": 220,
-                                    "maxWidth": "24vw",
-                                    "margin": 0
-                                  },
-                                  "children": [
-                                    {
-                                      "tag": "select",
-                                      "allowClear": true,
-                                      "showSearch": true,
-                                      "placeholder": "单元",
-                                      "fieldNames": {
-                                        "label": "unit_name",
-                                        "value": "unit_id"
-                                      },
-                                      "options": "${unitList}",
-                                      "action": [
-                                        {
-                                          "tag": "update-form",
-                                          "formName": "questionSearchForm",
-                                          "value": {
-                                            "page": 1,
-                                            "unit_id": "${value || ''}",
-                                            "knowledge_id": ""
-                                          }
-                                        },
-                                        {
-                                          "tag": "update-store",
-                                          "value": {
-                                            "searchForm": "${Object.assign({}, searchForm, {page: 1, size: searchForm.size || 10, unit_id: value || '', knowledge_id: ''})}"
-                                          }
-                                        },
-                                        {
-                                          "tag": "localstore",
-                                          "method": "write",
-                                          "key": "ai-study:question-bank:search-form",
-                                          "storeField": "searchForm"
-                                        },
-                                        {
-                                          "tag": "reload-init-action",
-                                          "group": "knowledge-list"
-                                        },
-                                        {
-                                          "tag": "reload-init-action",
-                                          "group": "question-list"
-                                        },
-                                        {
-                                          "tag": "reload-init-action",
-                                          "group": "question-stats"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "tag": "form-item",
-                                  "name": "knowledge_id",
-                                  "visible": false,
-                                  "label": "知识点",
-                                  "style": {
-                                    "width": 220,
-                                    "maxWidth": "24vw",
-                                    "margin": 0
-                                  },
-                                  "children": [
-                                    {
-                                      "tag": "select",
-                                      "allowClear": true,
-                                      "showSearch": true,
-                                      "placeholder": "知识点",
-                                      "fieldNames": {
-                                        "label": "knowledge_name",
-                                        "value": "knowledge_id"
-                                      },
-                                      "options": "${knowledgeList}"
                                     }
                                   ]
                                 },
@@ -1604,8 +1411,7 @@
                                   ]
                                 }
                               ]
-                            }
-                            ,
+                            },
                             {
                               "tag": "div",
                               "className": "qb-toolbar-actions",
@@ -1691,7 +1497,7 @@
                                     "whiteSpace": "nowrap",
                                     "fontWeight": 700
                                   },
-                                  "children": "${(()=>{const sf=searchForm||{};const subject=(sf.subject?(((Array.isArray(subjectList)?subjectList:[]).find(item=>item.subject_code===sf.subject)||{}).subject_name||sf.subject):'全部科目');const grade=(sf.grade?(((Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===sf.grade)||{}).grade_name||sf.grade):'全部年级');const textbook={pep:'人教版',bsd:'北师大版'}[sf.textbook_version||'pep']||(sf.textbook_version||'全部教材');const categoryMap={normal:'普通题型',grammar_choice:'语法/单项选择',cloze_choice:'完形填空',reading_choice:'阅读理解',fill_word:'词形/填空',sentence_transform:'句型转换',dialogue_completion:'补全对话',reading_short_answer:'阅读回答',judge_tf:'判断正误',vocabulary_choice:'词汇辨析',iq:'智力练习'};const typeMap={single_choice:'单选题',multiple_choice:'多选题',blank:'填空题',judge:'判断题',short_answer:'简答题',calculation:'计算题'};const diffMap={basic:'基础',medium:'进阶',hard:'困难'};const statusMap={draft:'草稿',reviewing:'待审核',published:'已发布',offline:'已下线',rejected:'已退回'};const unit=sf.unit_id?(((Array.isArray(unitList)?unitList:[]).find(item=>item.unit_id===sf.unit_id)||{}).unit_name||sf.unit_id):'全部单元';const knowledge=sf.knowledge_id?(((Array.isArray(knowledgeList)?knowledgeList:[]).find(item=>item.knowledge_id===sf.knowledge_id)||{}).knowledge_name||sf.knowledge_id):'全部知识点';const parts=['科目：'+subject,'年级：'+grade,'教材：'+textbook,'分类：'+(sf.question_category?(categoryMap[sf.question_category]||sf.question_category):'全部分类'),'类型：'+(sf.question_type?(typeMap[sf.question_type]||sf.question_type):'全部类型'),'难度：'+(sf.difficulty?(diffMap[sf.difficulty]||sf.difficulty):'全部难度'),'状态：'+(sf.status?(statusMap[sf.status]||sf.status):'全部状态'),'单元：'+unit,'知识点：'+knowledge];if(sf.keyword)parts.unshift('关键字：'+sf.keyword);return '当前查询条件：'+parts.join(' / ');})()}"
+                                  "children": "${(()=>{const sf=searchForm||{};const subject=(sf.subject?(((Array.isArray(subjectList)?subjectList:[]).find(item=>item.subject_code===sf.subject)||{}).subject_name||sf.subject):'全部科目');const grade=(sf.grade?(((Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===sf.grade)||{}).grade_label||((Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===sf.grade)||{}).grade_name||sf.grade):'全部年级');const textbook={pep:'人教版',bsd:'北师大版'}[sf.textbook_version||'pep']||(sf.textbook_version||'全部教材');const categoryMap={classic:'经典题型',normal:'普通题型',exam:'考试真题',grammar_choice:'语法/单项选择',cloze_choice:'完形填空',reading_choice:'阅读理解',fill_word:'词形/填空',sentence_transform:'句型转换',dialogue_completion:'补全对话',reading_short_answer:'阅读回答',judge_tf:'判断正误',vocabulary_choice:'词汇辨析',iq:'智力练习'};const typeMap={single_choice:'单选题',multiple_choice:'多选题',blank:'填空题',judge:'判断题',short_answer:'简答题',calculation:'计算题'};const diffMap={basic:'基础',medium:'进阶',hard:'困难'};const statusMap={draft:'草稿',reviewing:'待审核',published:'已发布',offline:'已下线',rejected:'已退回'};const unit=sf.unit_id?(((Array.isArray(unitList)?unitList:[]).find(item=>item.unit_id===sf.unit_id)||{}).unit_name||sf.unit_id):'全部单元';const knowledge=sf.knowledge_id?(((Array.isArray(knowledgeList)?knowledgeList:[]).find(item=>item.knowledge_id===sf.knowledge_id)||{}).knowledge_name||sf.knowledge_id):'全部知识点';const parts=['科目：'+subject,'年级：'+grade,'教材：'+textbook,'属性：'+(sf.question_category?(categoryMap[sf.question_category]||sf.question_category):'全部属性'),'类型：'+(sf.question_type?(typeMap[sf.question_type]||sf.question_type):'全部类型'),'难度：'+(sf.difficulty?(diffMap[sf.difficulty]||sf.difficulty):'全部难度'),'状态：'+(sf.status?(statusMap[sf.status]||sf.status):'全部状态'),'单元：'+unit,'知识点：'+knowledge];if(sf.keyword)parts.unshift('关键字：'+sf.keyword);return '当前查询条件：'+parts.join(' / ');})()}"
                                 },
                                 {
                                   "tag": "button",
@@ -2092,7 +1898,7 @@
                                                           "color": "#5f4200",
                                                           "fontWeight": 700
                                                         },
-                                                        "children": "${row.question_category_name || ({normal:'普通题型', grammar_choice:'语法/单项选择', cloze_choice:'完形填空', reading_choice:'阅读理解', fill_word:'词形/填空', sentence_transform:'句型转换', dialogue_completion:'补全对话', reading_short_answer:'阅读回答', judge_tf:'判断正误', vocabulary_choice:'词汇辨析', iq:'智力练习'}[row.question_category || 'normal']) || row.question_category || '普通题型'}"
+                                                        "children": "${row.question_category_name || ({classic:'经典题型', normal:'普通题型', exam:'考试真题', grammar_choice:'语法/单项选择', cloze_choice:'完形填空', reading_choice:'阅读理解', fill_word:'词形/填空', sentence_transform:'句型转换', dialogue_completion:'补全对话', reading_short_answer:'阅读回答', judge_tf:'判断正误', vocabulary_choice:'词汇辨析', iq:'智力练习'}[row.question_category || 'normal']) || row.question_category || '普通题型'}"
                                                       },
                                                       {
                                                         "tag": "span",
@@ -2312,7 +2118,7 @@
                                             "children": [
                                               {
                                                 "tag": "span",
-                                                "children": "${row.grade_name || row.grade || '未分年级'}"
+                                                "children": "${row.grade_label || row.grade_name || row.grade || '未分年级'}"
                                               },
                                               {
                                                 "tag": "span",
@@ -3183,43 +2989,6 @@
                                           "showResultMsg": false
                                         },
                                         {
-                                          "tag": "update-form",
-                                          "enable": false,
-                                          "formName": "questionSearchForm",
-                                          "value": {
-                                            "page": 1,
-                                            "keyword": "",
-                                            "subject": "${questionForm.subject || searchForm.subject || ''}",
-                                            "grade": "${questionForm.grade || 'grade_7'}",
-                                            "textbook_version": "${questionForm.textbook_version || 'pep'}",
-                                            "unit_id": "${questionForm.unit_id || ''}",
-                                            "knowledge_id": "${(()=>{const ids=Array.isArray(questionForm.knowledge_id)?questionForm.knowledge_id:(questionForm.knowledge_id?[questionForm.knowledge_id]:[]);return ids[0]||'';})()}",
-                                            "question_type": "",
-                                            "difficulty": "${questionForm.difficulty || ''}"
-                                          }
-                                        },
-                                        {
-                                          "tag": "update-store",
-                                          "enable": false,
-                                          "value": {
-                                            "searchForm": "${(()=>{const ids=Array.isArray(questionForm.knowledge_id)?questionForm.knowledge_id:(questionForm.knowledge_id?[questionForm.knowledge_id]:[]);return Object.assign({}, searchForm, {page: 1, size: searchForm.size || 10, keyword: '', subject: questionForm.subject || searchForm.subject || '', grade: questionForm.grade || 'grade_7', textbook_version: questionForm.textbook_version || 'pep', unit_id: questionForm.unit_id || '', knowledge_id: ids[0] || '', question_type: '', difficulty: questionForm.difficulty || ''});})()}"
-                                          }
-                                        },
-                                        {
-                                          "tag": "localstore",
-                                          "method": "write",
-                                          "key": "ai-study:question-bank:search-form",
-                                          "storeField": "searchForm"
-                                        },
-                                        {
-                                          "tag": "reload-init-action",
-                                          "group": "unit-list"
-                                        },
-                                        {
-                                          "tag": "reload-init-action",
-                                          "group": "knowledge-list"
-                                        },
-                                        {
                                           "tag": "reload-init-action",
                                           "group": "question-list"
                                         },
@@ -3417,7 +3186,7 @@
                                                                         }
                                                                       ],
                                                                       "fieldNames": {
-                                                                        "label": "grade_name",
+                                                                        "label": "grade_label",
                                                                         "value": "grade_code"
                                                                       },
                                                                       "options": "${gradeList}"
@@ -3524,48 +3293,16 @@
                                                                       "tag": "select",
                                                                       "options": [
                                                                         {
+                                                                          "label": "经典题型",
+                                                                          "value": "classic"
+                                                                        },
+                                                                        {
                                                                           "label": "普通题型",
                                                                           "value": "normal"
                                                                         },
                                                                         {
-                                                                          "label": "语法/单项选择",
-                                                                          "value": "grammar_choice"
-                                                                        },
-                                                                        {
-                                                                          "label": "完形填空",
-                                                                          "value": "cloze_choice"
-                                                                        },
-                                                                        {
-                                                                          "label": "阅读理解",
-                                                                          "value": "reading_choice"
-                                                                        },
-                                                                        {
-                                                                          "label": "词形/填空",
-                                                                          "value": "fill_word"
-                                                                        },
-                                                                        {
-                                                                          "label": "句型转换",
-                                                                          "value": "sentence_transform"
-                                                                        },
-                                                                        {
-                                                                          "label": "补全对话",
-                                                                          "value": "dialogue_completion"
-                                                                        },
-                                                                        {
-                                                                          "label": "阅读回答",
-                                                                          "value": "reading_short_answer"
-                                                                        },
-                                                                        {
-                                                                          "label": "判断正误",
-                                                                          "value": "judge_tf"
-                                                                        },
-                                                                        {
-                                                                          "label": "词汇辨析",
-                                                                          "value": "vocabulary_choice"
-                                                                        },
-                                                                        {
-                                                                          "label": "智力练习",
-                                                                          "value": "iq"
+                                                                          "label": "考试真题",
+                                                                          "value": "exam"
                                                                         }
                                                                       ],
                                                                       "action": [
@@ -4890,7 +4627,7 @@
                       "valueGetter": "data.question_type_name || data.question_type || ''"
                     },
                     {
-                      "headerName": "分类",
+                      "headerName": "属性",
                       "field": "question_category_name",
                       "width": 120,
                       "valueGetter": "data.question_category_name || data.question_category || ''"
@@ -5075,7 +4812,7 @@
                             {
                               "tag": "span",
                               "className": "qb-preview-chip",
-                              "children": "${previewData.question_category_name || ({normal:'普通题型', grammar_choice:'语法/单项选择', cloze_choice:'完形填空', reading_choice:'阅读理解', fill_word:'词形/填空', sentence_transform:'句型转换', dialogue_completion:'补全对话', reading_short_answer:'阅读回答', judge_tf:'判断正误', vocabulary_choice:'词汇辨析', iq:'智力练习'}[previewData.question_category || 'normal']) || previewData.question_category || '普通题型'}"
+                              "children": "${previewData.question_category_name || ({classic:'经典题型', normal:'普通题型', exam:'考试真题', grammar_choice:'语法/单项选择', cloze_choice:'完形填空', reading_choice:'阅读理解', fill_word:'词形/填空', sentence_transform:'句型转换', dialogue_completion:'补全对话', reading_short_answer:'阅读回答', judge_tf:'判断正误', vocabulary_choice:'词汇辨析', iq:'智力练习'}[previewData.question_category || 'normal']) || previewData.question_category || '普通题型'}"
                             },
                             {
                               "tag": "span",

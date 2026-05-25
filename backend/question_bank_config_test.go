@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestQuestionBankKnowledgeSelectUsesTaxonomyDataAsMultiSelect(t *testing.T) {
+func TestQuestionBankKnowledgeSelectUsesKnowledgePointDataAsMultiSelect(t *testing.T) {
 	root := readJSONFile(t, "collect/frontend/page_data/data/question/question_bank.json")
 	rootObj, ok := root.(map[string]any)
 	if !ok {
@@ -21,12 +21,18 @@ func TestQuestionBankKnowledgeSelectUsesTaxonomyDataAsMultiSelect(t *testing.T) 
 	if !ok {
 		t.Fatalf("question-knowledge-list init action not found")
 	}
-	if got, want := stringField(knowledgeListAction, "api"), "post:/template_data/data?service=question.knowledge_query"; got != want {
+	if got, want := stringField(knowledgeListAction, "api"), "post:/template_data/data?service=question.knowledge_point_query"; got != want {
 		t.Fatalf("question-knowledge-list api = %q, want %q", got, want)
 	}
 	adapt, ok := knowledgeListAction["adapt"].(map[string]any)
-	if !ok || adapt["questionKnowledgeList"] != "${data}" {
-		t.Fatalf("question-knowledge-list should adapt data into questionKnowledgeList, got %#v", knowledgeListAction["adapt"])
+	if !ok {
+		t.Fatalf("question-knowledge-list adapt missing")
+	}
+	adaptExpr, _ := adapt["questionKnowledgeList"].(string)
+	for _, want := range []string{"point_id", "point_name", "knowledge_id", "knowledge_name"} {
+		if !strings.Contains(adaptExpr, want) {
+			t.Fatalf("question-knowledge-list adapt should map knowledge point fields, missing %q in %q", want, adaptExpr)
+		}
 	}
 	data, ok := knowledgeListAction["data"].(map[string]any)
 	if !ok {
@@ -34,6 +40,19 @@ func TestQuestionBankKnowledgeSelectUsesTaxonomyDataAsMultiSelect(t *testing.T) 
 	}
 	if got, want := data["unit_id"], "${questionForm.unit_id || ''}"; got != want {
 		t.Fatalf("question-knowledge-list unit_id = %#v, want %q", got, want)
+	}
+	if got := data["pagination"]; got != false {
+		t.Fatalf("question-knowledge-list pagination = %#v, want false", got)
+	}
+	if got := data["count"]; got != false {
+		t.Fatalf("question-knowledge-list count = %#v, want false", got)
+	}
+	searchKnowledgeListAction, ok := findObjectWithString(initAction, "group", "knowledge-list")
+	if !ok {
+		t.Fatalf("knowledge-list init action not found")
+	}
+	if got, want := stringField(searchKnowledgeListAction, "api"), "post:/template_data/data?service=question.knowledge_point_query"; got != want {
+		t.Fatalf("knowledge-list api = %q, want %q", got, want)
 	}
 
 	selectObj, ok := findQuestionKnowledgeMultiSelect(root)
@@ -62,14 +81,38 @@ func TestQuestionBankTopToolbarHidesFiltersDuplicatedInSidebar(t *testing.T) {
 	}
 
 	for _, name := range []string{"question_type", "difficulty", "unit_id", "knowledge_id"} {
-		item, ok := findFormItemByName(toolbar, name)
-		if !ok {
-			t.Fatalf("top toolbar form item %s not found", name)
-		}
-		if visible, ok := item["visible"].(bool); !ok || visible {
-			t.Fatalf("top toolbar form item %s should be hidden, visible=%#v", name, item["visible"])
+		if item, ok := findFormItemByName(toolbar, name); ok {
+			t.Fatalf("top toolbar should not render duplicate form item %s: %#v", name, item)
 		}
 	}
+}
+
+func TestQuestionBankQuestionCategoryOptions(t *testing.T) {
+	root := readJSONFile(t, "collect/frontend/page_data/data/question/question_bank.json")
+	items := collectFormItemsByName(root, "question_category")
+	if len(items) < 2 {
+		t.Fatalf("question_category form items = %d, want at least search and editor", len(items))
+	}
+
+	var searchItem map[string]any
+	var editorItem map[string]any
+	for _, item := range items {
+		if stringField(item, "label") != "属性" {
+			continue
+		}
+		values := selectOptionValues(t, item)
+		if containsString(values, "") {
+			searchItem = item
+		} else {
+			editorItem = item
+		}
+	}
+	if searchItem == nil || editorItem == nil {
+		t.Fatalf("question_category search/editor 属性 form items not found")
+	}
+
+	assertSelectOptions(t, searchItem, []string{"全部属性", "经典题型", "普通题型", "考试真题"}, []string{"", "classic", "normal", "exam"})
+	assertSelectOptions(t, editorItem, []string{"经典题型", "普通题型", "考试真题"}, []string{"classic", "normal", "exam"})
 }
 
 func TestQuestionBankSaveButtonLoadingDoesNotRewriteSearchForm(t *testing.T) {
@@ -108,9 +151,7 @@ func TestQuestionBankSaveButtonLoadingDoesNotRewriteSearchForm(t *testing.T) {
 
 	visitObjects(button["action"], func(obj map[string]any) {
 		if stringField(obj, "tag") == "update-form" && stringField(obj, "formName") == "questionSearchForm" {
-			if enabled, ok := obj["enable"].(bool); !ok || enabled {
-				t.Fatalf("save action should not update questionSearchForm, enable=%#v", obj["enable"])
-			}
+			t.Fatalf("save action should not update questionSearchForm: %#v", obj)
 		}
 		if stringField(obj, "tag") == "update-store" {
 			value, ok := obj["value"].(map[string]any)
@@ -118,9 +159,7 @@ func TestQuestionBankSaveButtonLoadingDoesNotRewriteSearchForm(t *testing.T) {
 				return
 			}
 			if _, hasSearchForm := value["searchForm"]; hasSearchForm {
-				if enabled, ok := obj["enable"].(bool); !ok || enabled {
-					t.Fatalf("save action should not rewrite searchForm, enable=%#v", obj["enable"])
-				}
+				t.Fatalf("save action should not rewrite searchForm: %#v", obj)
 			}
 		}
 	})
@@ -237,6 +276,73 @@ func findFormItemByName(root any, name string) (map[string]any, bool) {
 		}
 	})
 	return found, found != nil
+}
+
+func collectFormItemsByName(root any, name string) []map[string]any {
+	var found []map[string]any
+	visitObjects(root, func(obj map[string]any) {
+		if stringField(obj, "tag") == "form-item" && stringField(obj, "name") == name {
+			found = append(found, obj)
+		}
+	})
+	return found
+}
+
+func assertSelectOptions(t *testing.T, formItem map[string]any, wantLabels []string, wantValues []string) {
+	t.Helper()
+	selectObj, ok := findObjectWithString(formItem["children"], "tag", "select")
+	if !ok {
+		t.Fatalf("select not found for form item %#v", formItem)
+	}
+	options, ok := selectObj["options"].([]any)
+	if !ok {
+		t.Fatalf("select options missing: %#v", selectObj["options"])
+	}
+	if len(options) != len(wantLabels) {
+		t.Fatalf("option count = %d, want %d", len(options), len(wantLabels))
+	}
+	for i, option := range options {
+		row, ok := option.(map[string]any)
+		if !ok {
+			t.Fatalf("option %d is not object: %#v", i, option)
+		}
+		if got := stringField(row, "label"); got != wantLabels[i] {
+			t.Fatalf("option %d label = %q, want %q", i, got, wantLabels[i])
+		}
+		if got := stringField(row, "value"); got != wantValues[i] {
+			t.Fatalf("option %d value = %q, want %q", i, got, wantValues[i])
+		}
+	}
+}
+
+func selectOptionValues(t *testing.T, formItem map[string]any) []string {
+	t.Helper()
+	selectObj, ok := findObjectWithString(formItem["children"], "tag", "select")
+	if !ok {
+		t.Fatalf("select not found for form item %#v", formItem)
+	}
+	options, ok := selectObj["options"].([]any)
+	if !ok {
+		t.Fatalf("select options missing: %#v", selectObj["options"])
+	}
+	values := make([]string, 0, len(options))
+	for _, option := range options {
+		row, ok := option.(map[string]any)
+		if !ok {
+			t.Fatalf("option is not object: %#v", option)
+		}
+		values = append(values, stringField(row, "value"))
+	}
+	return values
+}
+
+func containsString(values []string, want string) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
 }
 
 func findAjaxByService(root any, service string) (map[string]any, bool) {

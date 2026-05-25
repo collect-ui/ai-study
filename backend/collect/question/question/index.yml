@@ -211,12 +211,12 @@ service:
       option_c_html:
         template: "{{if .option_c_html}}{{.option_c_html}}{{else}}{{.option_c_text}}{{end}}"
         check:
-          template: '{{if and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}{{if .option_c_html}}{{must .option_c_html}}{{else}}{{must .option_c_text}}{{end}}{{else}}1{{end}}'
+          template: '{{if and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice")) (ge .option_count 3)}}{{if .option_c_html}}{{must .option_c_html}}{{else}}{{must .option_c_text}}{{end}}{{else}}1{{end}}'
           err_msg: 选项C不能为空
       option_d_html:
         template: "{{if .option_d_html}}{{.option_d_html}}{{else}}{{.option_d_text}}{{end}}"
         check:
-          template: '{{if and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}{{if .option_d_html}}{{must .option_d_html}}{{else}}{{must .option_d_text}}{{end}}{{else}}1{{end}}'
+          template: '{{if and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice")) (ge .option_count 4)}}{{if .option_d_html}}{{must .option_d_html}}{{else}}{{must .option_d_text}}{{end}}{{else}}1{{end}}'
           err_msg: 选项D不能为空
     handler_params:
       - key: service2field
@@ -273,7 +273,7 @@ service:
           option_text: "[option_b_text]"
           is_correct: "[option_b_correct]"
       - key: service2field
-        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice")) (ge .option_count 3)}}'
         service:
           service: question.option_save
           question_id: "[question_id]"
@@ -284,7 +284,7 @@ service:
           option_text: "[option_c_text]"
           is_correct: "[option_c_correct]"
       - key: service2field
-        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice")) (ge .option_count 4)}}'
         service:
           service: question.option_save
           question_id: "[question_id]"
@@ -573,7 +573,7 @@ service:
           option_text: "[option_b_text]"
           is_correct: "[option_b_correct]"
       - key: service2field
-        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice")) (ge .option_count 3)}}'
         service:
           service: question.option_save
           question_id: "[question_id]"
@@ -584,7 +584,7 @@ service:
           option_text: "[option_c_text]"
           is_correct: "[option_c_correct]"
       - key: service2field
-        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice"))}}'
+        enable: '{{and (ne .question_category "cloze_choice") (ne .question_category "reading_choice") (or (eq .question_type "single_choice") (eq .question_type "multiple_choice")) (ge .option_count 4)}}'
         service:
           service: question.option_save
           question_id: "[question_id]"
