@@ -7,6 +7,26 @@ service:
         template: "{{ if .keyword }}%{{.keyword}}%{{end}}"
     data_file: section_query.sql
 
+  - key: section_find_by_name
+    module: sql
+    params:
+      section_name:
+        check:
+          template: "{{must .section_name}}"
+          err_msg: 小节名称不能为空
+    data_file: section_find_by_name.sql
+    result_handler:
+      - key: arr2obj
+
+  - key: section_next_order
+    module: sql
+    params:
+      order_index:
+        default: 1
+    data_file: section_next_order.sql
+    result_handler:
+      - key: arr2obj
+
   - key: section_save
     http: true
     module: model_save
@@ -14,6 +34,54 @@ service:
     params:
       section_id:
         template: "{{uuid}}"
+      subject:
+        check:
+          template: "{{must .subject}}"
+          err_msg: 科目不能为空
+      stage:
+        check:
+          template: "{{must .stage}}"
+          err_msg: 学段不能为空
+      grade:
+        check:
+          template: "{{must .grade}}"
+          err_msg: 年级不能为空
+      unit_id:
+        check:
+          template: "{{must .unit_id}}"
+          err_msg: 单元不能为空
+      section_code:
+        check:
+          template: "{{must .section_code}}"
+          err_msg: 小节编码不能为空
+      section_name:
+        check:
+          template: "{{must .section_name}}"
+          err_msg: 小节名称不能为空
+      order_index:
+        type: int
+        default: 1
+      status:
+        default: enabled
+      is_delete:
+        default: "0"
+      create_time:
+        template: "{{current_date_time}}"
+      create_user:
+        template: "{{.session_user_id}}"
+      modify_time:
+        template: "{{current_date_time}}"
+      modify_user:
+        template: "{{.session_user_id}}"
+
+  - key: section_save_with_id
+    module: model_save
+    table: question_section
+    params:
+      section_id:
+        check:
+          template: "{{must .section_id}}"
+          err_msg: section_id不能为空
       subject:
         check:
           template: "{{must .subject}}"

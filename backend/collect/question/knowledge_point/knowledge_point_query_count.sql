@@ -6,6 +6,9 @@ LEFT JOIN question_subject subject ON subject.subject_code = a.subject AND ifnul
 LEFT JOIN question_grade grade ON grade.grade_code = a.grade AND ifnull(grade.is_delete, '0') = '0'
 LEFT JOIN sys_code semester_code ON semester_code.sys_code_type = 'grade_semester' AND semester_code.sys_code = COALESCE(NULLIF(grade.semester, ''), 'upper')
 WHERE ifnull(a.is_delete, '0') = '0'
+{{ if .point_id }}
+AND a.point_id = {{.point_id}}
+{{ end }}
 {{ if .subject }}
 AND a.subject = {{.subject}}
 {{ end }}

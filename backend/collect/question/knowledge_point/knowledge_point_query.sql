@@ -39,6 +39,9 @@ LEFT JOIN sys_code semester_code ON semester_code.sys_code_type = 'grade_semeste
 LEFT JOIN sys_code stage_code ON stage_code.sys_code_type = 'study_stage' AND stage_code.sys_code = a.stage
 LEFT JOIN sys_code textbook_code ON textbook_code.sys_code_type = 'textbook_version' AND textbook_code.sys_code = unit.textbook_version
 WHERE ifnull(a.is_delete, '0') = '0'
+{{ if .point_id }}
+AND a.point_id = {{.point_id}}
+{{ end }}
 {{ if .subject }}
 AND a.subject = {{.subject}}
 {{ end }}

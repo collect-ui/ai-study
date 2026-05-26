@@ -34,6 +34,7 @@
       "grade": "grade_7",
       "unit_id": "",
       "section_id": "",
+      "section_name": "",
       "point_code": "",
       "point_name": "",
       "content_detail": "",
@@ -323,7 +324,7 @@
                                   "tag": "update-store",
                                   "enable": "${editorMode === 'create'}",
                                   "value": {
-                                    "pointForm": "${Object.assign({}, pointForm || {}, {subject: value || 'english', unit_id: '', section_id: ''})}"
+                                    "pointForm": "${Object.assign({}, pointForm || {}, {subject: value || 'english', unit_id: '', section_id: '', section_name: ''})}"
                                   }
                                 },
                                 {
@@ -402,7 +403,7 @@
                                   "tag": "update-store",
                                   "enable": "${editorMode === 'create'}",
                                   "value": {
-                                    "pointForm": "${Object.assign({}, pointForm || {}, {stage: row.stage || pointForm.stage || searchForm.stage || 'junior', grade: row.grade_code || 'grade_7', unit_id: '', section_id: ''})}"
+                                    "pointForm": "${Object.assign({}, pointForm || {}, {stage: row.stage || pointForm.stage || searchForm.stage || 'junior', grade: row.grade_code || 'grade_7', unit_id: '', section_id: '', section_name: ''})}"
                                   }
                                 },
                                 {
@@ -496,7 +497,7 @@
                                   "tag": "update-store",
                                   "enable": "${editorMode === 'create'}",
                                   "value": {
-                                    "pointForm": "${(()=>{const unit=(Array.isArray(unitList)?unitList:[]).find(item=>item.unit_id===value)||{};return Object.assign({}, pointForm || {}, {unit_id:value||'',section_id:'',stage:unit.stage||pointForm.stage||searchForm.stage||'junior'});})()}"
+                                    "pointForm": "${(()=>{const unit=(Array.isArray(unitList)?unitList:[]).find(item=>item.unit_id===value)||{};return Object.assign({}, pointForm || {}, {unit_id:value||'',section_id:'',section_name:'',stage:unit.stage||pointForm.stage||searchForm.stage||'junior'});})()}"
                                   }
                                 },
                                 {
@@ -573,7 +574,7 @@
                                   "tag": "update-store",
                                   "enable": "${editorMode === 'create'}",
                                   "value": {
-                                    "pointForm": "${Object.assign({}, pointForm || {}, {section_id:value||''})}"
+                                    "pointForm": "${(()=>{const section=(Array.isArray(sectionList)?sectionList:[]).find(item=>item.section_id===value)||{};return Object.assign({}, pointForm || {}, {section_id:value||'',section_name:section.section_name||''});})()}"
                                   }
                                 },
                                 {
@@ -630,7 +631,7 @@
                                 "editorMode": "create",
                                 "editingPointID": "",
                                 "selectedPointID": "",
-                                "pointForm": "${(()=>{const search=searchForm||{};const subjects=Array.isArray(subjectList)?subjectList:[];const grades=Array.isArray(gradeList)?gradeList:[];const units=Array.isArray(unitList)?unitList:[];const sections=Array.isArray(sectionList)?sectionList:[];const subject=search.subject||((subjects[0]||{}).subject_code)||'english';const grade=search.grade||((grades.find(item=>item.grade_code==='grade_7')||grades[0]||{}).grade_code)||'grade_7';const gradeRow=grades.find(item=>item.grade_code===grade)||{};const matchedUnits=units.filter(item=>(!subject||item.subject===subject)&&item.grade===grade);const unit=matchedUnits.find(item=>item.unit_id===search.unit_id)||matchedUnits[0]||{};const section=sections.find(item=>item.section_id===search.section_id&&(!unit.unit_id||item.unit_id===unit.unit_id))||{};return {subject,stage:unit.stage||gradeRow.stage||search.stage||'junior',grade,unit_id:unit.unit_id||'',section_id:section.section_id||'',point_code:'',point_name:'',content_detail:'',order_index:1,status:'enabled'};})()}"
+                                "pointForm": "${(()=>{const search=searchForm||{};const subjects=Array.isArray(subjectList)?subjectList:[];const grades=Array.isArray(gradeList)?gradeList:[];const units=Array.isArray(unitList)?unitList:[];const sections=Array.isArray(sectionList)?sectionList:[];const subject=search.subject||((subjects[0]||{}).subject_code)||'english';const grade=search.grade||((grades.find(item=>item.grade_code==='grade_7')||grades[0]||{}).grade_code)||'grade_7';const gradeRow=grades.find(item=>item.grade_code===grade)||{};const matchedUnits=units.filter(item=>(!subject||item.subject===subject)&&item.grade===grade);const unit=matchedUnits.find(item=>item.unit_id===search.unit_id)||matchedUnits[0]||{};const section=sections.find(item=>item.section_id===search.section_id&&(!unit.unit_id||item.unit_id===unit.unit_id))||{};return {subject,stage:unit.stage||gradeRow.stage||search.stage||'junior',grade,unit_id:unit.unit_id||'',section_id:section.section_id||'',section_name:section.section_name||'',point_code:'',point_name:'',content_detail:'',order_index:1,status:'enabled'};})()}"
                               }
                             },
                             {
@@ -1083,7 +1084,7 @@
                                                           "selectedPointID": "${selectedPointID === row.point_id ? '' : selectedPointID}",
                                                           "editingPointID": "${editingPointID === row.point_id ? '' : editingPointID}",
                                                           "editorMode": "${editingPointID === row.point_id ? 'create' : editorMode}",
-                                                          "pointForm": "${editingPointID === row.point_id ? {subject:(searchForm.subject || 'english'),stage:(searchForm.stage || 'junior'),grade:(searchForm.grade || 'grade_7'),unit_id:(searchForm.unit_id || ''),section_id:(searchForm.section_id || ''),point_code:'',point_name:'',content_detail:'',order_index:1,status:'enabled'} : pointForm}"
+                                                          "pointForm": "${editingPointID === row.point_id ? (()=>{const section=(Array.isArray(sectionList)?sectionList:[]).find(item=>item.section_id===(searchForm.section_id || ''))||{};return {subject:(searchForm.subject || 'english'),stage:(searchForm.stage || 'junior'),grade:(searchForm.grade || 'grade_7'),unit_id:(searchForm.unit_id || ''),section_id:(searchForm.section_id || ''),section_name:section.section_name||'',point_code:'',point_name:'',content_detail:'',order_index:1,status:'enabled'};})() : pointForm}"
                                                         }
                                                       },
                                                       {
@@ -1206,7 +1207,7 @@
                                             "editorMode": "create",
                                             "editingPointID": "",
                                             "selectedPointID": "",
-                                            "pointForm": "${(()=>{const search=searchForm||{};const subjects=Array.isArray(subjectList)?subjectList:[];const grades=Array.isArray(gradeList)?gradeList:[];const units=Array.isArray(unitList)?unitList:[];const sections=Array.isArray(sectionList)?sectionList:[];const subject=search.subject||((subjects[0]||{}).subject_code)||'english';const grade=search.grade||((grades.find(item=>item.grade_code==='grade_7')||grades[0]||{}).grade_code)||'grade_7';const gradeRow=grades.find(item=>item.grade_code===grade)||{};const matchedUnits=units.filter(item=>(!subject||item.subject===subject)&&item.grade===grade);const unit=matchedUnits.find(item=>item.unit_id===search.unit_id)||matchedUnits[0]||{};const section=sections.find(item=>item.section_id===search.section_id&&(!unit.unit_id||item.unit_id===unit.unit_id))||{};return {subject,stage:unit.stage||gradeRow.stage||search.stage||'junior',grade,unit_id:unit.unit_id||'',section_id:section.section_id||'',point_code:'',point_name:'',content_detail:'',order_index:1,status:'enabled'};})()}"
+                                            "pointForm": "${(()=>{const search=searchForm||{};const subjects=Array.isArray(subjectList)?subjectList:[];const grades=Array.isArray(gradeList)?gradeList:[];const units=Array.isArray(unitList)?unitList:[];const sections=Array.isArray(sectionList)?sectionList:[];const subject=search.subject||((subjects[0]||{}).subject_code)||'english';const grade=search.grade||((grades.find(item=>item.grade_code==='grade_7')||grades[0]||{}).grade_code)||'grade_7';const gradeRow=grades.find(item=>item.grade_code===grade)||{};const matchedUnits=units.filter(item=>(!subject||item.subject===subject)&&item.grade===grade);const unit=matchedUnits.find(item=>item.unit_id===search.unit_id)||matchedUnits[0]||{};const section=sections.find(item=>item.section_id===search.section_id&&(!unit.unit_id||item.unit_id===unit.unit_id))||{};return {subject,stage:unit.stage||gradeRow.stage||search.stage||'junior',grade,unit_id:unit.unit_id||'',section_id:section.section_id||'',section_name:section.section_name||'',point_code:'',point_name:'',content_detail:'',order_index:1,status:'enabled'};})()}"
                                           }
                                         },
                                         {
@@ -1246,6 +1247,10 @@
                                         },
                                         {
                                           "tag": "reload-init-action",
+                                          "group": "section-list"
+                                        },
+                                        {
+                                          "tag": "reload-init-action",
                                           "group": "point-list"
                                         },
                                         {
@@ -1273,6 +1278,21 @@
                                           "name": "knowledgePointForm",
                                           "initialValues": "${pointForm}",
                                           "layout": "vertical",
+                                          "changeAction": [
+                                            {
+                                              "tag": "update-store",
+                                              "value": {
+                                                "pointForm": "${(()=>{const prev=pointForm||{};const name=String(section_name||'');const trimName=name.trim();const matched=(Array.isArray(sectionList)?sectionList:[]).find(item=>(!subject||item.subject===subject)&&(!grade||item.grade===grade)&&(!unit_id||item.unit_id===unit_id)&&String(item.section_name||'').trim()===trimName);return Object.assign({},prev,{subject:subject||prev.subject||'',stage:stage||prev.stage||'',grade:grade||prev.grade||'',unit_id:unit_id||prev.unit_id||'',section_name:name,section_id:trimName&&matched?matched.section_id:''});})()}"
+                                              }
+                                            },
+                                            {
+                                              "tag": "update-form",
+                                              "formName": "knowledgePointForm",
+                                              "value": {
+                                                "section_id": "${(pointForm||{}).section_id || ''}"
+                                              }
+                                            }
+                                          ],
                                           "children": [
                                             {
                                               "tag": "form-item",
@@ -1307,7 +1327,7 @@
                                                     {
                                                       "tag": "update-store",
                                                       "value": {
-                                                        "pointForm": "${Object.assign({}, pointForm || {}, {subject:value||'',unit_id:'',section_id:''})}"
+                                                        "pointForm": "${Object.assign({}, pointForm || {}, {subject:value||'',unit_id:'',section_id:'',section_name:''})}"
                                                       }
                                                     },
                                                     {
@@ -1342,7 +1362,7 @@
                                                     {
                                                       "tag": "update-store",
                                                       "value": {
-                                                        "pointForm": "${(()=>{const prev=pointForm||{};const row=(Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===value)||{};return Object.assign({},prev,{grade:value||'',stage:row.stage||prev.stage||'',unit_id:'',section_id:''});})()}"
+                                                        "pointForm": "${(()=>{const prev=pointForm||{};const row=(Array.isArray(gradeList)?gradeList:[]).find(item=>item.grade_code===value)||{};return Object.assign({},prev,{grade:value||'',stage:row.stage||prev.stage||'',unit_id:'',section_id:'',section_name:''});})()}"
                                                       }
                                                     },
                                                     {
@@ -1380,7 +1400,7 @@
                                                     {
                                                       "tag": "update-store",
                                                       "value": {
-                                                        "pointForm": "${(()=>{const unit=(Array.isArray(unitList)?unitList:[]).find(item=>item.unit_id===value)||{};return Object.assign({}, pointForm || {}, {unit_id:value||'',section_id:'',stage:unit.stage||pointForm.stage||'junior'});})()}"
+                                                        "pointForm": "${(()=>{const unit=(Array.isArray(unitList)?unitList:[]).find(item=>item.unit_id===value)||{};return Object.assign({}, pointForm || {}, {unit_id:value||'',section_id:'',section_name:'',stage:unit.stage||pointForm.stage||'junior'});})()}"
                                                       }
                                                     },
                                                     {
@@ -1395,26 +1415,25 @@
                                             {
                                               "tag": "form-item",
                                               "name": "section_id",
+                                              "hidden": true,
+                                              "children": [
+                                                {
+                                                  "tag": "input"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "tag": "form-item",
+                                              "name": "section_name",
                                               "label": "小节",
                                               "children": [
                                                 {
-                                                  "tag": "select",
+                                                  "tag": "input",
+                                                  "autoComplete": true,
                                                   "allowClear": true,
-                                                  "showSearch": true,
-                                                  "placeholder": "可不选择小节",
-                                                  "fieldNames": {
-                                                    "label": "section_name",
-                                                    "value": "section_id"
-                                                  },
-                                                  "options": "${(()=>{const form=pointForm||{};return (Array.isArray(sectionList)?sectionList:[]).filter(item=>(!form.subject||item.subject===form.subject)&&(!form.grade||item.grade===form.grade)&&(!form.unit_id||item.unit_id===form.unit_id));})()}",
-                                                  "action": [
-                                                    {
-                                                      "tag": "update-store",
-                                                      "value": {
-                                                        "pointForm": "${Object.assign({}, pointForm || {}, {section_id:value||''})}"
-                                                      }
-                                                    }
-                                                  ]
+                                                  "placeholder": "可选择或输入小节",
+                                                  "disabled": "${!((pointForm||{}).grade && (pointForm||{}).subject && (pointForm||{}).unit_id)}",
+                                                  "options": "${(()=>{const form=pointForm||{};return (Array.isArray(sectionList)?sectionList:[]).filter(item=>(!form.subject||item.subject===form.subject)&&(!form.grade||item.grade===form.grade)&&(!form.unit_id||item.unit_id===form.unit_id)).map(item=>({value:item.section_name||'',label:item.section_name||item.section_code||''})).filter(item=>item.value);})()}"
                                                 }
                                               ]
                                             },
@@ -1458,10 +1477,17 @@
                                               "label": "详细内容",
                                               "children": [
                                                 {
-                                                  "tag": "rich-text",
+                                                  "tag": "ai-study-knowledge-rich-text",
                                                   "className": "kp-content-rich-text",
                                                   "height": 180,
                                                   "symbolInsertTools": true,
+                                                  "knowledgeLinkTools": true,
+                                                  "knowledgePointApi": "post:/template_data/data?service=question.knowledge_point_query",
+                                                  "knowledgePointRequest": "${(()=>{const form=pointForm||{};return {status:'enabled',page:1,size:80,subject:form.subject||'',stage:form.stage||'',grade:form.grade||'',unit_id:form.unit_id||''};})()}",
+                                                  "subjectOptions": "${subjectList}",
+                                                  "gradeOptions": "${gradeList}",
+                                                  "unitOptions": "${unitList}",
+                                                  "currentPointId": "${(pointForm||{}).point_id || editingPointID || ''}",
                                                   "placeholder": "输入知识点说明、例句、易错点等内容"
                                                 }
                                               ]

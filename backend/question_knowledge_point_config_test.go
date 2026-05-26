@@ -102,8 +102,22 @@ func TestQuestionKnowledgePointModuleIsWired(t *testing.T) {
 			t.Fatalf("editor form missing label %q", label)
 		}
 	}
-	if _, ok := findObjectWithString(form, "tag", "rich-text"); !ok {
-		t.Fatalf("editor form should use rich-text for content detail")
+	contentItem, ok := findObjectWithString(form, "name", "content_detail")
+	if !ok {
+		t.Fatalf("editor form missing content_detail field")
+	}
+	knowledgeRichText, ok := findObjectWithString(contentItem, "tag", "ai-study-knowledge-rich-text")
+	if !ok {
+		t.Fatalf("editor form should use AI Study knowledge rich-text extension for content detail")
+	}
+	if _, ok := knowledgeRichText["knowledgePointApi"].(string); !ok {
+		t.Fatalf("knowledge rich-text should declare fixed knowledge point query api")
+	}
+	if _, ok := findObjectWithString(form, "name", "mnemonic_method"); ok {
+		t.Fatalf("mnemonic method should be associated inside content_detail rich text, not a separate form field")
+	}
+	if _, ok := findObjectWithString(form, "name", "antonyms"); ok {
+		t.Fatalf("antonyms should be associated inside content_detail rich text, not a separate form field")
 	}
 	if _, ok := findObjectWithString(root, "tag", "rich-text-render"); !ok {
 		t.Fatalf("knowledge point cards should render content detail through rich-text-render")
@@ -134,7 +148,7 @@ func TestQuestionKnowledgePointServicesAndMigration(t *testing.T) {
 	if save.Module != "model_save" || save.Table != "question_knowledge_point" {
 		t.Fatalf("knowledge_point_save = module %q table %q, want model_save question_knowledge_point", save.Module, save.Table)
 	}
-	for _, key := range []string{"point_id", "subject", "stage", "grade", "unit_id", "section_id", "point_code", "point_name", "content_detail"} {
+	for _, key := range []string{"point_id", "subject", "stage", "grade", "unit_id", "section_id", "section_name", "point_code", "point_name", "content_detail"} {
 		if _, ok := save.Params[key]; !ok {
 			t.Fatalf("knowledge_point_save params missing %s", key)
 		}
@@ -156,9 +170,14 @@ func TestQuestionKnowledgePointServicesAndMigration(t *testing.T) {
 		t.Fatalf("read knowledge_point_query.sql: %v", err)
 	}
 	sql := string(sqlData)
-	for _, want := range []string{"question_knowledge_point", "question_section", "section_id", "content_detail", "LIMIT {{.start}}, {{.size}}"} {
+	for _, want := range []string{"question_knowledge_point", "question_section", "section_id", "content_detail", "a.point_id = {{.point_id}}", "LIMIT {{.start}}, {{.size}}"} {
 		if !strings.Contains(sql, want) {
 			t.Fatalf("knowledge_point_query.sql missing %q", want)
+		}
+	}
+	for _, forbidden := range []string{"mnemonic_method", "antonyms"} {
+		if strings.Contains(sql, forbidden) {
+			t.Fatalf("knowledge_point_query.sql should not use separate field %q", forbidden)
 		}
 	}
 
@@ -170,6 +189,11 @@ func TestQuestionKnowledgePointServicesAndMigration(t *testing.T) {
 	for _, want := range []string{"CREATE TABLE IF NOT EXISTS question_knowledge_point", "idx_question_knowledge_point_query", "menu-question-knowledge-point", "frontend.question_knowledge_point"} {
 		if !strings.Contains(migration, want) {
 			t.Fatalf("migrate-question-web.sql missing %q", want)
+		}
+	}
+	for _, forbidden := range []string{"mnemonic_method", "antonyms"} {
+		if strings.Contains(migration, forbidden) {
+			t.Fatalf("migrate-question-web.sql should not add separate field %q", forbidden)
 		}
 	}
 }
